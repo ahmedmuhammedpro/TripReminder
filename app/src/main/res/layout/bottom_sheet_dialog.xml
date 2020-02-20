@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_16dp">
+
+    <TextView
+        android:id="@+id/trip_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        tools:text="Cairo" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/padding_16dp"
+        android:background="@android:color/black" />
+
+    <TextView
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_edit"
+        android:drawableLeft="@drawable/ic_edit"
+        android:drawablePadding="@dimen/padding_16dp"
+        android:paddingBottom="@dimen/padding_16dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        tools:text="Edit" />
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_cancel"
+        android:drawableLeft="@drawable/ic_cancel"
+        android:drawablePadding="@dimen/padding_16dp"
+        android:paddingBottom="@dimen/padding_16dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        tools:text="Cancel" />
+
+    <TextView
+        android:id="@+id/rename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_rename"
+        android:drawableLeft="@drawable/ic_rename"
+        android:drawablePadding="@dimen/padding_16dp"
+        android:paddingBottom="@dimen/padding_16dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        tools:text="Rename" />
+
+    <TextView
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_done"
+        android:drawableLeft="@drawable/ic_done"
+        android:drawablePadding="@dimen/padding_16dp"
+        android:paddingBottom="@dimen/padding_16dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        tools:text="Mark as done" />
+
+</LinearLayout>

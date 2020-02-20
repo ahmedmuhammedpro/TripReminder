@@ -24,4 +24,5 @@
             app:mbn_rippleColor="@color/ripple"
             app:mbn_selectedIconColor="@color/selectedIcon" />
     </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
