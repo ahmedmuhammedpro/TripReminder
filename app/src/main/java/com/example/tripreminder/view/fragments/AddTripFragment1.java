@@ -8,15 +8,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.tripreminder.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment {
+public class AddTripFragment1 extends Fragment {
 
 
-    public MainFragment() {
+    public AddTripFragment1() {
         // Required empty public constructor
     }
 
@@ -25,8 +26,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_main, container, false);
-        return v;
+        return inflater.inflate(R.layout.fragment_add_trip_fragment1, container, false);
     }
 
 }

@@ -2,9 +2,8 @@ package com.example.tripreminder.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
-
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
 import com.example.tripreminder.view.fragments.MainFragment;
@@ -28,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
                 // your codes
+                if(item.getId() == 3){
+                    Intent i = new Intent(MainActivity.this,AddTripActivity.class);
+                    startActivity(i);
+                }
             }
         });
         bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {

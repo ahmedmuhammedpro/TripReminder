@@ -4,4 +4,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
+    <string name="TripName">Trip Name</string>
+    <string name="startPoint">Start Point</string>
+    <string name="endPoint">End Point</string>
+    <string name="oneRound">One Round</string>
+    <string name="twoRound">Two Round</string>
+    <string name="tripType">Trip Type</string>
+    <string name="setDate">Set Date</string>
+    <string name="setLocation">Set Location</string>
+    <string name="setDateandTime"><![CDATA[Set Date&Time]]></string>
 </resources>
