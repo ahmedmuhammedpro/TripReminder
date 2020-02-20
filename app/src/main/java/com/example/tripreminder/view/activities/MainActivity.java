@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.example.tripreminder.R;
 import com.example.tripreminder.view.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
