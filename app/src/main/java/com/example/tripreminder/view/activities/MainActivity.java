@@ -1,8 +1,12 @@
 package com.example.tripreminder.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
@@ -11,13 +15,15 @@ import com.example.tripreminder.view.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Fragment selectedFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupBottomBar();
+        setupBottomBar(savedInstanceState);
     }
-    private void setupBottomBar (){
+    private void setupBottomBar (final Bundle savedInstanceState){
         MeowBottomNavigation bottomNavigation = findViewById(R.id.bottomNavigation);
         bottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.ic_history_24px));
         bottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.ic_event_24px));
@@ -27,13 +33,20 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
-                // your codes
+
             }
         });
         bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
             @Override
             public void onShowItem(MeowBottomNavigation.Model item) {
-                // your codes
+
+                switch (item.getId()) {
+                    case 1: break;
+                    case 2: selectedFragment = new MainFragment(); break;
+                }
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, selectedFragment).commit();
             }
         });
 
@@ -43,5 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 // your codes
             }
         });
+
+        bottomNavigation.show(2, true);
     }
 }

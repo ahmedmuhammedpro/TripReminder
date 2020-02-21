@@ -11,9 +11,9 @@
         android:id="@+id/trip_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Cairo"
         android:textColor="@android:color/black"
-        android:textSize="20sp"
-        tools:text="Cairo" />
+        android:textSize="20sp" />
 
     <View
         android:layout_width="match_parent"
@@ -23,50 +23,62 @@
 
     <TextView
         android:id="@+id/edit"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
         android:drawableStart="@drawable/ic_edit"
         android:drawableLeft="@drawable/ic_edit"
         android:drawablePadding="@dimen/padding_16dp"
+        android:focusable="true"
         android:paddingBottom="@dimen/padding_16dp"
+        android:text="Edit"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
-        tools:text="Edit" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/cancel"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
         android:drawableStart="@drawable/ic_cancel"
         android:drawableLeft="@drawable/ic_cancel"
         android:drawablePadding="@dimen/padding_16dp"
+        android:focusable="true"
         android:paddingBottom="@dimen/padding_16dp"
+        android:text="Cancel"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
-        tools:text="Cancel" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/rename"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
         android:drawableStart="@drawable/ic_rename"
         android:drawableLeft="@drawable/ic_rename"
         android:drawablePadding="@dimen/padding_16dp"
+        android:focusable="true"
         android:paddingBottom="@dimen/padding_16dp"
+        android:text="Rename"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
-        tools:text="Rename" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/done"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
         android:drawableStart="@drawable/ic_done"
         android:drawableLeft="@drawable/ic_done"
         android:drawablePadding="@dimen/padding_16dp"
+        android:focusable="true"
         android:paddingBottom="@dimen/padding_16dp"
+        android:text="Mark as done"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
-        tools:text="Mark as done" />
+        android:textSize="18sp" />
 
 </LinearLayout>
