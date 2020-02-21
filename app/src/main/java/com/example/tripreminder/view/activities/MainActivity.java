@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
                 // your codes
                 if(item.getId() == 3){
                     Intent i = new Intent(MainActivity.this,AddTripActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
                 }
             }

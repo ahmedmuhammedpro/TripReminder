@@ -4,18 +4,23 @@ package com.example.tripreminder.view.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.tripreminder.R;
+import com.google.android.material.chip.ChipGroup;
 
-public class MainFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class AddTripFragment2 extends Fragment {
 
-    public MainFragment() {
+     ChipGroup allNotes;
+
+    public AddTripFragment2() {
         // Required empty public constructor
     }
 
@@ -24,10 +29,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_main, container, false);
-        recyclerView = v.findViewById(R.id.upcoming_trips_recycler_view);
-
-        return v;
+        return inflater.inflate(R.layout.fragment_add_trip_fragment2, container, false);
     }
 
 }

@@ -13,4 +13,10 @@
     <string name="setDate">Set Date</string>
     <string name="setLocation">Set Location</string>
     <string name="setDateandTime"><![CDATA[Set Date&Time]]></string>
+    <string name="dateFormat">dd-MMM-yyyy</string>
+    <string name="timeFormat">hh:mm a</string>
+    <string name="tripNotes">Trip Notes</string>
+    <string name="Labtop">My Laptop</string>
+    <string name="water">Water Bottle</string>
+    <string name="note">Note</string>
 </resources>
