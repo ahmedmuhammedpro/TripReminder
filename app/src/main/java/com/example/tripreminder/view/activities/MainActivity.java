@@ -1,6 +1,7 @@
 package com.example.tripreminder.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import com.example.tripreminder.R;
 import com.example.tripreminder.view.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Fragment selectedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +32,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
                 // your codes
-                if(item.getId() == 3){
-                    Intent i = new Intent(MainActivity.this,AddTripActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
+                switch (item.getId()) {
+                    case 1: break;
+                    case 2: selectedFragment = new MainFragment(); break;
                 }
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, selectedFragment).commit();
             }
         });
         bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {

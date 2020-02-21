@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.tripreminder.model.Trip;
 
+import java.util.List;
+
 public class MainViewModel extends ViewModel implements MainViewModelInterface {
 
 
     @Override
-    public LiveData<Trip> getAllTrips() {
+    public LiveData<List<Trip>> getAllTrips() {
         return null;
     }
 
