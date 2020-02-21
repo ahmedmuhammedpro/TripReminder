@@ -2,6 +2,7 @@ package com.example.tripreminder.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -28,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
                 // your codes
+                if(item.getId() == 3){
+                    Intent i = new Intent(MainActivity.this,AddTripActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                }
             }
         });
         bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {

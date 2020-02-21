@@ -1,7 +1,23 @@
 <resources>
     <string name="app_name">Trip Reminder</string>
+    <string name="no_trips_string">There are currently no trips in your list. Tap the add icon below to get started!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
+    <string name="TripName">Trip Name</string>
+    <string name="startPoint">Start Point</string>
+    <string name="endPoint">End Point</string>
+    <string name="oneRound">One Round</string>
+    <string name="twoRound">Two Round</string>
+    <string name="tripType">Trip Type</string>
+    <string name="setDate">Set Date</string>
+    <string name="setLocation">Set Location</string>
+    <string name="setDateandTime"><![CDATA[Set Date&Time]]></string>
+    <string name="dateFormat">dd-MMM-yyyy</string>
+    <string name="timeFormat">hh:mm a</string>
+    <string name="tripNotes">Trip Notes</string>
+    <string name="Labtop">My Laptop</string>
+    <string name="water">Water Bottle</string>
+    <string name="note">Note</string>
 </resources>
