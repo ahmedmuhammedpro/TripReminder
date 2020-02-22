@@ -10,6 +10,7 @@ public class Trip {
 
     private int tripId;
     private int tripStatus;
+    private int tripType;
     private String tripName;
     private TripLocation startLocation;
     private TripLocation endLocation;
@@ -20,7 +21,7 @@ public class Trip {
     }
 
     public Trip(int tripId, int tripStatus, String tripName, TripLocation startLocation,
-                TripLocation endLocation, Vector<String> notes, Date tripDate) {
+                TripLocation endLocation, Vector<String> notes, Date tripDate, int tripType) {
         this.tripId = tripId;
         this.tripStatus = tripStatus;
         this.tripName = tripName;
@@ -28,6 +29,7 @@ public class Trip {
         this.endLocation = endLocation;
         this.notes = notes;
         this.tripDate = tripDate;
+        this.tripType = tripType;
     }
 
     public int getTripId() {
@@ -84,5 +86,13 @@ public class Trip {
 
     public void setTripDate(Date tripDate) {
         this.tripDate = tripDate;
+    }
+
+    public void setTripType(int tripType) {
+        this.tripType = tripType;
+    }
+
+    public int getTripType() {
+        return tripType;
     }
 }

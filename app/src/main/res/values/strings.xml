@@ -20,4 +20,6 @@
     <string name="Labtop">My Laptop</string>
     <string name="water">Water Bottle</string>
     <string name="note">Note</string>
+    <string name="addTrip">Add Trip</string>
+    <string name="cancel">Cancel</string>
 </resources>

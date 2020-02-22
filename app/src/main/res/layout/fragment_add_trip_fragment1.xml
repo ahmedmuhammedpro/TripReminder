@@ -110,7 +110,7 @@
         app:layout_constraintTop_toBottomOf="@+id/space2" />
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroupNotes"
+        android:id="@+id/chipGroupTripTypes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
@@ -122,7 +122,7 @@
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/laptopChip"
+            android:id="@+id/trip1"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -133,11 +133,13 @@
             app:chipCornerRadius="20dp" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/waterChip"
+            android:id="@+id/trip2"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/twoRound"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            app:chipCornerRadius="20dp" />
 
     </com.google.android.material.chip.ChipGroup>
 
@@ -147,6 +149,7 @@
         android:layout_height="2dp"
         android:layout_marginTop="20dp"
         android:background="@color/colorPrimaryDark"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -158,6 +161,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:background="@color/colorPrimaryDark"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -171,6 +175,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:background="@color/colorPrimaryDark"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

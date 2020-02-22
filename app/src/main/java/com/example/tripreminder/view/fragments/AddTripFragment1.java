@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -17,9 +18,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.view.adapters.PlacesAutoCompleteAdapter;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.DateFormat;
@@ -33,16 +37,18 @@ import java.util.TimeZone;
  */
 public class AddTripFragment1 extends Fragment {
     public static final String TRIP_NAME = "name";
-    public static final  String TRIP_TYPE = "type";
+    public static final String TRIP_TYPE = "type";
     public static final String TRIP_START_POINT ="startPoint";
     public static final String TRIP_END_POINT= "endPoint";
     public static final String TIME_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_1 = "dd-MMM-yyyy";
+    private ChipGroup tripTypes;
     private  Button setDate , setTime;
     private  TextView dateTxt,timeTxt;
     private AutoCompleteTextView startPointTxt,endPointTxt;
     private TextInputEditText nameTxt;
     private int mYear, mMonth, mDay, mHour, mMinute;
+    private int tripType;
 
     public AddTripFragment1() {
         // Required empty public constructor
@@ -65,6 +71,7 @@ public class AddTripFragment1 extends Fragment {
     private void setup(View view,Bundle saveInstanseState){
 
         //set views
+        tripTypes = view.findViewById(R.id.chipGroupTripTypes);
         nameTxt = view.findViewById(R.id.tripNameTxt);
         setDate = view.findViewById(R.id.dateBtn);
         setTime = view.findViewById(R.id.timeBtn);
@@ -116,15 +123,33 @@ public class AddTripFragment1 extends Fragment {
              }
          });
 
+        tripTypes.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(ChipGroup group,@IdRes int checkedId) {
+                // Handle the checked chip change.
+                int chipsCount = group.getChildCount();
+                if (chipsCount > 0) {
+                    int i = 0;
+                    while (i < chipsCount) {
+                        Chip chip = (Chip) group.getChildAt(i);
+                        if (chip.isChecked()) {
+                            tripType = i+1;
+                        }
+                        i++;
+                    }
+                }
+            }
+        });
+
          //set Adapters
         startPointTxt.setAdapter(new PlacesAutoCompleteAdapter(AddTripFragment1.super.getContext(),android.R.layout.simple_list_item_1));
         endPointTxt.setAdapter(new PlacesAutoCompleteAdapter(AddTripFragment1.super.getContext(),android.R.layout.simple_list_item_1));
-
-        if(saveInstanseState != null){
-            Log.i("name state",saveInstanseState.toString());
-            Log.i("name state trip",saveInstanseState.getCharSequence(TRIP_NAME).toString());
-             nameTxt.setText(saveInstanseState.getCharSequence(TRIP_NAME).toString());
-        }
+//
+//        if(saveInstanseState != null){
+//            Log.i("name state",saveInstanseState.toString());
+//            Log.i("name state trip",saveInstanseState.getCharSequence(TRIP_NAME).toString());
+//             nameTxt.setText(saveInstanseState.getCharSequence(TRIP_NAME).toString());
+//        }
 
     }
     @Override
@@ -136,10 +161,10 @@ public class AddTripFragment1 extends Fragment {
         return view;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putCharSequence(TRIP_NAME , nameTxt.getText().toString());
-        Log.i("name",nameTxt.getText().toString());
-    }
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putCharSequence(TRIP_NAME , nameTxt.getText().toString());
+//        Log.i("name",nameTxt.getText().toString());
+//    }
 }
