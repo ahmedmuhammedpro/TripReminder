@@ -9,8 +9,6 @@ import com.example.tripreminder.model.repositories.TripRepositoryImp;
 
 import java.util.List;
 
-import java.util.List;
-
 public class MainViewModel extends ViewModel implements MainViewModelInterface {
 
     TripRepositoryImp tripRepositoryImp = new TripRepositoryImp();

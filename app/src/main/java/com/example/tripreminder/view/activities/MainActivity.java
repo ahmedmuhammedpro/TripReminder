@@ -12,12 +12,13 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.repositories.UserRepositoryImp;
+import com.example.tripreminder.view.fragments.AddTripFragment1;
 import com.example.tripreminder.view.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private Fragment selectedFragment;
-    String userId="";
+    public static String userId="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
                 // your codes
+                switch (item.getId()) {
+                    case 1: break;
+                    case 2: bottomNavigation.show(2, true); break;
+                    case 3: bottomNavigation.show(3, true); break;
+                }
             }
         });
         bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
@@ -45,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getId()) {
                     case 1: break;
                     case 2: selectedFragment = new MainFragment(); break;
+                    case 3: selectedFragment = new AddTripFragment1(); break;
                 }
 
                 getSupportFragmentManager().beginTransaction()

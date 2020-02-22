@@ -10,12 +10,14 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.tripreminder.R;
+import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.view.adapters.MainAdapter;
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.Entities.TripLocation;
@@ -50,13 +52,15 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = v.findViewById(R.id.upcoming_trips_recycler_view);
+        noTripsLayout = v.findViewById(R.id.no_trips_layout);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setVisibility(INVISIBLE);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.getAllTrips("").observe(this, new Observer<List<Trip>>() {
+        viewModel.getAllTrips(MainActivity.userId).observe(this, new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
-                if (trips != null) {
+                if (trips != null && !trips.isEmpty()) {
+                    Log.i("ahmed", "size => " + trips.size());
                     MainAdapter adapter = new MainAdapter(getActivity(), trips);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);
