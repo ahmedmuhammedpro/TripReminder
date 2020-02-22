@@ -32,6 +32,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
                 // your codes
+            }
+        });
+        bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
+            @Override
+            public void onShowItem(MeowBottomNavigation.Model item) {
+                // your codes
                 switch (item.getId()) {
                     case 1: break;
                     case 2: selectedFragment = new MainFragment(); break;
@@ -41,12 +47,6 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.container, selectedFragment).commit();
             }
         });
-        bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
-            @Override
-            public void onShowItem(MeowBottomNavigation.Model item) {
-                // your codes
-            }
-        });
 
         bottomNavigation.setOnReselectListener(new MeowBottomNavigation.ReselectListener() {
             @Override
@@ -54,5 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 // your codes
             }
         });
+
+        bottomNavigation.show(2, true);
     }
 }
