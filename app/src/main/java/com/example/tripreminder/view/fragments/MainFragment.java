@@ -16,8 +16,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.tripreminder.R;
-import com.example.tripreminder.model.Trip;
 import com.example.tripreminder.view.adapters.MainAdapter;
+import com.example.tripreminder.model.Entities.Trip;
+import com.example.tripreminder.model.Entities.TripLocation;
 import com.example.tripreminder.viewmodel.MainViewModel;
 import com.example.tripreminder.viewmodel.MainViewModelInterface;
 
@@ -52,7 +53,7 @@ public class MainFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setVisibility(INVISIBLE);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.getAllTrips().observe(this, new Observer<List<Trip>>() {
+        viewModel.getAllTrips("").observe(this, new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
                 if (trips != null) {

@@ -1,4 +1,4 @@
-package com.example.tripreminder.model;
+package com.example.tripreminder.model.Entities;
 
 import java.util.Date;
 import java.util.Vector;
@@ -8,8 +8,10 @@ public class Trip {
     public static final int UPCOMING = 1;
     public static final int DONE = 2;
 
-    private int tripId;
+    private String userID;
+    private String tripId;
     private int tripStatus;
+    private int tripType;
     private String tripName;
     private TripLocation startLocation;
     private TripLocation endLocation;
@@ -19,8 +21,20 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(int tripId, int tripStatus, String tripName, TripLocation startLocation,
-                TripLocation endLocation, Vector<String> notes, Date tripDate) {
+    public Trip(String tripId, int tripStatus, String tripName, TripLocation startLocation,
+                TripLocation endLocation, Vector<String> notes, Date tripDate, int tripType) {
+        this.tripId = tripId;
+        this.tripStatus = tripStatus;
+        this.tripName = tripName;
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
+        this.notes = notes;
+        this.tripDate = tripDate;
+        this.tripType = tripType;
+    }
+
+    public Trip(String tripId, int tripStatus, String tripName, TripLocation startLocation,
+                TripLocation endLocation, Vector<String> notes, Date tripDate){
         this.tripId = tripId;
         this.tripStatus = tripStatus;
         this.tripName = tripName;
@@ -30,11 +44,18 @@ public class Trip {
         this.tripDate = tripDate;
     }
 
-    public int getTripId() {
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+    public String getTripId() {
         return tripId;
     }
 
-    public void setTripId(int tripId) {
+    public void setTripId(String tripId) {
         this.tripId = tripId;
     }
 
@@ -84,5 +105,13 @@ public class Trip {
 
     public void setTripDate(Date tripDate) {
         this.tripDate = tripDate;
+    }
+
+    public void setTripType(int tripType) {
+        this.tripType = tripType;
+    }
+
+    public int getTripType() {
+        return tripType;
     }
 }
