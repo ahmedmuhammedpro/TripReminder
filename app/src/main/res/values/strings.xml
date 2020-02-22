@@ -22,4 +22,7 @@
     <string name="note">Note</string>
     <string name="addTrip">Add Trip</string>
     <string name="cancel">Cancel</string>
+    <string name="Email">Email</string>
+    <string name="Password">Password</string>
+    <string name="LoginButtonText">Login</string>
 </resources>

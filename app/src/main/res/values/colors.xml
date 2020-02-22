@@ -3,7 +3,7 @@
     <color name="colorPrimary">#46007C91</color>
     <color name="colorPrimaryDark">#007C91</color>
     <color name="colorAccent">#2F424242</color>
-    <color name="barBackground">#ffffff</color>
+    <color name="barBackground">#FFFFFF</color>
     <color name="defaultIcon">#2F050505</color>
     <color name="ripple">#2F050505</color>
     <color name="selectedIcon">#007c91</color>

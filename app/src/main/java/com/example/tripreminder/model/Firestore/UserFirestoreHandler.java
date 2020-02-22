@@ -135,11 +135,13 @@ public class UserFirestoreHandler {
                 FirebaseUser firebaseUser = auth.getCurrentUser();
                 if(firebaseUser!=null){
                     user.setUserId(firebaseUser.getUid());
-                    userLoggedIn.postValue(user);
+
                 }
             }else{
+                user.setUserId("-1");
                 logErrorMessage(Objects.requireNonNull(authTask.getException()).getMessage());
             }
+            userLoggedIn.postValue(user);
         });
         return userLoggedIn;
     }

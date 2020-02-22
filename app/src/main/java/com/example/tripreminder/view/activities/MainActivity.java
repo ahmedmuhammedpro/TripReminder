@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
@@ -13,11 +14,13 @@ import com.example.tripreminder.model.repositories.UserRepositoryImp;
 import com.example.tripreminder.view.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
-    
+
+    String userId="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userId = getIntent().getStringExtra(LoginActivity.USER_ID_TAG);
         setupBottomBar();
     }
     private void setupBottomBar (){

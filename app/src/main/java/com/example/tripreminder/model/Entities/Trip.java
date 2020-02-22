@@ -33,6 +33,17 @@ public class Trip {
         this.tripType = tripType;
     }
 
+    public Trip(String tripId, int tripStatus, String tripName, TripLocation startLocation,
+                TripLocation endLocation, Vector<String> notes, Date tripDate){
+        this.tripId = tripId;
+        this.tripStatus = tripStatus;
+        this.tripName = tripName;
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
+        this.notes = notes;
+        this.tripDate = tripDate;
+    }
+
     public String getUserID() {
         return userID;
     }
