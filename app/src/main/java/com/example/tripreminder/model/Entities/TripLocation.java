@@ -1,4 +1,4 @@
-package com.example.tripreminder.model;
+package com.example.tripreminder.model.Entities;
 
 public class TripLocation {
 

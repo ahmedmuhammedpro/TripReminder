@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +23,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.tripreminder.R;
+import com.example.tripreminder.model.Entities.Trip;
+import com.example.tripreminder.model.Entities.TripLocation;
+import com.example.tripreminder.model.repositories.TripRepositoryImp;
 import com.example.tripreminder.view.adapters.PlacesAutoCompleteAdapter;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.example.tripreminder.viewmodel.AddTripViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.DateFormat;
@@ -50,6 +56,9 @@ public class AddTripFragment1 extends Fragment {
     private int mYear, mMonth, mDay, mHour, mMinute;
     private int tripType;
 
+    Button addTripButton;
+    AddTripViewModel addTripViewModel;
+
     public AddTripFragment1() {
         // Required empty public constructor
     }
@@ -71,6 +80,7 @@ public class AddTripFragment1 extends Fragment {
     private void setup(View view,Bundle saveInstanseState){
 
         //set views
+        addTripViewModel = ViewModelProviders.of(this).get(AddTripViewModel.class);
         tripTypes = view.findViewById(R.id.chipGroupTripTypes);
         nameTxt = view.findViewById(R.id.tripNameTxt);
         setDate = view.findViewById(R.id.dateBtn);
@@ -151,6 +161,26 @@ public class AddTripFragment1 extends Fragment {
 //             nameTxt.setText(saveInstanseState.getCharSequence(TRIP_NAME).toString());
 //        }
 
+        addTripButton = view.findViewById(R.id.addTripButton);
+        addTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Trip trip = new Trip();
+                trip.setTripName(nameTxt.getText().toString());
+                trip.setUserID("test");
+                trip.setStartLocation(new TripLocation(1,1,startPointTxt.getText().toString()));
+                trip.setEndLocation(new TripLocation(1,1,endPointTxt.getText().toString()));
+                addTripViewModel.addTrip(trip).observe(AddTripFragment1.this, new Observer<Trip>() {
+                    @Override
+                    public void onChanged(Trip trip) {
+
+                        Toast.makeText(getActivity(), "Trip Added Successfully", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

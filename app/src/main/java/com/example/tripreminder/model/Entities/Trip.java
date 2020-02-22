@@ -1,4 +1,4 @@
-package com.example.tripreminder.model;
+package com.example.tripreminder.model.Entities;
 
 import java.util.Date;
 import java.util.Vector;
@@ -8,7 +8,8 @@ public class Trip {
     public static final int UPCOMING = 1;
     public static final int DONE = 2;
 
-    private int tripId;
+    private String userID;
+    private String tripId;
     private int tripStatus;
     private int tripType;
     private String tripName;
@@ -20,7 +21,7 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(int tripId, int tripStatus, String tripName, TripLocation startLocation,
+    public Trip(String tripId, int tripStatus, String tripName, TripLocation startLocation,
                 TripLocation endLocation, Vector<String> notes, Date tripDate, int tripType) {
         this.tripId = tripId;
         this.tripStatus = tripStatus;
@@ -32,11 +33,18 @@ public class Trip {
         this.tripType = tripType;
     }
 
-    public int getTripId() {
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+    public String getTripId() {
         return tripId;
     }
 
-    public void setTripId(int tripId) {
+    public void setTripId(String tripId) {
         this.tripId = tripId;
     }
 

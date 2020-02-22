@@ -12,9 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.tripreminder.R;
-import com.example.tripreminder.model.Trip;
-import com.example.tripreminder.model.TripLocation;
-import com.example.tripreminder.view.adapters.MainAdapter;
+import com.example.tripreminder.model.Entities.Trip;
+import com.example.tripreminder.model.Entities.TripLocation;
 import com.example.tripreminder.viewmodel.MainViewModel;
 import com.example.tripreminder.viewmodel.MainViewModelInterface;
 
@@ -37,39 +36,39 @@ public class MainFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tripList = new ArrayList<>();
-        tripList.add(new Trip(1, 1, "ismalia",
+        tripList.add(new Trip("1", 1, "ismalia",
                 new TripLocation(10.0, 15.01, "iti ismalia"),
                 new TripLocation(10.0, 15.01, "iti smart"), null,
                 new Date()));
-        tripList.add(new Trip(1, 1, "ismalia",
+        tripList.add(new Trip("1", 1, "ismalia",
                 new TripLocation(10.0, 15.01, "iti ismalia"),
                 new TripLocation(10.0, 15.01, "iti smart"), null,
                 new Date()));
-        tripList.add(new Trip(1, 1, "ismalia",
+        tripList.add(new Trip("1", 1, "ismalia",
                 new TripLocation(10.0, 15.01, "iti ismalia"),
                 new TripLocation(10.0, 15.01, "iti smart"), null,
                 new Date()));
-        tripList.add(new Trip(1, 1, "ismalia",
+        tripList.add(new Trip("1", 1, "ismalia",
                 new TripLocation(10.0, 15.01, "iti ismalia"),
                 new TripLocation(10.0, 15.01, "iti smart"), null,
                 new Date()));
-        tripList.add(new Trip(1, 1, "ismalia",
+        tripList.add(new Trip("1", 1, "ismalia",
                 new TripLocation(10.0, 15.01, "iti ismalia"),
                 new TripLocation(10.0, 15.01, "iti smart"), null,
                 new Date()));
-        tripList.add(new Trip(1, 1, "ismalia",
+        tripList.add(new Trip("1", 1, "ismalia",
                 new TripLocation(10.0, 15.01, "iti ismalia"),
                 new TripLocation(10.0, 15.01, "iti smart"), null,
                 new Date()));
-        tripList.add(new Trip(1, 1, "ismalia",
+        tripList.add(new Trip("1", 1, "ismalia",
                 new TripLocation(10.0, 15.01, "iti ismalia"),
                 new TripLocation(10.0, 15.01, "iti smart"), null,
                 new Date()));
-        tripList.add(new Trip(1, 1, "ismalia",
+        tripList.add(new Trip("1", 1, "ismalia",
                 new TripLocation(10.0, 15.01, "iti ismalia"),
                 new TripLocation(10.0, 15.01, "iti smart"), null,
                 new Date()));
-        tripList.add(new Trip(1, 1, "ismalia",
+        tripList.add(new Trip("1", 1, "ismalia",
                 new TripLocation(10.0, 15.01, "iti ismalia"),
                 new TripLocation(10.0, 15.01, "iti smart"), null,
                 new Date()));

@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tripreminder.R;
-import com.example.tripreminder.model.Trip;
+import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.view.fragments.TripBottomSheetDialog;
 
 import java.text.SimpleDateFormat;
