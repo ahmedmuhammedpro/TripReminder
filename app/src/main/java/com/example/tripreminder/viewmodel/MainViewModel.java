@@ -3,14 +3,18 @@ package com.example.tripreminder.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.tripreminder.model.Trip;
+import com.example.tripreminder.model.Entities.Trip;
+import com.example.tripreminder.model.repositories.TripRepositoryImp;
+
+import java.util.List;
 
 public class MainViewModel extends ViewModel implements MainViewModelInterface {
 
+    TripRepositoryImp tripRepositoryImp = new TripRepositoryImp();
 
     @Override
-    public LiveData<Trip> getAllTrips() {
-        return null;
+    public LiveData<List<Trip>> getAllTrips(String userId) {
+         return tripRepositoryImp.getUserTrips(userId);
     }
 
     @Override
