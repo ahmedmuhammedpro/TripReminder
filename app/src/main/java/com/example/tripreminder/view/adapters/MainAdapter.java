@@ -47,10 +47,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
-        holder.tripDateTV.setText(format.format(tripList.get(position).getTripDate()).toString());
+        //holder.tripDateTV.setText(format.format(tripList.get(position).getTripDate()).toString());
         holder.tripNameTV.setText(tripList.get(position).getTripName());
-        holder.tripStartLocationTV.setText("Start point: " + tripList.get(position).getStartLocation().getLocationName());
-        holder.tripEndLocationTV.setText("End point: " + tripList.get(position).getEndLocation().getLocationName());
+        //holder.tripStartLocationTV.setText("Start point: " + tripList.get(position).getStartLocation().getLocationName());
+        //holder.tripEndLocationTV.setText("End point: " + tripList.get(position).getEndLocation().getLocationName());
     }
 
     @Override

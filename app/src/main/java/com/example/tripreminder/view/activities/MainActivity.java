@@ -1,6 +1,7 @@
 package com.example.tripreminder.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +12,13 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.repositories.UserRepositoryImp;
+import com.example.tripreminder.view.fragments.AddTripFragment1;
 import com.example.tripreminder.view.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    String userId="";
+    private Fragment selectedFragment;
+    public static String userId="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
                 // your codes
-                if(item.getId() == 3){
-                    Intent i = new Intent(MainActivity.this,AddTripActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
+                switch (item.getId()) {
+                    case 1: break;
+                    case 2: bottomNavigation.show(2, true); break;
+                    case 3: bottomNavigation.show(3, true); break;
                 }
             }
         });
@@ -45,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onShowItem(MeowBottomNavigation.Model item) {
                 // your codes
+                switch (item.getId()) {
+                    case 1: break;
+                    case 2: selectedFragment = new MainFragment(); break;
+                    case 3: selectedFragment = new AddTripFragment1(); break;
+                }
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, selectedFragment).commit();
             }
         });
 
@@ -54,5 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 // your codes
             }
         });
+
+        bottomNavigation.show(2, true);
     }
 }

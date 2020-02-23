@@ -26,6 +26,7 @@ import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.Entities.TripLocation;
 import com.example.tripreminder.model.repositories.TripRepositoryImp;
+import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.view.adapters.PlacesAutoCompleteAdapter;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -168,7 +169,7 @@ public class AddTripFragment1 extends Fragment {
 
                 Trip trip = new Trip();
                 trip.setTripName(nameTxt.getText().toString());
-                trip.setUserID("test");
+                trip.setUserID(MainActivity.userId);
                 trip.setStartLocation(new TripLocation(1,1,startPointTxt.getText().toString()));
                 trip.setEndLocation(new TripLocation(1,1,endPointTxt.getText().toString()));
                 addTripViewModel.addTrip(trip).observe(AddTripFragment1.this, new Observer<Trip>() {
