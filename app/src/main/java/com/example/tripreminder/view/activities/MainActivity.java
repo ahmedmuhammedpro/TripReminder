@@ -18,12 +18,14 @@ import com.example.tripreminder.view.fragments.MainFragment;
 public class MainActivity extends AppCompatActivity {
 
     private Fragment selectedFragment;
+    private MainFragment mainFragment;
     public static String userId="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         userId = getIntent().getStringExtra(LoginActivity.USER_ID_TAG);
+        mainFragment = new MainFragment();
         setupBottomBar();
     }
     private void setupBottomBar (){
@@ -37,25 +39,33 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
                 // your codes
-                switch (item.getId()) {
+               /* switch (item.getId()) {
                     case 1: break;
                     case 2: bottomNavigation.show(2, true); break;
                     case 3: bottomNavigation.show(3, true); break;
+                }*/
+                switch (item.getId()) {
+                    case 1: break;
+                    case 2: selectedFragment = mainFragment; break;
+                    case 3: selectedFragment = new AddTripFragment1(); break;
                 }
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, selectedFragment).commit();
             }
         });
         bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
             @Override
             public void onShowItem(MeowBottomNavigation.Model item) {
                 // your codes
-                switch (item.getId()) {
+                /*switch (item.getId()) {
                     case 1: break;
-                    case 2: selectedFragment = new MainFragment(); break;
+                    case 2: selectedFragment = mainFragment; break;
                     case 3: selectedFragment = new AddTripFragment1(); break;
                 }
 
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, selectedFragment).commit();
+                        .replace(R.id.container, selectedFragment).commit();*/
             }
         });
 
