@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tripreminder.model.Entities.Trip;
+import com.example.tripreminder.model.Entities.TripLocation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -53,10 +54,11 @@ public class TripFirestoreHandler {
                     for (QueryDocumentSnapshot document : querySnapshot) {
                         String tripId = document.getId();
                         String tripName = String.valueOf(document.getData().get("tripName"));
-
                         Trip trip = new Trip();
                         trip.setTripName(tripName);
                         trip.setTripId(tripId);
+                        trip.setStartLocation(new TripLocation(1,1,String.valueOf(document.getData().get("startLocation"))));
+                        trip.setEndLocation(new TripLocation(1,1,String.valueOf(document.getData().get("endLocation"))));
 
                         tripsList.add(trip);
                     }

@@ -14,4 +14,8 @@ public class LoginViewModel extends ViewModel {
 
         return userRepositoryImp.login(user);
     }
+
+    public void registerIfNewGoogleAccount(User user){
+        userRepositoryImp.registerGoogleUSer(user);
+    }
 }

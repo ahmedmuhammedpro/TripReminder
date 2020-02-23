@@ -17,9 +17,6 @@ UserFirestoreHandler userFirestoreHandler = new UserFirestoreHandler();
         return userFirestoreHandler.getUsersList();
     }
 
-    public void addNewUser(String username,String password){
-        userFirestoreHandler.addNewUser(username,password);
-    }
 
     public void deleteUser(String username){
         userFirestoreHandler.deleteUser(username);
@@ -29,6 +26,9 @@ UserFirestoreHandler userFirestoreHandler = new UserFirestoreHandler();
         userFirestoreHandler.updateUser(username,password);
     }
 
+    public  MutableLiveData<User> registerGoogleUSer(User user){
+        return userFirestoreHandler.registerGoogleUSer(user);
+    }
     public MutableLiveData<User> registerUser(User user){
        return userFirestoreHandler.register(user);
     }
@@ -36,5 +36,7 @@ UserFirestoreHandler userFirestoreHandler = new UserFirestoreHandler();
     public MutableLiveData<User> login(User user){
         return userFirestoreHandler.login(user);
     }
+
+
 
 }

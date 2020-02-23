@@ -19,5 +19,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="TripAlertDialog" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+        <item name="windowNoTitle">true</item>
+    </style>
 
 </resources>
