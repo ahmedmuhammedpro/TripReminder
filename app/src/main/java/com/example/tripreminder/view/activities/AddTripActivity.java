@@ -52,7 +52,6 @@ public class AddTripActivity extends AppCompatActivity {
                 nextBtn.setEnabled(true);
                 prevBtn.setEnabled(false);
                 FragmentManager manager = getSupportFragmentManager();
-               // manager.popBackStack();
                 AddTripFragment1 fone = new AddTripFragment1();
                 manager.beginTransaction().replace(R.id.tripInformationLayout,fone,"addTripFragment1").commit();
 

@@ -1,9 +1,10 @@
 package com.example.tripreminder.model.Entities;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Vector;
 
-public class Trip {
+public class Trip implements Serializable {
 
     public static final int UPCOMING = 1;
     public static final int DONE = 2;
@@ -16,13 +17,13 @@ public class Trip {
     private TripLocation startLocation;
     private TripLocation endLocation;
     private Vector<String> notes;
-    private Date tripDate;
+    private String tripDate;
 
     public Trip() {
     }
 
     public Trip(String tripId, int tripStatus, String tripName, TripLocation startLocation,
-                TripLocation endLocation, Vector<String> notes, Date tripDate, int tripType) {
+                TripLocation endLocation, Vector<String> notes, String tripDate, int tripType) {
         this.tripId = tripId;
         this.tripStatus = tripStatus;
         this.tripName = tripName;
@@ -34,7 +35,7 @@ public class Trip {
     }
 
     public Trip(String tripId, int tripStatus, String tripName, TripLocation startLocation,
-                TripLocation endLocation, Vector<String> notes, Date tripDate){
+                TripLocation endLocation, Vector<String> notes, String tripDate){
         this.tripId = tripId;
         this.tripStatus = tripStatus;
         this.tripName = tripName;
@@ -99,11 +100,11 @@ public class Trip {
         this.notes = notes;
     }
 
-    public Date getTripDate() {
+    public String getTripDate() {
         return tripDate;
     }
 
-    public void setTripDate(Date tripDate) {
+    public void setTripDate(String tripDate) {
         this.tripDate = tripDate;
     }
 

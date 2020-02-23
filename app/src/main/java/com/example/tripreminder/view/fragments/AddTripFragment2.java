@@ -5,6 +5,9 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.tripreminder.R;
+import com.example.tripreminder.model.Entities.Trip;
+import com.example.tripreminder.viewmodel.AddTripViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
@@ -30,12 +35,14 @@ public class AddTripFragment2 extends Fragment {
      Button addNoteBtn ,addTripBtn,cancelTripBtn;
      TextInputEditText noteTxt;
      TextInputLayout noteLayout;
-     Vector<String> notes;
+
+    AddTripViewModel addTripViewModel;
     public AddTripFragment2() {
         // Required empty public constructor
     }
     private void setup(View v){
-        notes= new Vector<>();
+        addTripViewModel = ViewModelProviders.of(this).get(AddTripViewModel.class);
+
         allNotes =  v.findViewById(R.id.chipGroupNotes);
         noteTxt = v.findViewById(R.id.noteTxt);
         addTripBtn = v.findViewById(R.id.addTripBtn);
@@ -64,16 +71,38 @@ public class AddTripFragment2 extends Fragment {
       addTripBtn.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-              addChipsIntoVector(allNotes,notes);
+              Vector<String> notes = addChipsIntoVector(allNotes);
+              Bundle bundle = getArguments();
+              Trip trip= (Trip) bundle.getSerializable(AddTripFragment1.TRIP_Object);;
+              trip.setNotes(notes);
+              addTripViewModel.addTrip(trip).observe(AddTripFragment2.this, new Observer<Trip>() {
+                  @Override
+                  public void onChanged(Trip trip) {
+                      Toast.makeText(getActivity(), "Trip details:"+ trip.getTripDate()+trip.getTripName(), Toast.LENGTH_SHORT).show();
+
+
+                  }
+              });
+          }
+      });
+      cancelTripBtn.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+              MainFragment fmain =new  MainFragment();
+              FragmentManager manager = AddTripFragment2.super.getActivity().getSupportFragmentManager();
+              manager.beginTransaction()
+                      .replace(R.id.container, fmain).commit();
           }
       });
     }
-    private void addChipsIntoVector(ChipGroup allNotes,Vector<String> notes){
+    private Vector<String> addChipsIntoVector(ChipGroup allNotes){
+        Vector<String> notes = new Vector<>();
         int chipCount =  allNotes.getChildCount();
         for(int i=0;i<chipCount;i++){
             Chip chip = (Chip) allNotes.getChildAt(i);
             notes.add(i,chip.getText().toString());
         }
+        return notes;
     }
     private Chip addNoteChip(final ChipGroup notes,String text){
         Chip chip = (Chip) LayoutInflater.from(AddTripFragment2.super.getContext()).inflate(R.layout.note_item, null, false);

@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.fragments.AddTripFragment1">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppThemeAddTrip">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tripnameLayout"
-            android:layout_width="390dp"
+            android:layout_width="300dp"
             android:layout_height="70dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
             android:hint="@string/TripName"
             app:boxBackgroundMode="filled"
             app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
             app:endIconMode="clear_text"
             app:endIconTintMode="src_in"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -35,28 +43,31 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
+            android:layout_marginTop="20dp"
             android:text="@string/setLocation"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/timeTxt"
+            app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout2"
 
-            android:layout_width="390dp"
+            android:layout_width="300dp"
             android:layout_height="70dp"
-            android:layout_marginTop="250dp"
+            android:layout_marginTop="200dp"
             android:baselineAlignedChildIndex="5"
             android:hint="@string/startPoint"
             app:boxBackgroundColor="#D9D9D9"
             app:boxBackgroundMode="filled"
             app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
             app:endIconMode="clear_text"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView2"
             app:layout_constraintTop_toBottomOf="@+id/tripnameLayout">
 
             <AutoCompleteTextView
@@ -72,7 +83,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout3"
-            android:layout_width="390dp"
+            android:layout_width="300dp"
             android:layout_height="70dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
@@ -80,10 +91,12 @@
             app:boxBackgroundColor="#D9D9D9"
             app:boxBackgroundMode="filled"
             app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
             app:endIconMode="clear_text"
             app:layout_constraintBottom_toTopOf="@+id/space2"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
             <AutoCompleteTextView
@@ -102,25 +115,20 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="20dp"
             android:text="@string/tripType"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/chipGroupNotes"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/space2" />
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroupTripTypes"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginLeft="80dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="20dp"
             app:chipSpacingHorizontal="0dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
             app:singleSelection="true">
 
@@ -159,6 +167,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
         <Space
+            android:id="@+id/space3"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="20dp"
@@ -187,10 +196,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dateTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginLeft="60dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginLeft="56dp"
             android:layout_marginBottom="20dp"
             android:ems="10"
             android:hint="@string/dateFormat"
@@ -203,38 +212,32 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/timeTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="@string/timeFormat"
             android:inputType="time"
             android:textSize="16sp"
             app:endIconMode="clear_text"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/dateTxt"
             app:layout_constraintTop_toBottomOf="@+id/dateTxt" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="52dp"
+            android:layout_marginTop="40dp"
             android:text="@string/setDateandTime"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tripnameLayout"
             app:layout_constraintTop_toBottomOf="@+id/tripnameLayout" />
 
         <Button
             android:id="@+id/timeBtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
             android:background="@mipmap/ic_launcher_time_foreground"
             app:layout_constraintStart_toEndOf="@+id/timeTxt"
             app:layout_constraintTop_toTopOf="@+id/timeTxt" />
@@ -243,21 +246,21 @@
             android:id="@+id/dateBtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
             android:background="@mipmap/ic_launcher_calender_foreground"
             app:layout_constraintStart_toEndOf="@+id/dateTxt"
             app:layout_constraintTop_toTopOf="@+id/dateTxt" />
 
         <Button
-            android:id="@+id/addTripButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="AddTrip"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            android:id="@+id/nextBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="340dp"
+            android:layout_marginLeft="340dp"
+            android:background="@drawable/ic_navigate_next_24px"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/space2" />
+            app:layout_constraintTop_toBottomOf="@+id/chipGroupTripTypes"
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

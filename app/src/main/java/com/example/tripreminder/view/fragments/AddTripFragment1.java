@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -33,6 +34,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.example.tripreminder.viewmodel.AddTripViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,10 +45,7 @@ import java.util.TimeZone;
  * A simple {@link Fragment} subclass.
  */
 public class AddTripFragment1 extends Fragment {
-    public static final String TRIP_NAME = "name";
-    public static final String TRIP_TYPE = "type";
-    public static final String TRIP_START_POINT ="startPoint";
-    public static final String TRIP_END_POINT= "endPoint";
+    public static final String TRIP_Object = "trip";
     public static final String TIME_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_1 = "dd-MMM-yyyy";
     private ChipGroup tripTypes;
@@ -56,9 +55,9 @@ public class AddTripFragment1 extends Fragment {
     private TextInputEditText nameTxt;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private int tripType;
+    String dateString ;
 
-    Button addTripButton;
-    AddTripViewModel addTripViewModel;
+    Button nextBtn;
 
     public AddTripFragment1() {
         // Required empty public constructor
@@ -81,8 +80,8 @@ public class AddTripFragment1 extends Fragment {
     private void setup(View view,Bundle saveInstanseState){
 
         //set views
-        addTripViewModel = ViewModelProviders.of(this).get(AddTripViewModel.class);
         tripTypes = view.findViewById(R.id.chipGroupTripTypes);
+        nextBtn = view.findViewById(R.id.nextBtn);
         nameTxt = view.findViewById(R.id.tripNameTxt);
         setDate = view.findViewById(R.id.dateBtn);
         setTime = view.findViewById(R.id.timeBtn);
@@ -100,14 +99,18 @@ public class AddTripFragment1 extends Fragment {
                  mYear = c.get(Calendar.YEAR);
                  mMonth = c.get(Calendar.MONTH);
                  mDay = c.get(Calendar.DAY_OF_MONTH);
+
                  // Launch Date Picker Dialog
                  DatePickerDialog datePickerDialog = new DatePickerDialog(AddTripFragment1.super.getContext(),
                          new DatePickerDialog.OnDateSetListener() {
                              @Override
                              public void onDateSet(DatePicker view, int year,
                                                    int monthOfYear, int dayOfMonth) {
-                                 String date = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
-                                 dateTxt.setText(date);
+                                 c.set(year,monthOfYear,dayOfMonth);
+                                String date = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+                               dateTxt.setText(date);
+                                 monthOfYear +=1;
+                                 dateString = ""+year+"-"+monthOfYear+"-"+dayOfMonth;
                              }
                          }, mYear, mMonth, mDay);
                  datePickerDialog.show();
@@ -127,6 +130,7 @@ public class AddTripFragment1 extends Fragment {
                              @Override
                              public void onTimeSet(TimePicker view, int hourOfDay,
                                                    int minute) {
+                                dateString +="-"+mHour+"-"+mMinute;
                                  timeTxt.setText(hourOfDay + ":" + minute);
                              }
                          }, mHour, mMinute, true);
@@ -151,37 +155,30 @@ public class AddTripFragment1 extends Fragment {
                 }
             }
         });
-
-         //set Adapters
-        startPointTxt.setAdapter(new PlacesAutoCompleteAdapter(AddTripFragment1.super.getContext(),android.R.layout.simple_list_item_1));
-        endPointTxt.setAdapter(new PlacesAutoCompleteAdapter(AddTripFragment1.super.getContext(),android.R.layout.simple_list_item_1));
-//
-//        if(saveInstanseState != null){
-//            Log.i("name state",saveInstanseState.toString());
-//            Log.i("name state trip",saveInstanseState.getCharSequence(TRIP_NAME).toString());
-//             nameTxt.setText(saveInstanseState.getCharSequence(TRIP_NAME).toString());
-//        }
-
-        addTripButton = view.findViewById(R.id.addTripButton);
-        addTripButton.setOnClickListener(new View.OnClickListener() {
+        nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View view) {
+                nextBtn.setEnabled(false);
                 Trip trip = new Trip();
+                trip.setTripType(tripType);
                 trip.setTripName(nameTxt.getText().toString());
                 trip.setUserID(MainActivity.userId);
                 trip.setStartLocation(new TripLocation(1,1,startPointTxt.getText().toString()));
                 trip.setEndLocation(new TripLocation(1,1,endPointTxt.getText().toString()));
-                addTripViewModel.addTrip(trip).observe(AddTripFragment1.this, new Observer<Trip>() {
-                    @Override
-                    public void onChanged(Trip trip) {
-
-                        Toast.makeText(getActivity(), "Trip Added Successfully", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+                trip.setTripDate(dateString);
+                AddTripFragment2 ftwo = new AddTripFragment2();
+                FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(TRIP_Object, trip);
+                ftwo.setArguments(bundle);
+                manager.beginTransaction().replace(R.id.container,ftwo,"addTripFragment2").commit();
             }
         });
+
+         //set Adapters
+        startPointTxt.setAdapter(new PlacesAutoCompleteAdapter(AddTripFragment1.super.getContext(),android.R.layout.simple_list_item_1));
+        endPointTxt.setAdapter(new PlacesAutoCompleteAdapter(AddTripFragment1.super.getContext(),android.R.layout.simple_list_item_1));
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -192,10 +189,4 @@ public class AddTripFragment1 extends Fragment {
         return view;
     }
 
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putCharSequence(TRIP_NAME , nameTxt.getText().toString());
-//        Log.i("name",nameTxt.getText().toString());
-//    }
 }

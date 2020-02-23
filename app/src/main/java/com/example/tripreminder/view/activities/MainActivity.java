@@ -39,23 +39,18 @@ public class MainActivity extends AppCompatActivity {
                 // your codes
                 switch (item.getId()) {
                     case 1: break;
-                    case 2: bottomNavigation.show(2, true); break;
-                    case 3: bottomNavigation.show(3, true); break;
-                }
-            }
-        });
-        bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
-            @Override
-            public void onShowItem(MeowBottomNavigation.Model item) {
-                // your codes
-                switch (item.getId()) {
-                    case 1: break;
                     case 2: selectedFragment = new MainFragment(); break;
                     case 3: selectedFragment = new AddTripFragment1(); break;
                 }
 
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, selectedFragment).commit();
+            }
+        });
+        bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
+            @Override
+            public void onShowItem(MeowBottomNavigation.Model item) {
+                // your codes
             }
         });
 
@@ -66,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        bottomNavigation.show(2, true);
+        //bottomNavigation.show(2, true);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container,new MainFragment() ).commit();
     }
 }
