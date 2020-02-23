@@ -18,12 +18,14 @@ import com.example.tripreminder.view.fragments.MainFragment;
 public class MainActivity extends AppCompatActivity {
 
     private Fragment selectedFragment;
+    private MainFragment mainFragment;
     public static String userId="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         userId = getIntent().getStringExtra(LoginActivity.USER_ID_TAG);
+        mainFragment = new MainFragment();
         setupBottomBar();
     }
     private void setupBottomBar (){
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 // your codes
                 switch (item.getId()) {
                     case 1: break;
-                    case 2: selectedFragment = new MainFragment(); break;
+                    case 2: selectedFragment = mainFragment; break;
                     case 3: selectedFragment = new AddTripFragment1(); break;
                 }
 

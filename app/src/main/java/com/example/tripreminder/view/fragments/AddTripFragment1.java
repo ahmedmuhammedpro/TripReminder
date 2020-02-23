@@ -82,6 +82,7 @@ public class AddTripFragment1 extends Fragment {
 
         //set views
         addTripViewModel = ViewModelProviders.of(this).get(AddTripViewModel.class);
+        addTripViewModel.setContext(getActivity().getApplicationContext());
         tripTypes = view.findViewById(R.id.chipGroupTripTypes);
         nameTxt = view.findViewById(R.id.tripNameTxt);
         setDate = view.findViewById(R.id.dateBtn);
