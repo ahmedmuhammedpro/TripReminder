@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -30,7 +31,7 @@ import java.util.Objects;
 public class UserFirestoreHandler {
 
     FirebaseAuth auth= FirebaseAuth.getInstance();;
-    private final String USERNAME_KEY="username",PASSWORD_KEY="password";
+    private final String USERNAME_KEY="username",PASSWORD_KEY="password",EMAIL_KEY="email";
     private final String TAG="fireBase";
     MutableLiveData<List<User>> userLiveDataList = new MutableLiveData<>();
     private FirebaseFirestore dbFirestoreInstance = FirebaseFirestore.getInstance();
@@ -55,23 +56,6 @@ public class UserFirestoreHandler {
         });
 
         return userLiveDataList;
-    }
-
-    public void addNewUser(String username , String password){
-        HashMap<String,Object> newNode = new HashMap<>();
-        newNode.put(PASSWORD_KEY,password);
-
-        dbFirestoreInstance.collection("users").document(username).set(newNode).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.i(TAG, "added successfully");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.i(TAG, "error in adding");
-            }
-        });
     }
 
     public void deleteUser(String username){
@@ -112,7 +96,13 @@ public class UserFirestoreHandler {
     }
 
     public MutableLiveData<User> register(User user){
+
         MutableLiveData<User> userRegistered = new MutableLiveData<>();
+        if(isUserRegisteredBefore(user)){
+            user.setUserId("-1");
+            userRegistered.postValue(user);
+            return userRegistered;
+        }
         auth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener(authTask->{
             if(authTask.isSuccessful()){
                 FirebaseUser firebaseUser = auth.getCurrentUser();
@@ -149,4 +139,42 @@ public class UserFirestoreHandler {
         Log.d("Error", error);
     }
 
+
+    private boolean isUserRegisteredBefore(User user){
+        final boolean[] result = {false};
+
+        return result[0];
+    }
+
+    public  MutableLiveData<User> registerGoogleUSer(User user){
+        MutableLiveData<User> userRegistered = new MutableLiveData<>();
+        //check if user is registered before
+        dbFirestoreInstance.collection("users").whereEqualTo("email",user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(!task.isSuccessful()){
+                    //if not registered
+                    HashMap<String,Object> newNode = new HashMap<>();
+                    newNode.put(EMAIL_KEY,user.getEmail());
+                    dbFirestoreInstance.collection("users").document(user.getUserId()).set(newNode).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.i(TAG, "Added successfully");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.i(TAG, "error in Adding");
+                            user.setUserId("-1");
+                        }
+                    });
+
+                } else {
+                    Log.i("Error", "Already registered");
+                }
+            }
+        });
+
+        return userRegistered;
+    }
 }
