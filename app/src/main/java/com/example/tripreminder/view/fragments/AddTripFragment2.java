@@ -75,9 +75,11 @@ public class AddTripFragment2 extends Fragment {
               Bundle bundle = getArguments();
               Trip trip= (Trip) bundle.getSerializable(AddTripFragment1.TRIP_Object);;
               trip.setNotes(notes);
+              addTripViewModel.setContext(getContext());
               addTripViewModel.addTrip(trip).observe(AddTripFragment2.this, new Observer<Trip>() {
                   @Override
                   public void onChanged(Trip trip) {
+
                       Toast.makeText(getActivity(), "Trip details:"+ trip.getTripDate()+trip.getTripName(), Toast.LENGTH_SHORT).show();
 
 

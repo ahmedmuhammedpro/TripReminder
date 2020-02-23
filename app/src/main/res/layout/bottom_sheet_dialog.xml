@@ -52,7 +52,7 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/rename"
+        android:id="@+id/delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -62,7 +62,7 @@
         android:drawablePadding="@dimen/padding_16dp"
         android:focusable="true"
         android:paddingBottom="@dimen/padding_16dp"
-        android:text="Rename"
+        android:text="delete"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 

@@ -2,6 +2,7 @@ package com.example.tripreminder.view.adapters;
 
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     private Context context;
     private List<Trip> tripList;
     private SimpleDateFormat format;
-
+    public static final String TRIP_ID_KEY="tripID";
     public MainAdapter(Context context,  List<Trip> tripList) {
         this.context = context;
         this.tripList = tripList;
@@ -38,10 +39,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     public MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.upcoming_trip_item, parent, false);
         MainViewHolder mainViewHolder = new MainViewHolder(view);
-        mainViewHolder.tripOptionsIV.setOnClickListener(v -> {
-            TripBottomSheetDialog bottomSheetDialog = new TripBottomSheetDialog();
-            bottomSheetDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), TripBottomSheetDialog.TAG);
-        });
         return mainViewHolder;
     }
 
@@ -49,6 +46,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
         //holder.tripDateTV.setText(format.format(tripList.get(position).getTripDate()).toString());
         holder.tripNameTV.setText(tripList.get(position).getTripName());
+        holder.tripOptionsIV.setOnClickListener(v -> {
+            TripBottomSheetDialog bottomSheetDialog = new TripBottomSheetDialog();
+            Bundle bundle = new Bundle();
+            String tripId=tripList.get(position).getTripId();
+            bundle.putString(TRIP_ID_KEY,tripId);
+            bottomSheetDialog.setArguments(bundle);
+            bottomSheetDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), TripBottomSheetDialog.TAG);
+        });
         //holder.tripStartLocationTV.setText("Start point: " + tripList.get(position).getStartLocation().getLocationName());
         //holder.tripEndLocationTV.setText("End point: " + tripList.get(position).getEndLocation().getLocationName());
     }

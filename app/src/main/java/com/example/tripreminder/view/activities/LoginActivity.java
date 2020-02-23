@@ -16,7 +16,9 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,9 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private final String SHARED_PREFERENCES_FILE_NAME="loggedInUserInfo",EMAIL_KEY="email",PASSWORD_KEY="password";
+    private final String lOGGED_IN_KEY="loggedIn";
+    boolean loggedIn=false;
     public static final String USER_ID_TAG="userID";
     private static final int RC_SIGN_IN = 1;
     Button loginButton;
@@ -40,17 +45,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
+
     private void setup(){
+        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        readFromSharedPreferences();
+
         loginButton = findViewById(R.id.loginButton);
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         googleSignInButton = findViewById(R.id.googleSignInButton);
 
-        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+                String email = emailEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+                login(email,password);
             }
         });
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -89,24 +101,24 @@ public class LoginActivity extends AppCompatActivity {
             user.setEmail(account.getEmail());
             user.setUserId(account.getId());
             loginViewModel.registerIfNewGoogleAccount(user);
-            updateUI(account);
+            updateUI(account,user);
         } catch (ApiException e) {
-            updateUI(null);
+            updateUI(null,null);
         }
     }
 
-    private void updateUI(GoogleSignInAccount account) {
+    private void updateUI(GoogleSignInAccount account,User user) {
 
         if(account!=null) {
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(USER_ID_TAG, user.getUserId());
             startActivity(intent);
         }
     }
 
-    private void login(){
+    private void login(String email,String password){
 
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
+
         if(!email.trim().equals("") && !password.trim().equals("")) {
             User user = new User();
             user.setEmail(email);
@@ -120,6 +132,9 @@ public class LoginActivity extends AppCompatActivity {
 
                     }else {
 
+                        if(!loggedIn) {
+                            writeInSharedPreferences(loggedInUser);
+                        }
                         Toast.makeText(this, "Login Successfully", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(this, MainActivity.class);
                         intent.putExtra(USER_ID_TAG, loggedInUser.getUserId());
@@ -133,4 +148,26 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter email and password before login", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void writeInSharedPreferences(User loggedInUser) {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(EMAIL_KEY,loggedInUser.getEmail());
+        editor.putString(PASSWORD_KEY,loggedInUser.getPassword());
+        editor.putBoolean(lOGGED_IN_KEY,true);
+        editor.commit();
+    }
+
+    private void readFromSharedPreferences(){
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        loggedIn = sharedPreferences.getBoolean(lOGGED_IN_KEY,false);
+        if(loggedIn) {
+            String email = sharedPreferences.getString(EMAIL_KEY, "empty");
+            String password = sharedPreferences.getString(PASSWORD_KEY, "empty");
+            login(email,password);
+        }
+    }
+
 }
