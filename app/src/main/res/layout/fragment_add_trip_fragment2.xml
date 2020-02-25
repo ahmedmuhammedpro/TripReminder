@@ -5,127 +5,138 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.fragments.AddTripFragment2">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/frameLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:theme="@style/AppThemeAddTrip"
-    tools:context=".view.fragments.AddTripFragment2">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="19dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="150dp"
-        android:text="@string/tripNotes"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/chipGroupNotes"
-        app:layout_constraintStart_toStartOf="@+id/chipGroupNotes"
-        app:layout_constraintTop_toBottomOf="@+id/space2" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/AppThemeAddTrip"
+        tools:context=".view.fragments.AddTripFragment2">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/noteTxtLayout"
-        android:layout_width="300dp"
-        android:layout_height="70dp"
+        <Button
+            android:id="@+id/prevBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_navigate_before_black_24dp"
+            app:layout_constraintStart_toStartOf="@+id/chipGroupNotes"
+            app:layout_constraintTop_toTopOf="@+id/cancelTripBtn" />
 
-        android:layout_marginTop="100dp"
-        app:boxCornerRadiusBottomEnd="20dp"
-        app:boxCornerRadiusBottomStart="20dp"
-        app:boxCornerRadiusTopEnd="20dp"
-        app:boxCornerRadiusTopStart="20dp"
-        app:endIconMode="clear_text"
-        app:endIconTintMode="src_in"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/tripNotes"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/chipGroupNotes"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/noteTxt"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/note" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/noteTxtLayout"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
 
-    </com.google.android.material.textfield.TextInputLayout>
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:endIconMode="clear_text"
+            app:endIconTintMode="src_in"
+            app:layout_constraintStart_toStartOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-    <Button
-        android:id="@+id/addNoteBtn"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:background="@drawable/ic_note_add_black_24dp"
-        app:layout_constraintEnd_toEndOf="@+id/noteTxtLayout"
-        app:layout_constraintTop_toTopOf="@+id/textView3" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/noteTxt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/note" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroupNotes"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_margin="30dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/custom_chipgroup"
-        android:isScrollContainer="true"
-        android:overScrollMode="always"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="horizontal|vertical"
-        app:chipSpacingHorizontal="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/addTripBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteTxtLayout">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Entry"
+        <Button
+            android:id="@+id/addNoteBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/ic_note_add_black_24dp"
+            app:layout_constraintStart_toEndOf="@+id/noteTxtLayout"
+            app:layout_constraintTop_toTopOf="@+id/noteTxtLayout" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupNotes"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_margin="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/custom_chipgroup"
+            android:isScrollContainer="true"
+            android:overScrollMode="always"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="horizontal|vertical"
+            app:chipSpacingHorizontal="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/noteTxtLayout">
+
+            <com.google.android.material.chip.Chip
+                style="@style/Widget.MaterialComponents.Chip.Entry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_8dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/Labtop"
+                android:textSize="24sp"
+                app:chipIcon="@drawable/ic_note"
+                app:closeIcon="@drawable/ic_cancel" />
+
+            <com.google.android.material.chip.Chip
+                style="@style/Widget.MaterialComponents.Chip.Entry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:text="@string/water"
+                android:textSize="24sp"
+                app:chipIcon="@drawable/ic_note"
+                app:closeIcon="@drawable/ic_cancel" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <Button
+            android:id="@+id/cancelTripBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_8dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:text="@string/Labtop"
-            android:textSize="24sp"
-            app:chipIcon="@drawable/ic_note"
-            app:closeIcon="@drawable/ic_cancel" />
+            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+            android:text="@string/cancel"
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="@+id/addTripBtn"
+            app:layout_constraintStart_toStartOf="@+id/addTripBtn"
+            app:layout_constraintTop_toBottomOf="@+id/addTripBtn" />
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Entry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:text="@string/water"
-            android:textSize="24sp"
-            app:chipIcon="@drawable/ic_note"
-            app:closeIcon="@drawable/ic_cancel" />
+        <com.spark.submitbutton.SubmitButton
+            android:id="@+id/addTripBtn"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="@string/addTrip"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/chipGroupNotes"
+            app:layout_constraintStart_toStartOf="@+id/chipGroupNotes"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroupNotes"
+            app:sub_btn_background="@color/colorPrimaryDark"
+            app:sub_btn_duration="2000"
+            app:sub_btn_line_color="@color/colorPrimaryDark"
+            app:sub_btn_ripple_color="@color/quantum_vanillagreen100"
+            app:sub_btn_tick_color="@color/quantum_vanillagreen100" />
 
-    </com.google.android.material.chip.ChipGroup>
 
-    <Button
-        android:id="@+id/cancelTripBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
-        android:layout_marginLeft="104dp"
-        android:background="#F9F9F9"
-        android:text="@string/cancel"
-        android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintStart_toStartOf="@+id/addTripBtn"
-        app:layout_constraintTop_toBottomOf="@+id/addTripBtn" />
-
-    <Button
-        android:id="@+id/addTripBtn"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="44dp"
-        android:background="@drawable/custom_button_dark_rounded"
-        android:text="@string/addTrip"
-        android:textColor="@android:color/white"
-        app:layout_constraintStart_toStartOf="@+id/chipGroupNotes"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroupNotes" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

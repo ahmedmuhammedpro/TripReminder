@@ -30,7 +30,7 @@ public class AddTripViewModel extends ViewModel {
     }
 
     public MutableLiveData<Trip> addTrip(Trip trip){
-        addTripToWorkManager(trip);
+       // addTripToWorkManager(trip);
         return tripRepositoryImp.addTrip(trip);
     }
 

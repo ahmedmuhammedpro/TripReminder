@@ -13,7 +13,7 @@ import com.example.tripreminder.view.fragments.AddTripFragment2;
 
 public class AddTripActivity extends AppCompatActivity {
 
-    Button closeBtn,nextBtn,prevBtn;
+//    Button closeBtn,nextBtn,prevBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,46 +24,41 @@ public class AddTripActivity extends AppCompatActivity {
     private void setup(){
 
         //buttons views
-        closeBtn = findViewById(R.id.closeBtn);
-        nextBtn = findViewById(R.id.nextBtn);
-        prevBtn = findViewById(R.id.prevBtn);
-        prevBtn.setEnabled(false);
-        //button listners
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               finish();
-            }
-        });
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                 nextBtn.setEnabled(false);
-                 prevBtn.setEnabled(true);
-                 AddTripFragment2 ftwo = new AddTripFragment2();
-                 FragmentManager manager = getSupportFragmentManager();
-                // manager.popBackStack();
-                 manager.beginTransaction().replace(R.id.tripInformationLayout,ftwo,"addTripFragment2").commit();
-            }
-        });
-        prevBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                nextBtn.setEnabled(true);
-                prevBtn.setEnabled(false);
-                FragmentManager manager = getSupportFragmentManager();
-                AddTripFragment1 fone = new AddTripFragment1();
-                manager.beginTransaction().replace(R.id.tripInformationLayout,fone,"addTripFragment1").commit();
-
-            }
-        });
-        FragmentManager manager = getSupportFragmentManager();
-        AddTripFragment1 fone = new AddTripFragment1();
-        manager.beginTransaction().replace(R.id.tripInformationLayout,fone,"addTripFragment1").commit();
-    }
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("res" , "");
+//        closeBtn = findViewById(R.id.closeBtn);
+//        nextBtn = findViewById(R.id.nextBtn);
+//        prevBtn = findViewById(R.id.prevBtn);
+//        prevBtn.setEnabled(false);
+//        //button listners
+//        closeBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//               finish();
+//            }
+//        });
+//        nextBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                 nextBtn.setEnabled(false);
+//                 prevBtn.setEnabled(true);
+//                 AddTripFragment2 ftwo = new AddTripFragment2();
+//                 FragmentManager manager = getSupportFragmentManager();
+//                // manager.popBackStack();
+//                 manager.beginTransaction().replace(R.id.tripInformationLayout,ftwo,"addTripFragment2").commit();
+//            }
+//        });
+//        prevBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                nextBtn.setEnabled(true);
+//                prevBtn.setEnabled(false);
+//                FragmentManager manager = getSupportFragmentManager();
+//                AddTripFragment1 fone = new AddTripFragment1();
+//                manager.beginTransaction().replace(R.id.tripInformationLayout,fone,"addTripFragment1").commit();
+//
+//            }
+//        });
+//        FragmentManager manager = getSupportFragmentManager();
+//        AddTripFragment1 fone = new AddTripFragment1();
+//        manager.beginTransaction().replace(R.id.tripInformationLayout,fone,"addTripFragment1").commit();
     }
 }

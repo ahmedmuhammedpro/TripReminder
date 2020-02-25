@@ -22,6 +22,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.spark.submitbutton.SubmitButton;
 
 import java.util.Vector;
 
@@ -32,22 +33,22 @@ import java.util.Vector;
 public class AddTripFragment2 extends Fragment {
 
      ChipGroup allNotes;
-     Button addNoteBtn ,addTripBtn,cancelTripBtn;
+     Button addNoteBtn ,cancelTripBtn,prevBtn;
      TextInputEditText noteTxt;
      TextInputLayout noteLayout;
-
+    SubmitButton addTripBtn;
     AddTripViewModel addTripViewModel;
     public AddTripFragment2() {
         // Required empty public constructor
     }
     private void setup(View v){
         addTripViewModel = ViewModelProviders.of(this).get(AddTripViewModel.class);
-
         allNotes =  v.findViewById(R.id.chipGroupNotes);
         noteTxt = v.findViewById(R.id.noteTxt);
         addTripBtn = v.findViewById(R.id.addTripBtn);
         cancelTripBtn = v.findViewById(R.id.cancelTripBtn);
         addNoteBtn = v.findViewById(R.id.addNoteBtn);
+        prevBtn = v.findViewById(R.id.prevBtn);
         noteLayout = v.findViewById(R.id.noteTxtLayout);
         addNoteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +95,14 @@ public class AddTripFragment2 extends Fragment {
               FragmentManager manager = AddTripFragment2.super.getActivity().getSupportFragmentManager();
               manager.beginTransaction()
                       .replace(R.id.container, fmain).commit();
+          }
+      });
+      prevBtn.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+              AddTripFragment1 fone = new AddTripFragment1();
+              FragmentManager manager = AddTripFragment2.super.getActivity().getSupportFragmentManager();
+              manager.beginTransaction().replace(R.id.container,fone,"addTripFragment1").commit();
           }
       });
     }

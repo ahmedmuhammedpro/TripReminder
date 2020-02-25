@@ -2,16 +2,9 @@ package com.example.tripreminder.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
-import com.example.tripreminder.model.Entities.User;
-import com.example.tripreminder.model.repositories.UserRepositoryImp;
 import com.example.tripreminder.view.fragments.AddTripFragment1;
 import com.example.tripreminder.view.fragments.MainFragment;
 
