@@ -1,38 +1,40 @@
 package com.example.tripreminder.view.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.example.tripreminder.model.PlaceApi;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class PlacesAutoCompleteAdapter extends ArrayAdapter implements Filterable {
 
-   private ArrayList<String> results;
+   private ArrayList<String> placesDescriptions;
+   private ArrayList<String> placesIds;
+   private HashMap<Integer,ArrayList<String>> placesData = new HashMap<>();
    private int resource;
    private Context context;
-
+   private double lat ,lng;
    private PlaceApi placeApi = new PlaceApi();
 
     public PlacesAutoCompleteAdapter(Context context, int resId) {
         super(context, resId);
         this.context = context;
         this.resource = resId;
-
     }
 
     @Override
     public int getCount() {
-        return results.size();
+        return placesDescriptions.size();
     }
 
     @Override
     public String getItem(int pos) {
-        return results.get(pos);
+        return placesDescriptions.get(pos);
     }
 
     @Override
@@ -42,10 +44,12 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter implements Filterabl
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
-                    results = placeApi.autoComplete(constraint.toString());
-
-                    filterResults.values = results;
-                    filterResults.count = results.size();
+                    placesData = placeApi.autoComplete(constraint.toString());
+                    Log.i("desc",placesData.get(0).get(0));
+                    placesDescriptions = placesData.get(0);
+                    placesIds = placesData.get(1);
+                    filterResults.values = placesDescriptions;
+                    filterResults.count = placesDescriptions.size();
                 }
                 return filterResults;
             }
@@ -62,4 +66,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter implements Filterabl
         };
         return filter;
     }
+   public ArrayList<String> getplacesIds(){
+        return placesIds;
+   }
 }
