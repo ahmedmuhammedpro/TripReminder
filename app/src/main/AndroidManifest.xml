@@ -12,8 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activities.TripAlertActivity" android:theme="@style/TripAlertDialog"></activity>
-        <activity android:name=".view.activities.LoginActivity">
+        <activity android:name=".view.activities.TripAlertActivity"
+            android:theme="@style/TripAlertDialog"
+            android:excludeFromRecents="true"></activity>
+        <activity android:name=".view.activities.LoginActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,12 +25,6 @@
         </activity>
         <activity android:name=".view.activities.AddTripActivity" />
         <activity android:name=".view.activities.MainActivity"></activity>
-
-        <receiver android:name=".viewmodel.workmanager.TripBroadcastReceiver">
-            <intent-filter>
-                <action android:name="tripAlert" />
-            </intent-filter>
-        </receiver>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

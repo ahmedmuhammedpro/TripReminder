@@ -36,7 +36,10 @@ public class AddTripViewModel extends ViewModel {
 
     private void addTripToWorkManager(Trip trip) {
         Data.Builder dataBuilder = new Data.Builder();
+        dataBuilder.putString(Constants.TRIP_ID_KEY, trip.getTripId());
         dataBuilder.putString(Constants.TRIP_NAME_KEY, trip.getTripName());
+        dataBuilder.putString(Constants.TRIP_START_LOCATION_KEY, trip.getStartLocation().getLocationName());
+        dataBuilder.putString(Constants.TRIP_END_LOCATION_KEY, trip.getEndLocation().getLocationName());
 
         OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(TripWorker.class)
                 .setInputData(dataBuilder.build())

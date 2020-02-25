@@ -258,7 +258,7 @@
             android:layout_marginLeft="340dp"
             android:background="@drawable/ic_navigate_next_24px"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chipGroupTripTypes"
             app:layout_constraintVertical_bias="0.0" />
 
