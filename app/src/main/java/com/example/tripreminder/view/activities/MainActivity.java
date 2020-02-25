@@ -14,6 +14,7 @@ import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.repositories.UserRepositoryImp;
 import com.example.tripreminder.view.fragments.AddTripFragment1;
 import com.example.tripreminder.view.fragments.MainFragment;
+import com.example.tripreminder.view.fragments.PastTripsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClickItem(MeowBottomNavigation.Model item) {
                 // your codes
                 switch (item.getId()) {
-                    case 1: break;
+                    case 1: selectedFragment = new PastTripsFragment();break;
                     case 2: selectedFragment = new MainFragment(); break;
                     case 3: selectedFragment = new AddTripFragment1(); break;
                 }

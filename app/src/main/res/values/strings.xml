@@ -29,4 +29,6 @@
     <string name="Email">Email</string>
     <string name="Password">Password</string>
     <string name="LoginButtonText">Login</string>
+    <string name="PastTripsTab">Past Trips</string>
+    <string name="MapTapText">Map</string>
 </resources>

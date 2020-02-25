@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activities.TripAlertActivity" android:theme="@style/TripAlertDialog"></activity>
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBxfnMwiZig4b4yJqDLkT7IPtN-ZhRzFlo" />
+        <activity
+            android:name=".view.activities.TripAlertActivity"
+            android:theme="@style/TripAlertDialog" />
         <activity android:name=".view.activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,13 +28,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activities.AddTripActivity" />
-        <activity android:name=".view.activities.MainActivity"></activity>
+        <activity android:name=".view.activities.MainActivity" />
 
         <receiver android:name=".viewmodel.workmanager.TripBroadcastReceiver">
             <intent-filter>
                 <action android:name="tripAlert" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
