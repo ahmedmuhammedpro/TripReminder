@@ -184,6 +184,8 @@ public class AddTripFragment1 extends Fragment {
                 trip.setTripName(nameTxt.getText().toString());
                 trip.setUserID(MainActivity.userId);
                 trip.setTripDate(dateString);
+                trip.getStartLocation().setLocationName(startPointTxt.getText().toString());
+                trip.getEndLocation().setLocationName(endPointTxt.getText().toString());
                 AddTripFragment2 ftwo = new AddTripFragment2();
                 FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
                 Bundle bundle = new Bundle();
@@ -216,11 +218,9 @@ public class AddTripFragment1 extends Fragment {
             LatLng l = place.getLatLng();
            if(type==1) {
                TripLocation loc = new TripLocation(l.latitude, l.longitude);
-               loc.setLocationName(place.getName());
                trip.setStartLocation(loc);
            }else {
                TripLocation loc = new TripLocation(l.latitude, l.longitude);
-               loc.setLocationName(place.getName());
                trip.setEndLocation(loc);
            }
         }).addOnFailureListener((exception) -> {

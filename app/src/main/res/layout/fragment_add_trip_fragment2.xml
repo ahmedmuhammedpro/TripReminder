@@ -17,10 +17,8 @@
             android:id="@+id/prevBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="52dp"
-            android:layout_marginLeft="52dp"
-            android:background="@drawable/ic_navigate_before_24px"
-            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/ic_navigate_before_black_24dp"
+            app:layout_constraintStart_toStartOf="@+id/chipGroupNotes"
             app:layout_constraintTop_toTopOf="@+id/cancelTripBtn" />
 
         <TextView
@@ -58,11 +56,10 @@
 
         <Button
             android:id="@+id/addNoteBtn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:background="@drawable/ic_note_add_black_24dp"
             app:layout_constraintStart_toEndOf="@+id/noteTxtLayout"
             app:layout_constraintTop_toTopOf="@+id/noteTxtLayout" />
@@ -118,31 +115,27 @@
             android:id="@+id/cancelTripBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="72dp"
-            android:layout_marginLeft="72dp"
-            android:background="#F9F9F9"
+            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
             android:text="@string/cancel"
             android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="@+id/addTripBtn"
             app:layout_constraintStart_toStartOf="@+id/addTripBtn"
             app:layout_constraintTop_toBottomOf="@+id/addTripBtn" />
 
         <com.spark.submitbutton.SubmitButton
             android:id="@+id/addTripBtn"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="409dp"
-            android:layout_height="129dp"
-            android:layout_marginStart="88dp"
-            android:layout_marginLeft="88dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="300dp"
+            android:layout_height="20dp"
             android:text="@string/addTrip"
             android:textColor="@android:color/white"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/chipGroupNotes"
+            app:layout_constraintStart_toStartOf="@+id/chipGroupNotes"
             app:layout_constraintTop_toBottomOf="@+id/chipGroupNotes"
             app:sub_btn_background="@color/colorPrimaryDark"
-            app:sub_btn_duration="1000"
+            app:sub_btn_duration="2000"
             app:sub_btn_line_color="@color/colorPrimaryDark"
-            app:sub_btn_ripple_color="@color/quantum_vanillagreen300"
-            app:sub_btn_tick_color="@color/quantum_googgreen300" />
+            app:sub_btn_ripple_color="@color/quantum_vanillagreen100"
+            app:sub_btn_tick_color="@color/quantum_vanillagreen100" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
