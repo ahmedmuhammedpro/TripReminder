@@ -28,7 +28,7 @@ public class AudioPlayer {
             };
     // Implement what we need when audio complete
     private MediaPlayer.OnCompletionListener onCompletionListener = mp -> {
-        mediaPlayer.reset();
+        mediaPlayer.seekTo(0);
         mediaPlayer.start();
     };
 

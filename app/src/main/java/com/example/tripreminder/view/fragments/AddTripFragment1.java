@@ -151,7 +151,8 @@ public class AddTripFragment1 extends Fragment {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
-                                dateString += "-" + mHour + "-" + mMinute;
+                                dateString += "-" + hourOfDay + "-" + minute;
+                                // dateString += "-" + mHour + "-" + mMinute;
                                 timeTxt.setText(hourOfDay + ":" + minute);
                             }
                         }, mHour, mMinute, true);
