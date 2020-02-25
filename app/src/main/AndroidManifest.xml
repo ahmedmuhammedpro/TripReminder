@@ -14,14 +14,14 @@
         android:theme="@style/AppTheme">
         <activity android:name=".view.activities.TripAlertActivity" android:theme="@style/TripAlertDialog"></activity>
         <activity android:name=".view.activities.LoginActivity">
-
-        </activity>
-        <activity android:name=".view.activities.AddTripActivity" />
-        <activity android:name=".view.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".view.activities.AddTripActivity" />
+        <activity android:name=".view.activities.MainActivity">
+
         </activity>
 
         <receiver android:name=".viewmodel.workmanager.TripBroadcastReceiver">
