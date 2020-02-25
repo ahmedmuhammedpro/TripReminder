@@ -25,8 +25,8 @@ import java.util.Vector;
 
 public class TripFirestoreHandler {
 
-    public static final String TRIP_NAME_KEY="tripName",USER_ID_KEY="userId",DATE_KEY="tripDate",START_LOCATION="startLocation";
-    public static final String END_LOCATION = "endLocation";
+    private final String TRIP_NAME_KEY="tripName",USER_ID_KEY="userId",DATE_KEY="tripDate",START_LOCATION="startLocation";
+    private final String END_LOCATION = "endLocation",LONGITUDE="longitude",LATITUDE="latitude",LOCATION_NAME="locationName";
     private FirebaseFirestore dbFirestoreInstance = FirebaseFirestore.getInstance();
 
     public MutableLiveData<Trip> addTrip(Trip trip){
@@ -35,8 +35,9 @@ public class TripFirestoreHandler {
         tripValues.put(TRIP_NAME_KEY,trip.getTripName());
         tripValues.put(USER_ID_KEY,trip.getUserID());
         tripValues.put(DATE_KEY,trip.getTripDate());
-        tripValues.put(START_LOCATION,trip.getStartLocation().getLocationName());
-        tripValues.put(END_LOCATION,trip.getEndLocation().getLocationName());
+        //tripValues.put(START_LOCATION,trip.getStartLocation().getLocationName());
+        //tripValues.put(END_LOCATION,trip.getEndLocation().getLocationName());
+
 
 
         MutableLiveData<Trip> tripAdded = new MutableLiveData<>();
@@ -48,6 +49,21 @@ public class TripFirestoreHandler {
                 if(task.isSuccessful()){
 
                     String documentID = task.getResult().getId();
+
+                    HashMap<String,Object> startLocationValues = new HashMap<>();
+                    /*startLocationValues.put(LATITUDE,String.valueOf(trip.getStartLocation().getLatitude()));
+                    startLocationValues.put(LONGITUDE,String.valueOf(trip.getStartLocation().getLongitude()));
+                    startLocationValues.put(LOCATION_NAME,String.valueOf(trip.getStartLocation().getLocationName()));
+*/
+
+                    HashMap<String,Object> endLocationValues = new HashMap<>();
+                    /*endLocationValues.put(LATITUDE,String.valueOf(trip.getEndLocation().getLatitude()));
+                    endLocationValues.put(LONGITUDE,String.valueOf(trip.getEndLocation().getLongitude()));
+                    endLocationValues.put(LOCATION_NAME,String.valueOf(trip.getEndLocation().getLocationName()));
+*/
+                    dbFirestoreInstance.collection("trips").document(documentID).collection(START_LOCATION).add(startLocationValues);
+                    dbFirestoreInstance.collection("trips").document(documentID).collection(END_LOCATION).add(endLocationValues);
+
                     int counter=1;
                     Vector<String> notes = trip.getNotes();
                     Iterator iterator = notes.iterator();
