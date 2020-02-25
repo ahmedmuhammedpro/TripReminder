@@ -1,7 +1,6 @@
 package com.example.tripreminder.viewmodel;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.repositories.TripRepositoryImp;
@@ -14,13 +13,7 @@ import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class AddTripViewModel extends ViewModel {
@@ -28,7 +21,7 @@ public class AddTripViewModel extends ViewModel {
     private WorkManager workManager;
     private Context context;
 
-    public AddTripViewModel(){
+    public AddTripViewModel() {
 
     }
 
@@ -37,7 +30,7 @@ public class AddTripViewModel extends ViewModel {
         workManager = WorkManager.getInstance(context);
     }
 
-    public MutableLiveData<Trip> addTrip(Trip trip){
+    public MutableLiveData<Trip> addTrip(Trip trip) {
         addTripToWorkManager(trip);
         return tripRepositoryImp.addTrip(trip);
     }
