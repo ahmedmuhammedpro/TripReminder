@@ -21,13 +21,19 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.tripreminder.R;
+import com.example.tripreminder.model.map_directions.FetchURL;
 import com.example.tripreminder.utils.LocationCommunicator;
 import com.example.tripreminder.utils.LocationLocator;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,6 +49,9 @@ import javax.net.ssl.HttpsURLConnection;
  * A simple {@link Fragment} subclass.
  */
 public class PastTripsMapFragment extends Fragment implements OnMapReadyCallback {
+
+    MarkerOptions place1,place2;
+    Polyline currentPolyline;
 
 
     public GoogleMap googleMap;
@@ -109,74 +118,57 @@ public class PastTripsMapFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        this.googleMap=googleMap;
         //longitude and latitude of egypt
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(26.8205528 , 30.8024979), 6));
+       // googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(26.8205528 , 30.8024979), 6));
 
 
-        LatLng fromPosition = new LatLng(26.6205528 , 30.6024979); // enter user location lat and long
-        LatLng toPosition = new LatLng(26.9205528, 30.9024979);// fixed location
+        //LatLng fromPosition = new LatLng(26.6205528 , 30.6024979); // enter user location lat and long
+        //LatLng toPosition = new LatLng(26.9205528, 30.9024979);// fixed location
 
-        new AsyncTask<String,Void,String>(){
+        LatLng fromPosition = new LatLng(30.063550, 31.027708);
+        LatLng toPosition = new LatLng(30.071296, 31.020731);
 
 
-            @Override
-            protected String doInBackground(String... strings) {
-                String responseString = "";
-                try{
-                    responseString = requestDirection(strings[0]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return  responseString;
-            }
+        LatLng fromPosition2 = new LatLng(30.060737, 31.031110);
+        LatLng toPosition2 = new LatLng(30.069327, 31.030263);
 
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                //parse json
-            }
-        };
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(30.063550, 31.027708), 6));
+        place1 = new MarkerOptions().position(fromPosition).title("location 1");
+        place2 = new MarkerOptions().position(toPosition).title("location 2").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        googleMap.addMarker(place1);
+        googleMap.addMarker(place2);
+
+        place1 = new MarkerOptions().position(fromPosition2).title("location 1");
+        place2 = new MarkerOptions().position(toPosition2).title("location 2").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+        googleMap.addMarker(place1);
+        googleMap.addMarker(place2);
+
+        String url = getUrl(fromPosition,toPosition,"driving");
+        new FetchURL(getContext()).execute(url,"driving");
+
+        String url2 = getUrl(fromPosition2,toPosition2,"driving");
+        new FetchURL(getContext()).execute(url2,"driving");
     }
 
-    private String requestDirection(String reqUrl) throws IOException {
-        String responseString="";
-        InputStream inputStream=null;
-        HttpURLConnection httpURLConnection = null;
-        try{
-            URL url = new URL(reqUrl);
-            httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.connect();
 
-            inputStream = httpURLConnection.getInputStream();
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            StringBuffer stringBuffer = new StringBuffer();
-            String line="";
-            while ((line = bufferedReader.readLine())!=null){
-                stringBuffer.append(line);
-            }
-            responseString = stringBuffer.toString();
-            bufferedReader.close();
-            inputStreamReader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            if(inputStream!=null)
-                inputStream.close();;
-            httpURLConnection.disconnect();
-        }
-        return responseString;
-    }
 
-    private String getRequestURL(LatLng origin , LatLng destination){
-        String str_origin = "origin="+origin.latitude+"," + origin.longitude;
-        String str_destination ="destination="+destination.latitude+","+destination.longitude;
-        String sensor="sensor=false";
-        String mode="mode=driving";
-        String param = str_origin+"&"+str_destination+"&" +sensor+ "&"+mode;
-        String output="json";
-        String url ="https://maps.googleapis.com/api/directions/"+ output +"?"+param;
-        return  url;
+    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        String api_key="AIzaSyBxfnMwiZig4b4yJqDLkT7IPtN-ZhRzFlo";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + api_key;
+        return url;
     }
 
 }

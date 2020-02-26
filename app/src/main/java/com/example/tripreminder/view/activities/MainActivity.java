@@ -2,17 +2,27 @@ package com.example.tripreminder.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
+import com.example.tripreminder.model.map_directions.TaskLoadedCallback;
 import com.example.tripreminder.view.fragments.AddTripFragment1;
 import com.example.tripreminder.view.fragments.MainFragment;
 import com.example.tripreminder.view.fragments.PastTripsFragment;
+import com.example.tripreminder.view.fragments.PastTripsMapFragment;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TaskLoadedCallback {
 
+    int testCounter=1;
     private Fragment selectedFragment;
     public static String userId="";
+    Polyline currentPolyline;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,5 +68,22 @@ public class MainActivity extends AppCompatActivity {
         //bottomNavigation.show(2, true);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container,new MainFragment() ).commit();
+    }
+
+    //for googleMap line drawing
+    @Override
+    public void onTaskDone(Object... values) {
+        //if (currentPolyline != null)
+          //  currentPolyline.remove();
+
+        if(getSupportFragmentManager().getFragments().get(1)instanceof PastTripsMapFragment) {
+            if(testCounter==1) {
+                ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(Color.BLUE);
+                testCounter++;
+            }
+            else{
+                ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(Color.RED);
+            }
+        }
     }
 }

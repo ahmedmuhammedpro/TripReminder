@@ -27,7 +27,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activities.AddTripActivity" />
-        <activity android:name=".view.activities.MainActivity" />
+        <activity android:name=".view.activities.MainActivity">
+
+        </activity>
 
         <receiver android:name=".viewmodel.workmanager.TripBroadcastReceiver">
             <intent-filter>
