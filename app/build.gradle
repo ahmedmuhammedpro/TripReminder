@@ -1,3 +1,4 @@
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
@@ -56,9 +57,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.google.android.libraries.places:places:2.1.0'
     implementation 'me.spark:submitbutton:1.0.1'
+    implementation 'com.facebook.rebound:rebound:0.3.8'
     //ghadeer end
 
     //yahya start
+    implementation "com.google.android.gms:play-services-location:17.0.0"
+    implementation "com.google.android.gms:play-services-maps:17.0.0"
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.android.support:multidex:1.0.3'

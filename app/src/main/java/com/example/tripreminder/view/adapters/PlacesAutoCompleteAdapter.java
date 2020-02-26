@@ -45,7 +45,6 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter implements Filterabl
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
                     placesData = placeApi.autoComplete(constraint.toString());
-                    Log.i("desc",placesData.get(0).get(0));
                     placesDescriptions = placesData.get(0);
                     placesIds = placesData.get(1);
                     filterResults.values = placesDescriptions;

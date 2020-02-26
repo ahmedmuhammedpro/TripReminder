@@ -153,8 +153,6 @@
             android:id="@+id/dateTxt"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
-            android:layout_marginLeft="56dp"
             android:editable="@bool/enable_system_alarm_service_default"
             android:ems="10"
             android:hint="@string/dateFormat"
@@ -162,7 +160,7 @@
             android:textSize="16sp"
             app:endIconMode="clear_text"
             app:layout_constraintBottom_toTopOf="@+id/timeTxt"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <com.google.android.material.textfield.TextInputEditText

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
 import com.example.tripreminder.view.fragments.AddTripFragment1;
+import com.example.tripreminder.view.fragments.FeedbackFragment;
 import com.example.tripreminder.view.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
                     case 1: break;
                     case 2: selectedFragment = new MainFragment(); break;
                     case 3: selectedFragment = new AddTripFragment1(); break;
+                    case 5: selectedFragment = new FeedbackFragment(); break;
                 }
 
                 getSupportFragmentManager().beginTransaction()
