@@ -152,25 +152,28 @@ public class UserFirestoreHandler {
         dbFirestoreInstance.collection("users").whereEqualTo("email",user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(!task.isSuccessful()){
-                    //if not registered
-                    HashMap<String,Object> newNode = new HashMap<>();
-                    newNode.put(EMAIL_KEY,user.getEmail());
-                    dbFirestoreInstance.collection("users").document(user.getUserId()).set(newNode).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Log.i(TAG, "Added successfully");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.i(TAG, "error in Adding");
-                            user.setUserId("-1");
-                        }
-                    });
-
-                } else {
-                    Log.i("Error", "Already registered");
+                if(task.isSuccessful()){
+                    if(task.getResult().getDocuments().size() == 0) {
+                        //if not registered
+                        HashMap<String, Object> newNode = new HashMap<>();
+                        newNode.put(EMAIL_KEY, user.getEmail());
+                        newNode.put(USERNAME_KEY, user.getUsername());
+                        dbFirestoreInstance.collection("users").document(user.getUserId()).set(newNode).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.i(TAG, "Added successfully");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.i(TAG, "error in Adding");
+                                user.setUserId("-1");
+                            }
+                        });
+                    }
+                    else {
+                        Log.i("Error", "Already registered");
+                    }
                 }
             }
         });

@@ -3,6 +3,7 @@ package com.example.tripreminder.view.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.view.fragments.TripBottomSheetDialog;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,7 +46,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
-        //holder.tripDateTV.setText(format.format(tripList.get(position).getTripDate()).toString());
+        holder.tripDateTV.setText(format.format(new Date()));
         holder.tripNameTV.setText(tripList.get(position).getTripName());
         holder.tripOptionsIV.setOnClickListener(v -> {
             TripBottomSheetDialog bottomSheetDialog = new TripBottomSheetDialog();
@@ -54,8 +56,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             bottomSheetDialog.setArguments(bundle);
             bottomSheetDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), TripBottomSheetDialog.TAG);
         });
-        //holder.tripStartLocationTV.setText("Start point: " + tripList.get(position).getStartLocation().getLocationName());
-        //holder.tripEndLocationTV.setText("End point: " + tripList.get(position).getEndLocation().getLocationName());
+        holder.tripStartLocationTV.setText("Start point: " + tripList.get(position).getStartLocation().getLocationName());
+        holder.tripEndLocationTV.setText("End point: " + tripList.get(position).getEndLocation().getLocationName());
     }
 
     @Override

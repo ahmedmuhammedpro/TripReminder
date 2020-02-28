@@ -1,6 +1,8 @@
 package com.example.tripreminder.model.Entities;
 
-public class TripLocation {
+import java.io.Serializable;
+
+public class TripLocation implements Serializable {
 
     private double latitude;
     private double longitude;

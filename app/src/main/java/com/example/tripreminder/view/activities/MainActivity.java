@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
@@ -19,7 +18,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MainActivity extends AppCompatActivity implements TaskLoadedCallback {
 
-    int testCounter=1;
+    int testMapCounter =1;
+    int previousFragmentNumber=2;
     private Fragment selectedFragment;
     public static String userId="";
     Polyline currentPolyline;
@@ -43,12 +43,19 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                 // your codes
                 switch (item.getId()) {
                     case 1: selectedFragment = new PastTripsFragment();break;
-                    case 2: selectedFragment = new MainFragment(); break;
-                    case 3: selectedFragment = new AddTripFragment1(); break;
+                    case 2: selectedFragment = new MainFragment();break;
+                    case 3: selectedFragment = new AddTripFragment1();break;
                 }
-
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, selectedFragment).commit();
+                if(item.getId()>previousFragmentNumber) {
+                    getSupportFragmentManager().beginTransaction()
+                 //           .setCustomAnimations(R.anim.fragment_enter_right_to_left,R.anim.fragment_exit_to_left)
+                            .replace(R.id.container, selectedFragment).commit();
+                }else if (item.getId()<previousFragmentNumber) {
+                    getSupportFragmentManager().beginTransaction()
+                 //           .setCustomAnimations(R.anim.fragment_enter_left_to_right,R.anim.fragment_exit_to_right)
+                            .replace(R.id.container, selectedFragment).commit();
+                }
+                previousFragmentNumber = item.getId();
             }
         });
         bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
@@ -77,9 +84,9 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
           //  currentPolyline.remove();
 
         if(getSupportFragmentManager().getFragments().get(1)instanceof PastTripsMapFragment) {
-            if(testCounter==1) {
+            if(testMapCounter ==1) {
                 ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(Color.BLUE);
-                testCounter++;
+                testMapCounter++;
             }
             else{
                 ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(Color.RED);

@@ -20,7 +20,6 @@ import com.example.tripreminder.R;
 import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.view.adapters.MainAdapter;
 import com.example.tripreminder.model.Entities.Trip;
-import com.example.tripreminder.model.Entities.TripLocation;
 import com.example.tripreminder.viewmodel.MainViewModel;
 import com.example.tripreminder.viewmodel.MainViewModelInterface;
 
@@ -60,7 +59,6 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(List<Trip> trips) {
                 if (trips != null && !trips.isEmpty()) {
-                    Log.i("ahmed", "size => " + trips.size());
                     MainAdapter adapter = new MainAdapter(getActivity(), trips);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);

@@ -17,7 +17,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,13 +41,8 @@ public class TripFirestoreHandler {
         tripValues.put(DATE_KEY,trip.getTripDate());
         tripValues.put(START_LOCATION,trip.getStartLocation());
         tripValues.put(END_LOCATION,trip.getEndLocation());
-        //tripValues.put(START_LOCATION,trip.getStartLocation().getLocationName());
-        //tripValues.put(END_LOCATION,trip.getEndLocation().getLocationName());
-
-
 
         MutableLiveData<Trip> tripAdded = new MutableLiveData<>();
-
 
         dbFirestoreInstance.collection("trips").add(tripValues).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
@@ -51,23 +50,6 @@ public class TripFirestoreHandler {
                 if(task.isSuccessful()){
 
                     String documentID = task.getResult().getId();
-
-                  /*  HashMap<String,Object> startLocationValues = new HashMap<>();
-                    startLocationValues.put(END_LOCATION,trip.getStartLocation());
-                    startLocationValues.put(LATITUDE,String.valueOf(trip.getStartLocation().getLatitude()));
-                    startLocationValues.put(LONGITUDE,String.valueOf(trip.getStartLocation().getLongitude()));
-                    startLocationValues.put(LOCATION_NAME,String.valueOf(trip.getStartLocation().getLocationName()));
-
-
-                    HashMap<String,Object> endLocationValues = new HashMap<>();
-                    endLocationValues.put(END_LOCATION,trip.getEndLocation());
-                    /*endLocationValues.put(LATITUDE,String.valueOf(trip.getEndLocation().getLatitude()));
-                    endLocationValues.put(LONGITUDE,String.valueOf(trip.getEndLocation().getLongitude()));
-                    endLocationValues.put(LOCATION_NAME,String.valueOf(trip.getEndLocation().getLocationName()));
-
-                    dbFirestoreInstance.collection("trips").document(documentID).collection(START_LOCATION).add(startLocationValues);
-                    dbFirestoreInstance.collection("trips").document(documentID).collection(END_LOCATION).add(endLocationValues);
-*/
                     int counter=1;
                     Vector<String> notes = trip.getNotes();
                     Iterator iterator = notes.iterator();
@@ -89,12 +71,13 @@ public class TripFirestoreHandler {
             }
         });
 
-
-
         return tripAdded;
     }
 
     public LiveData<List<Trip>> getUserTrips(String userId) {
+
+        long timeInMillis = Calendar.getInstance().getTimeInMillis();
+
 
         MutableLiveData<List<Trip>> tripsListLiveData = new MutableLiveData<>();
 
@@ -111,8 +94,28 @@ public class TripFirestoreHandler {
                         Trip trip = new Trip();
                         trip.setTripName(tripName);
                         trip.setTripId(tripId);
-                        trip.setStartLocation(new TripLocation(1,1,String.valueOf(document.getData().get("startLocation"))));
-                        trip.setEndLocation(new TripLocation(1,1,String.valueOf(document.getData().get("endLocation"))));
+
+                        SimpleDateFormat format = new SimpleDateFormat("dd-M-yyyy-HH:m");
+                        String dateString = String.valueOf(document.getData().get("tripDate"));
+                        try {
+                            Date date = format.parse(dateString);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        HashMap location = (HashMap) document.getData().get("startLocation");
+                        Double latitude = (Double) location.get("latitude");
+                        Double longitude = (Double) location.get("longitude");
+                        String locationName = (String) location.get("locationName");
+
+                        trip.setStartLocation(new TripLocation(latitude,longitude,locationName ));
+
+                        HashMap endLocation= (HashMap) document.getData().get("endLocation");
+                        Double endLatitude = (Double) endLocation.get("latitude");
+                        Double endLongitude = (Double) endLocation.get("longitude");
+                        String endLocationName = (String) endLocation.get("locationName");
+
+                        trip.setEndLocation(new TripLocation(endLatitude,endLongitude,endLocationName ));
 
                         tripsList.add(trip);
                     }
@@ -145,7 +148,6 @@ public class TripFirestoreHandler {
                         }
                     });
 
-
                 }
                 else
                     Log.d("test", "error in deleting");
@@ -157,5 +159,48 @@ public class TripFirestoreHandler {
             }
         });
         return deleteTripLiveData;
+    }
+
+    public MutableLiveData<Trip> updateTrip(Trip trip) {
+        MutableLiveData<Trip> updatedTripData = new MutableLiveData<>();
+
+        HashMap<String,Object> tripValues = new HashMap<>();
+        tripValues.put(TRIP_NAME_KEY,trip.getTripName());
+        tripValues.put(USER_ID_KEY,trip.getUserID());
+        tripValues.put(DATE_KEY,trip.getTripDate());
+        tripValues.put(START_LOCATION,trip.getStartLocation());
+        tripValues.put(END_LOCATION,trip.getEndLocation());
+
+        dbFirestoreInstance.collection("trips").document(trip.getTripId()).set(tripValues).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                if(task.isSuccessful()){
+
+                    String documentID = trip.getTripId();
+                    int counter=1;
+                    Vector<String> notes = trip.getNotes();
+                    Iterator iterator = notes.iterator();
+                    HashMap<String,Object> noteValues = new HashMap<>();
+                    while(iterator.hasNext()){
+                        noteValues.put(""+counter,String.valueOf(iterator.next()));
+                        counter++;
+                    }
+
+                    dbFirestoreInstance.collection("notes").document(documentID).set(noteValues).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            updatedTripData.postValue(trip);
+                            Log.d("test", "notes updated");
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+
+        return updatedTripData;
     }
 }

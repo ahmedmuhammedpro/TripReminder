@@ -23,7 +23,7 @@
         tools:text="@string/trip_dialog_title" />
 
     <Button
-        android:id="@+id/snooze_button"
+        android:id="@+id/alert_dialog_snooze_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -35,7 +35,7 @@
         android:textSize="14sp" />
 
     <Button
-        android:id="@+id/start_button"
+        android:id="@+id/alert_dialog_start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -43,11 +43,11 @@
         android:text="@string/dialog_start_button"
         android:textColor="@color/colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/trip_dialog_title"
-        app:layout_constraintEnd_toStartOf="@id/cancel_button"
+        app:layout_constraintEnd_toStartOf="@id/alert_dialog_cancel_button"
         android:textSize="14sp" />
 
     <Button
-        android:id="@+id/cancel_button"
+        android:id="@+id/alert_dialog_cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
