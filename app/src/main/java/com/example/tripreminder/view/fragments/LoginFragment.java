@@ -37,7 +37,7 @@ public class LoginFragment extends Fragment {
 
     TextView newUserTextView;
     private final String SHARED_PREFERENCES_FILE_NAME="loggedInUserInfo",EMAIL_KEY="email",PASSWORD_KEY="password";
-    private final String lOGGED_IN_KEY="loggedIn",USER_ID_KEY="UserId";
+    private final String lOGGED_IN_KEY="loggedIn",USER_ID_KEY="UserId",USERNAME_KEY = "username";
     boolean loggedIn=false;
     public static final String USER_ID_TAG="userID";
     private static final int RC_SIGN_IN = 1;
@@ -122,6 +122,7 @@ public class LoginFragment extends Fragment {
             user.setUserId(account.getId());
             user.setUsername(account.getDisplayName());
             loginViewModel.registerIfNewGoogleAccount(user);
+
             updateUI(account,user);
         } catch (ApiException e) {
             updateUI(null,null);
@@ -131,6 +132,7 @@ public class LoginFragment extends Fragment {
     private void updateUI(GoogleSignInAccount account,User user) {
 
         if(account!=null) {
+            writeInSharedPreferences(user);
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.putExtra(USER_ID_TAG, user.getUserId());
             startActivity(intent);
@@ -174,6 +176,7 @@ public class LoginFragment extends Fragment {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(EMAIL_KEY,loggedInUser.getEmail());
+        editor.putString(USERNAME_KEY,loggedInUser.getUsername());
         //editor.putString(PASSWORD_KEY,loggedInUser.getPassword());
         editor.putString(USER_ID_TAG,loggedInUser.getUserId());
         editor.putBoolean(lOGGED_IN_KEY,true);

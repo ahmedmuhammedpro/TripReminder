@@ -24,6 +24,7 @@ import com.example.tripreminder.viewmodel.MainViewModel;
 import com.example.tripreminder.viewmodel.MainViewModelInterface;
 
 import java.util.List;
+import java.util.Vector;
 
 import static android.view.View.VISIBLE;
 import static android.view.View.INVISIBLE;
@@ -63,6 +64,7 @@ public class MainFragment extends Fragment {
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);
                     noTripsLayout.setVisibility(INVISIBLE);
+
                 } else {
                     recyclerView.setVisibility(INVISIBLE);
                     noTripsLayout.setVisibility(VISIBLE);

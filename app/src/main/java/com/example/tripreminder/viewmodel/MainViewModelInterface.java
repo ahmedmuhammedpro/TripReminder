@@ -1,10 +1,12 @@
 package com.example.tripreminder.viewmodel;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.tripreminder.model.Entities.Trip;
 
 import java.util.List;
+import java.util.Vector;
 
 public interface MainViewModelInterface {
 
@@ -14,4 +16,5 @@ public interface MainViewModelInterface {
 
     void updateTrip(Trip trip);
 
+    public MutableLiveData<Vector<String>> getTripNotes(String tripId);
 }

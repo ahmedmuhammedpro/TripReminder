@@ -6,6 +6,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.Entities.TripLocation;
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,12 +27,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 public class TripFirestoreHandler {
 
     private final String TRIP_NAME_KEY="tripName",USER_ID_KEY="userId",DATE_KEY="tripDate",START_LOCATION="startLocation";
-    private final String END_LOCATION = "endLocation",LONGITUDE="longitude",LATITUDE="latitude",LOCATION_NAME="locationName";
+    private final String END_LOCATION = "endLocation",TRIP_STATUS="tripStatus";
     private FirebaseFirestore dbFirestoreInstance = FirebaseFirestore.getInstance();
 
     public MutableLiveData<Trip> addTrip(Trip trip){
@@ -41,7 +44,7 @@ public class TripFirestoreHandler {
         tripValues.put(DATE_KEY,trip.getTripDate());
         tripValues.put(START_LOCATION,trip.getStartLocation());
         tripValues.put(END_LOCATION,trip.getEndLocation());
-
+        tripValues.put(TRIP_STATUS,trip.getTripStatus());
         MutableLiveData<Trip> tripAdded = new MutableLiveData<>();
 
         dbFirestoreInstance.collection("trips").add(tripValues).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
@@ -67,7 +70,6 @@ public class TripFirestoreHandler {
                             Log.d("test", "notes added ");
                         }
                     });
-
                 }
             }
         });
@@ -76,9 +78,6 @@ public class TripFirestoreHandler {
     }
 
     public LiveData<List<Trip>> getUserTrips(String userId) {
-
-        long timeInMillis = Calendar.getInstance().getTimeInMillis();
-
 
         MutableLiveData<List<Trip>> tripsListLiveData = new MutableLiveData<>();
 
@@ -95,15 +94,7 @@ public class TripFirestoreHandler {
                         Trip trip = new Trip();
                         trip.setTripName(tripName);
                         trip.setTripId(tripId);
-
-                        SimpleDateFormat format = new SimpleDateFormat("dd-M-yyyy-HH:m");
-                        String dateString = String.valueOf(document.getData().get("tripDate"));
-                        try {
-                            Date date = format.parse(dateString);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
+                        trip.setTripDate((String)document.getData().get("tripDate"));
                         HashMap location = (HashMap) document.getData().get("startLocation");
                         Double latitude = (Double) location.get("latitude");
                         Double longitude = (Double) location.get("longitude");
@@ -117,6 +108,7 @@ public class TripFirestoreHandler {
                         String endLocationName = (String) endLocation.get("locationName");
 
                         trip.setEndLocation(new TripLocation(endLatitude,endLongitude,endLocationName ));
+
 
                         tripsList.add(trip);
                     }
@@ -151,7 +143,7 @@ public class TripFirestoreHandler {
 
                 }
                 else
-                    Log.d("test", "error in deleting");
+                    Log.d("Error", "error in deleting");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -195,13 +187,43 @@ public class TripFirestoreHandler {
                             Log.d("test", "notes updated");
                         }
                     });
-
                 }
+            }
+        });
 
+        return updatedTripData;
+    }
+
+    public MutableLiveData<Vector<String>> getTripNotes(String tripId){
+
+        MutableLiveData<Vector<String>> notesMutableLiveData = new MutableLiveData<>();
+
+        Vector<String> notesVector= new Vector<>();
+        dbFirestoreInstance.collection("notes").document(tripId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    HashMap notesHashMap = (HashMap) task.getResult().getData();
+                    if(notesHashMap!= null && !notesHashMap.isEmpty()){
+                        for(int i=0;i<notesHashMap.size();i++){
+                            notesVector.add((String) notesHashMap.get(""+(i + 1)));
+                        }
+                        notesMutableLiveData.postValue(notesVector);
+                    }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+                notesMutableLiveData.postValue(null);
+                Log.d("Error", "error in getting notes :"+e.getMessage());
             }
         });
 
 
-        return updatedTripData;
+        return notesMutableLiveData;
+
+
     }
 }

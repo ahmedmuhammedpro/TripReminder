@@ -7,6 +7,7 @@ import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.Firestore.TripFirestoreHandler;
 
 import java.util.List;
+import java.util.Vector;
 
 
 public class TripRepositoryImp {
@@ -21,5 +22,9 @@ public class TripRepositoryImp {
 
     public LiveData<List<Trip>> getUserTrips(String userId){
         return tripFirestoreHandler.getUserTrips(userId);
+    }
+
+    public MutableLiveData<Vector<String>> getTripNotes(String tripId) {
+        return  tripFirestoreHandler.getTripNotes(tripId);
     }
 }

@@ -8,6 +8,7 @@ import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.repositories.TripRepositoryImp;
 
 import java.util.List;
+import java.util.Vector;
 
 public class MainViewModel extends ViewModel implements MainViewModelInterface {
 
@@ -26,5 +27,9 @@ public class MainViewModel extends ViewModel implements MainViewModelInterface {
     @Override
     public void updateTrip(Trip trip) {
 
+    }
+    @Override
+    public MutableLiveData<Vector<String>> getTripNotes(String tripId){
+        return tripRepositoryImp.getTripNotes(tripId);
     }
 }
