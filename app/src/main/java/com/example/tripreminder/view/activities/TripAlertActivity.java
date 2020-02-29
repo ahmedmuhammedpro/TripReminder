@@ -8,9 +8,14 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.tripreminder.R;
+import com.example.tripreminder.model.Entities.Trip;
+import com.example.tripreminder.model.Entities.TripLocation;
 import com.example.tripreminder.utils.AudioPlayer;
 import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.utils.TripNotification;
+
+import java.util.Arrays;
+import java.util.Vector;
 
 public class TripAlertActivity extends AppCompatActivity {
 
@@ -27,12 +32,26 @@ public class TripAlertActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String tripId = intent.getExtras().getString(Constants.TRIP_ID_KEY);
         String tripName = intent.getExtras().getString(Constants.TRIP_NAME_KEY);
-        String tripStartLocationName = intent.getExtras().getString(Constants.TRIP_START_LOCATION_KEY);
-        String tripEndLocationName = intent.getExtras().getString(Constants.TRIP_END_LOCATION_KEY);
+        int tripStatus = intent.getExtras().getInt(Constants.TRIP_STATUS);
+        String tripStartName = intent.getExtras().getString(Constants.TRIP_START_NAME);
+        String tripEndName = intent.getExtras().getString(Constants.TRIP_END_NAME);
+        double tripStartLatitude = intent.getExtras().getDouble(Constants.TRIP_START_LAT_KEY);
+        double tripStartLongitude = intent.getExtras().getDouble(Constants.TRIP_START_LON_KEY);
+        double tripEndLatitude = intent.getExtras().getDouble(Constants.TRIP_END_LAT_KEY);
+        double tripEndLongitude = intent.getExtras().getDouble(Constants.TRIP_END_LON_KEY);
+        String[] tripNotes = intent.getExtras().getStringArray(Constants.TRIP_NOTES_KEY);
+        Vector<String> notesList = new Vector<>(Arrays.asList(tripNotes));
+        String tripDate = intent.getExtras().getString(Constants.TRIP_DATE_KEY);
+        int tripType = intent.getExtras().getInt(Constants.TRIP_TYPE);
+
+        TripLocation startLocation = new TripLocation(tripStartLatitude, tripStartLongitude, tripStartName);
+        TripLocation endLocation = new TripLocation(tripEndLatitude, tripEndLongitude, tripEndName);
+
+        Trip trip = new Trip(tripId, tripStatus, tripName, startLocation,
+                endLocation, notesList, tripDate, tripType);
 
         // Create TripNotification object
-        TripNotification tripNotification = new TripNotification(this, tripId, tripName,
-                tripStartLocationName, tripEndLocationName);
+        TripNotification tripNotification = new TripNotification(this, trip);
 
         String alertDialogTitle = String
                 .format(getResources().getString(R.string.trip_dialog_title), tripName);
@@ -49,7 +68,10 @@ public class TripAlertActivity extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                 getResources().getString(R.string.dialog_start_button), (dialog, which) -> {
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW);
-                    mapIntent.setData(Uri.parse("http://maps.google.com/maps?saddr=30.0566096,31.3213528&daddr=30.0141926,31.2791772"));
+                    mapIntent.setData(Uri.parse("http://maps.google.com/maps?" +
+                            "saddr=" + tripStartLatitude + "," + tripStartLongitude +
+                            "&daddr=" + tripEndLatitude + "," + tripEndLongitude));
+
                     startActivity(mapIntent);
                     alertDialog.dismiss();
                     finish();

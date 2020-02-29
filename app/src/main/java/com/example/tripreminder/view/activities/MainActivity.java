@@ -48,11 +48,11 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                 }
                 if(item.getId()>previousFragmentNumber) {
                     getSupportFragmentManager().beginTransaction()
-                 //           .setCustomAnimations(R.anim.fragment_enter_right_to_left,R.anim.fragment_exit_to_left)
+                            .setCustomAnimations(R.anim.fragment_enter_right_to_left,R.anim.fragment_exit_to_left)
                             .replace(R.id.container, selectedFragment).commit();
                 }else if (item.getId()<previousFragmentNumber) {
                     getSupportFragmentManager().beginTransaction()
-                 //           .setCustomAnimations(R.anim.fragment_enter_left_to_right,R.anim.fragment_exit_to_right)
+                            .setCustomAnimations(R.anim.fragment_enter_left_to_right,R.anim.fragment_exit_to_right)
                             .replace(R.id.container, selectedFragment).commit();
                 }
                 previousFragmentNumber = item.getId();

@@ -49,10 +49,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         holder.tripDateTV.setText(format.format(new Date()));
         holder.tripNameTV.setText(tripList.get(position).getTripName());
         holder.tripOptionsIV.setOnClickListener(v -> {
+            Log.i("ahmed", "date => " + tripList.get(position).getTripDate());
             TripBottomSheetDialog bottomSheetDialog = new TripBottomSheetDialog();
             Bundle bundle = new Bundle();
-            String tripId=tripList.get(position).getTripId();
-            bundle.putString(TRIP_ID_KEY,tripId);
+            bundle.putSerializable("xx", tripList.get(position));
             bottomSheetDialog.setArguments(bundle);
             bottomSheetDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), TripBottomSheetDialog.TAG);
         });
@@ -88,4 +88,5 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             notesIV = itemView.findViewById(R.id.trip_notes);
         }
     }
+
 }
