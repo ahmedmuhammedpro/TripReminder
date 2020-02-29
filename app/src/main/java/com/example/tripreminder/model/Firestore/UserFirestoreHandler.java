@@ -98,11 +98,7 @@ public class UserFirestoreHandler {
     public MutableLiveData<User> register(User user){
 
         MutableLiveData<User> userRegistered = new MutableLiveData<>();
-        if(isUserRegisteredBefore(user)){
-            user.setUserId("-1");
-            userRegistered.postValue(user);
-            return userRegistered;
-        }
+
         auth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener(authTask->{
             if(authTask.isSuccessful()){
                 FirebaseUser firebaseUser = auth.getCurrentUser();
@@ -112,7 +108,10 @@ public class UserFirestoreHandler {
                     dbFirestoreInstance.collection("users").document(user.getUserId()).set(user);
                 }
             }else{
-                logErrorMessage(Objects.requireNonNull(authTask.getException()).getMessage());
+                //logErrorMessage(Objects.requireNonNull(authTask.getException()).getMessage());
+                user.setUserId("-1");
+                user.setUsername(authTask.getException().getMessage());
+                userRegistered.postValue(user);
             }
         });
         return userRegistered;
@@ -140,11 +139,6 @@ public class UserFirestoreHandler {
     }
 
 
-    private boolean isUserRegisteredBefore(User user){
-        final boolean[] result = {false};
-
-        return result[0];
-    }
 
     public  MutableLiveData<User> registerGoogleUSer(User user){
         MutableLiveData<User> userRegistered = new MutableLiveData<>();

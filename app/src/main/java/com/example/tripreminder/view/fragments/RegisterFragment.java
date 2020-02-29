@@ -66,6 +66,7 @@ public class RegisterFragment extends Fragment {
                     user.setUsername(name);
                     user.setPassword(password);
 
+                    //if inputs are valid then register user
                     registerUser(user);
                 }
 
@@ -77,7 +78,7 @@ public class RegisterFragment extends Fragment {
     private boolean validateInput(String email,String name,String password,String confirmPassword){
 
         if(email.equals("") || password.equals("")||name.equals("")||confirmPassword.equals("")){
-            Toast.makeText(getActivity(), "You must enter all fields first", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "You must enter all fields first and shouldn't have spaces", Toast.LENGTH_SHORT).show();
         }
         else{
             if(confirmPassword.equals(password)){
@@ -95,7 +96,8 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onChanged(User user) {
                 if(user.getUserId().equals("-1")){
-                    Toast.makeText(getActivity(), "Error in register", Toast.LENGTH_SHORT).show();
+                    //username here will be the message of an error occurred
+                    Toast.makeText(getActivity(), user.getUsername(), Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(getActivity(), "registered successfully", Toast.LENGTH_SHORT).show();
