@@ -140,7 +140,7 @@ public class AddTripFragment1 extends Fragment {
                                 String date = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
                                 dateTxt.setText(date);
                                 monthOfYear += 1;
-                                dateString = "" +dayOfMonth + " - " + monthOfYear + " - " + year ;
+                                dateString = "" +dayOfMonth + "-" + monthOfYear + "-" + year ;
                                 countData +=1;
                                 if ( countData>=5 && !nameTxt.getText().toString().isEmpty()) {
                                     nextBtn.setEnabled(true);
@@ -164,7 +164,7 @@ public class AddTripFragment1 extends Fragment {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
-                                dateString += " - " + mHour + " - " + mMinute;
+                                dateString += "-" + hourOfDay+ "-" + minute;
                                 timeTxt.setText(hourOfDay + ":" + minute);
                                 countData +=1;
                                 if ( countData>=5 && !nameTxt.getText().toString().isEmpty()) {

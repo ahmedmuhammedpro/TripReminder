@@ -118,6 +118,7 @@ public class AddTripFragment2 extends Fragment {
     private Chip addNoteChip(final ChipGroup notes,String text){
         Chip chip = (Chip) LayoutInflater.from(AddTripFragment2.super.getContext()).inflate(R.layout.note_item, null, false);
         chip.setText(text);
+
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

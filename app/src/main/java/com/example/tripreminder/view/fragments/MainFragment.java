@@ -1,12 +1,15 @@
 package com.example.tripreminder.view.fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +23,10 @@ import com.example.tripreminder.R;
 import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.view.adapters.MainAdapter;
 import com.example.tripreminder.model.Entities.Trip;
-import com.example.tripreminder.model.Entities.TripLocation;
+import com.example.tripreminder.view.adapters.SwipeToDeleteCallBack;
 import com.example.tripreminder.viewmodel.MainViewModel;
 import com.example.tripreminder.viewmodel.MainViewModelInterface;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -36,7 +40,7 @@ public class MainFragment extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayout noTripsLayout;
     private MainViewModelInterface viewModel;
-
+    MainAdapter adapter;
     public MainFragment() {
     }
 
@@ -60,11 +64,11 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(List<Trip> trips) {
                 if (trips != null && !trips.isEmpty()) {
-                    Log.i("ahmed", "size => " + trips.size());
-                    MainAdapter adapter = new MainAdapter(getActivity(), trips);
+                    adapter = new MainAdapter(getActivity(), trips);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);
                     noTripsLayout.setVisibility(INVISIBLE);
+                    enableSwipeToDeleteAndUndo();
                 } else {
                     recyclerView.setVisibility(INVISIBLE);
                     noTripsLayout.setVisibility(VISIBLE);
@@ -74,5 +78,38 @@ public class MainFragment extends Fragment {
 
 
         return v;
+    }
+
+    //set swiper items
+
+    private void enableSwipeToDeleteAndUndo() {
+        SwipeToDeleteCallBack swipeToDeleteCallback = new SwipeToDeleteCallBack(getContext()) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+                final int position = viewHolder.getAdapterPosition();
+                final Trip item = adapter.getData().get(position);
+
+                adapter.removeItem(position);
+
+                Snackbar snackbar = Snackbar
+                        .make(getView(), "Item was removed from the list.", Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        adapter.restoreItem(item, position);
+                        recyclerView.scrollToPosition(position);
+                    }
+                });
+
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 }

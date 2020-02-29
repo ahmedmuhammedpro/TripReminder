@@ -20,6 +20,8 @@ public class Trip implements Serializable {
     private String tripDate;
 
     public Trip() {
+        startLocation = new TripLocation(0, 0, "");
+        endLocation = new TripLocation(0, 0, "");
     }
 
     public Trip(String tripId, int tripStatus, String tripName, TripLocation startLocation,

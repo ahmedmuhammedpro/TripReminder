@@ -72,7 +72,7 @@ public class FeedbackFragment extends Fragment {
                 initializeFloatingBubble();
             } else { //Permission is not available
                 Toast.makeText(getContext(), "Draw over other app permission not available. Closing the application", Toast.LENGTH_SHORT).show();
-                getActivity().finish();
+               // getActivity().finish();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

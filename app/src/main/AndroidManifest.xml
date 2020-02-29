@@ -16,30 +16,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activities.TripAlertActivity" android:theme="@style/TripAlertDialog"></activity>
+        <activity android:name=".view.activities.TripAlertActivity"
+            android:theme="@style/TripAlertDialog"
+            android:excludeFromRecents="true"></activity>
         <activity android:name=".view.activities.LoginActivity">
-
-        </activity>
-        <activity android:name=".view.activities.AddTripActivity" />
-        <activity android:name=".view.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.activities.AddTripActivity" />
+        <activity android:name=".view.activities.MainActivity">
 
-        <receiver android:name=".viewmodel.workmanager.TripBroadcastReceiver">
-            <intent-filter>
-                <action android:name="tripAlert" />
-            </intent-filter>
-        </receiver>
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+        </activity>
         <service
             android:name=".services.FloatingBubbleService"
             android:enabled="true"
             android:exported="false"/>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>

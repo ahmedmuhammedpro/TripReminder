@@ -10,6 +10,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.tripreminder.utils.Constants;
+import com.example.tripreminder.view.activities.TripAlertActivity;
 
 public class TripWorker extends Worker {
 
@@ -20,14 +21,21 @@ public class TripWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Log.i("ahmed", "entered");
+        // Getting bound data with work manager request
         Data data = getInputData();
+        String tripId = data.getString(Constants.TRIP_ID_KEY);
         String tripName = data.getString(Constants.TRIP_NAME_KEY);
-        Intent intent = new Intent();
-        intent.setAction(Constants.TRIP_ALERT_ACTION);
-        intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        String tripStartLocationName = data.getString(Constants.TRIP_START_LOCATION_KEY);
+        String tripEndLocationName = data.getString(Constants.TRIP_END_LOCATION_KEY);
+        String[] tripNotes = data.getStringArray(Constants.TRIP_NOTES_KEY);
+        Intent intent = new Intent(getApplicationContext(), TripAlertActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Constants.TRIP_ID_KEY, tripId);
         intent.putExtra(Constants.TRIP_NAME_KEY, tripName);
-        getApplicationContext().sendBroadcast(intent);
+        intent.putExtra(Constants.TRIP_START_LOCATION_KEY, tripStartLocationName);
+        intent.putExtra(Constants.TRIP_END_LOCATION_KEY, tripEndLocationName);
+        intent.putExtra(Constants.TRIP_NOTES_KEY,tripNotes);
+        getApplicationContext().startActivity(intent);
         return Result.success();
     }
 
