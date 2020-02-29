@@ -64,7 +64,7 @@ public class MainFragment extends Fragment {
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);
                     noTripsLayout.setVisibility(INVISIBLE);
-                  
+
                 } else {
                     recyclerView.setVisibility(INVISIBLE);
                     noTripsLayout.setVisibility(VISIBLE);

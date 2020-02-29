@@ -93,7 +93,7 @@ public class TripFirestoreHandler {
                         Trip trip = new Trip();
                         trip.setTripName(tripName);
                         trip.setTripId(tripId);
-
+                        trip.setTripDate((String)document.getData().get("tripDate"));
                         HashMap location = (HashMap) document.getData().get("startLocation");
                         Double latitude = (Double) location.get("latitude");
                         Double longitude = (Double) location.get("longitude");

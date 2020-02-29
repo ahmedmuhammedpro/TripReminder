@@ -77,6 +77,7 @@ public class UserFirestoreHandler {
     }
 
 
+
     public void updateUser(String username,String password){
 
         HashMap<String,Object> newNode = new HashMap<>();
@@ -174,4 +175,5 @@ public class UserFirestoreHandler {
 
         return userRegistered;
     }
+
 }

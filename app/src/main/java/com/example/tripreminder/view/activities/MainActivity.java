@@ -93,4 +93,8 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
             }
         }
     }
+
+    private void signOut(){
+
+    }
 }
