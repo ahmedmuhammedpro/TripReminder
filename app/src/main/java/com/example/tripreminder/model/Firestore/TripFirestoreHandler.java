@@ -53,6 +53,7 @@ public class TripFirestoreHandler {
                 if(task.isSuccessful()){
 
                     String documentID = task.getResult().getId();
+                    trip.setTripId(documentID);
                     int counter=1;
                     Vector<String> notes = trip.getNotes();
                     Iterator iterator = notes.iterator();

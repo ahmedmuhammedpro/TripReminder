@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
+import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.view.fragments.TripBottomSheetDialog;
 
 import java.text.SimpleDateFormat;
@@ -41,6 +42,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     public MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.upcoming_trip_item, parent, false);
         MainViewHolder mainViewHolder = new MainViewHolder(view);
+        mainViewHolder.tripOptionsIV.setOnClickListener(v -> {
+            Trip currentTrip = tripList.get(mainViewHolder.getAdapterPosition());
+            TripBottomSheetDialog bottomSheetDialog = new TripBottomSheetDialog();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Constants.TRIP_OB_KEY, currentTrip);
+            bottomSheetDialog.setArguments(bundle);
+            bottomSheetDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), TripBottomSheetDialog.TAG);
+        });
         return mainViewHolder;
     }
 
@@ -48,14 +57,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
         holder.tripDateTV.setText(format.format(new Date()));
         holder.tripNameTV.setText(tripList.get(position).getTripName());
-        holder.tripOptionsIV.setOnClickListener(v -> {
-            TripBottomSheetDialog bottomSheetDialog = new TripBottomSheetDialog();
-            Bundle bundle = new Bundle();
-            String tripId=tripList.get(position).getTripId();
-            bundle.putString(TRIP_ID_KEY,tripId);
-            bottomSheetDialog.setArguments(bundle);
-            bottomSheetDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), TripBottomSheetDialog.TAG);
-        });
         holder.tripStartLocationTV.setText("Start point: " + tripList.get(position).getStartLocation().getLocationName());
         holder.tripEndLocationTV.setText("End point: " + tripList.get(position).getEndLocation().getLocationName());
     }
@@ -76,7 +77,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         Button startTripButton;
         ImageView notesIV;
 
-        public MainViewHolder(@NonNull View itemView) {
+        MainViewHolder(@NonNull View itemView) {
             super(itemView);
             tripDateTV = itemView.findViewById(R.id.trip_date);
             tripNameTV = itemView.findViewById(R.id.trip_name);
@@ -88,4 +89,5 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             notesIV = itemView.findViewById(R.id.trip_notes);
         }
     }
+
 }
