@@ -82,7 +82,6 @@ public class AddTripFragment2 extends Fragment {
                 Vector<String> notes = addChipsIntoVector(allNotes);
                 Bundle bundle = getArguments();
                 Trip trip = (Trip) bundle.getSerializable(AddTripFragment1.TRIP_Object);
-
                 trip.setNotes(notes);
                 addTripViewModel.addTrip(trip).observe(AddTripFragment2.this, new Observer<Trip>() {
                     @Override
@@ -90,6 +89,10 @@ public class AddTripFragment2 extends Fragment {
                         Toast.makeText(getActivity(), "Trip details:" + trip.getTripDate() + trip.getTripName(), Toast.LENGTH_SHORT).show();
                         WorkManagerViewModel workManagerViewModel = new WorkManagerViewModel(getActivity());
                         workManagerViewModel.addTripToWorkManager(trip);
+                        MainFragment fmain = new MainFragment();
+                        FragmentManager manager = AddTripFragment2.super.getActivity().getSupportFragmentManager();
+                        manager.beginTransaction()
+                                .replace(R.id.container, fmain).commit();
                     }
                 });
             }
@@ -126,6 +129,7 @@ public class AddTripFragment2 extends Fragment {
     private Chip addNoteChip(final ChipGroup notes, String text) {
         Chip chip = (Chip) LayoutInflater.from(AddTripFragment2.super.getContext()).inflate(R.layout.note_item, null, false);
         chip.setText(text);
+
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

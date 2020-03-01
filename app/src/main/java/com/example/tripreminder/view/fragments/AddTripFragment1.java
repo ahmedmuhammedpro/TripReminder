@@ -54,14 +54,15 @@ public class AddTripFragment1 extends Fragment {
     public static final String TIME_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_1 = "dd-MMM-yyyy";
     private ChipGroup tripTypes;
-    private Button setDate, setTime ,nextBtn;
+    private Button setDate, setTime ,nextBtn , saveBtn;
     private TextView dateTxt, timeTxt;
     private AutoCompleteTextView startPointTxt, endPointTxt;
     private TextInputEditText nameTxt;
     private int mYear, mMonth, mDay, mHour, mMinute,tripType;
     private  Trip trip;
     String dateString;
-
+    int countData=0;
+    Bundle bundleMainFragment;
     public AddTripFragment1() {
         // Required empty public constructor
     }
@@ -89,8 +90,10 @@ public class AddTripFragment1 extends Fragment {
         setTime = view.findViewById(R.id.timeBtn);
         dateTxt = view.findViewById(R.id.dateTxt);
         timeTxt = view.findViewById(R.id.timeTxt);
+        saveBtn = view.findViewById(R.id.saveBtn);
         startPointTxt = view.findViewById(R.id.startPointTxt);
         endPointTxt = view.findViewById(R.id.endPointTxt);
+        nextBtn.setEnabled(false);
     }
     private void setupAdapters(){
         PlacesAutoCompleteAdapter adapterStart = new PlacesAutoCompleteAdapter(AddTripFragment1.super.getContext(), android.R.layout.simple_list_item_1);
@@ -99,6 +102,10 @@ public class AddTripFragment1 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 setLocation(adapterStart,i,1);
+                countData +=1;
+                if ( countData>=5 && !nameTxt.getText().toString().isEmpty()) {
+                    nextBtn.setEnabled(true);
+                }
             }
         });
         PlacesAutoCompleteAdapter adapterEnd = new PlacesAutoCompleteAdapter(AddTripFragment1.super.getContext(), android.R.layout.simple_list_item_1);
@@ -107,6 +114,10 @@ public class AddTripFragment1 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 setLocation(adapterEnd,i,2);
+                countData +=1;
+                if ( countData>=5 && !nameTxt.getText().toString().isEmpty()) {
+                    nextBtn.setEnabled(true);
+                }
             }
         });
     }
@@ -132,6 +143,10 @@ public class AddTripFragment1 extends Fragment {
                                 dateTxt.setText(date);
                                 monthOfYear += 1;
                                 dateString = "" +dayOfMonth + "-" + monthOfYear + "-" + year ;
+                                countData +=1;
+                                if ( countData>=5 && !nameTxt.getText().toString().isEmpty()) {
+                                    nextBtn.setEnabled(true);
+                                }
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -151,9 +166,12 @@ public class AddTripFragment1 extends Fragment {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
-                                dateString += "-" + hourOfDay + "-" + minute;
-                                // dateString += "-" + mHour + "-" + mMinute;
+                                dateString += "-" + hourOfDay+ "-" + minute;
                                 timeTxt.setText(hourOfDay + ":" + minute);
+                                countData +=1;
+                                if ( countData>=5 && !nameTxt.getText().toString().isEmpty()) {
+                                    nextBtn.setEnabled(true);
+                                }
                             }
                         }, mHour, mMinute, true);
                 timePickerDialog.show();
@@ -171,6 +189,11 @@ public class AddTripFragment1 extends Fragment {
                         Chip chip = (Chip) group.getChildAt(i);
                         if (chip.isChecked()) {
                             tripType = i + 1;
+                            countData +=1;
+
+                            if ( countData>=5 && !nameTxt.getText().toString().isEmpty()) {
+                                nextBtn.setEnabled(true);
+                            }
                         }
                         i++;
                     }
@@ -180,19 +203,21 @@ public class AddTripFragment1 extends Fragment {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                nextBtn.setEnabled(false);
-                trip.setTripType(tripType);
-                trip.setTripName(nameTxt.getText().toString());
-                trip.setUserID(MainActivity.userId);
-                trip.setTripDate(dateString);
-                trip.getStartLocation().setLocationName(startPointTxt.getText().toString());
-                trip.getEndLocation().setLocationName(endPointTxt.getText().toString());
-                AddTripFragment2 ftwo = new AddTripFragment2();
-                FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(TRIP_Object, trip);
-                ftwo.setArguments(bundle);
-                manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
+                  if(nextBtn.isEnabled())  {
+                    trip.setTripType(tripType);
+                    trip.setTripStatus(Trip.UPCOMING);
+                    trip.setTripName(nameTxt.getText().toString());
+                    trip.setUserID(MainActivity.userId);
+                    trip.setTripDate(dateString);
+                    trip.getStartLocation().setLocationName(startPointTxt.getText().toString());
+                    trip.getEndLocation().setLocationName(endPointTxt.getText().toString());
+                    AddTripFragment2 ftwo = new AddTripFragment2();
+                    FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(TRIP_Object, trip);
+                    ftwo.setArguments(bundle);
+                    manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
+                }
             }
         });
 
@@ -204,6 +229,19 @@ public class AddTripFragment1 extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_trip_fragment1, container, false);
         setupView(view);
+        bundleMainFragment = getArguments();
+      if (bundleMainFragment != null) {
+          Trip mainTrip = (Trip) bundleMainFragment.getSerializable(MainFragment.TRIP_Object_FROM_MAIN);
+          if (trip != null) {
+              nameTxt.setText(mainTrip.getTripName());
+              startPointTxt.setText(mainTrip.getStartLocation().getLocationName());
+              endPointTxt.setText(mainTrip.getStartLocation().getLocationName());
+              dateTxt.setText(getDate(mainTrip.getTripDate()));
+              timeTxt.setText(getTime(mainTrip.getTripDate()));
+              // tripTypes.setSingleSelection(mainTrip.getTripType() == 1 ?  : 1);
+              nextBtn.setEnabled(true);
+          }
+      }
         setupAdapters();
         setupListeners();
         return view;
@@ -230,4 +268,23 @@ public class AddTripFragment1 extends Fragment {
             }
         });
     }
+
+  private String  getDate(String dateString){
+      String[] strings = dateString.split("-");
+      int day = Integer.parseInt(strings[0]);
+      int month = Integer.parseInt(strings[1]);
+      int year = Integer.parseInt(strings[2]);
+      Calendar c = Calendar.getInstance();
+      c.set(year, month, day);
+      return DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+
+  }
+    private String  getTime(String dateString){
+        String[] strings = dateString.split("-");
+        int hour = Integer.parseInt(strings[3]);
+        int minute = Integer.parseInt(strings[4]);
+        return hour+":"+minute;
+
+    }
+
 }

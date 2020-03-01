@@ -13,6 +13,7 @@ import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.map_directions.TaskLoadedCallback;
 import com.example.tripreminder.view.fragments.AddTripFragment1;
+import com.example.tripreminder.view.fragments.FeedbackFragment;
 import com.example.tripreminder.view.fragments.MainFragment;
 import com.example.tripreminder.view.fragments.PastTripsFragment;
 import com.example.tripreminder.view.fragments.PastTripsMapFragment;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                     case 1: selectedFragment = new PastTripsFragment();break;
                     case 2: selectedFragment = new MainFragment();break;
                     case 3: selectedFragment = new AddTripFragment1();break;
+                    case 5: selectedFragment = new FeedbackFragment(); break;
                 }
                 if(item.getId()>previousFragmentNumber) {
                     getSupportFragmentManager().beginTransaction()
@@ -75,9 +77,12 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
             }
         });
 
+
+
         //bottomNavigation.show(2, true);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container,new MainFragment() ).commit();
+        bottomNavigation.show(2, true);
     }
 
     //for googleMap line drawing
