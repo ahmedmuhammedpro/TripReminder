@@ -16,6 +16,8 @@ public class Constants {
     public static final String TRIP_DATE_KEY = "trip_date";
     public static final String TRIP_TYPE = "trip_type";
 
+    public static final String TRIP_OB_KEY = "trip_ob";
+
 
     public static final String NOTIFICATION_CHANNEL_ID = "trip_reminder_notification";
     public static final int NOTIFICATION_ID = 0;

@@ -26,26 +26,9 @@ public class WorkManagerViewModel {
 
     public void addTripToWorkManager(Trip trip) {
         long milliseconds = getDifferenceMilliseconds(trip.getTripDate());
-        Data.Builder dataBuilder = new Data.Builder();
-        dataBuilder.putString(Constants.TRIP_ID_KEY, trip.getTripId());
-        dataBuilder.putString(Constants.TRIP_NAME_KEY, trip.getTripName());
-        dataBuilder.putInt(Constants.TRIP_STATUS, trip.getTripStatus());
-        dataBuilder.putString(Constants.TRIP_START_NAME, trip.getStartLocation().getLocationName());
-        dataBuilder.putString(Constants.TRIP_END_NAME, trip.getEndLocation().getLocationName());
-        dataBuilder.putDouble(Constants.TRIP_START_LAT_KEY, trip.getStartLocation().getLatitude());
-        dataBuilder.putDouble(Constants.TRIP_START_LON_KEY, trip.getStartLocation().getLongitude());
-        dataBuilder.putDouble(Constants.TRIP_END_LAT_KEY, trip.getEndLocation().getLatitude());
-        dataBuilder.putDouble(Constants.TRIP_END_LON_KEY, trip.getEndLocation().getLongitude());
-
-        String[] notesArray = new String[trip.getNotes().size()];
-        trip.getNotes().toArray(notesArray);
-        dataBuilder.putStringArray(Constants.TRIP_NOTES_KEY, notesArray);
-
-        dataBuilder.putString(Constants.TRIP_DATE_KEY, trip.getTripDate());
-        dataBuilder.putInt(Constants.TRIP_TYPE, trip.getTripType());
 
         OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(TripWorker.class)
-                .setInputData(dataBuilder.build())
+                .setInputData(getDataBuilder(trip).build())
                 .setInitialDelay(milliseconds, TimeUnit.MILLISECONDS)
                 .build();
 
@@ -53,25 +36,11 @@ public class WorkManagerViewModel {
     }
 
     public void editRequest(Trip trip) {
-        Log.i("ahmed", "date => " + trip.getTripDate());
-        //long milliseconds = getDifferenceMilliseconds(trip.getTripDate());
-        Data.Builder dataBuilder = new Data.Builder();
-        dataBuilder.putString(Constants.TRIP_ID_KEY, trip.getTripId());
-        dataBuilder.putString(Constants.TRIP_NAME_KEY, trip.getTripName());
-        dataBuilder.putInt(Constants.TRIP_STATUS, trip.getTripStatus());
-        dataBuilder.putString(Constants.TRIP_START_NAME, trip.getStartLocation().getLocationName());
-        dataBuilder.putString(Constants.TRIP_END_NAME, trip.getEndLocation().getLocationName());
-        dataBuilder.putDouble(Constants.TRIP_START_LAT_KEY, trip.getStartLocation().getLatitude());
-        dataBuilder.putDouble(Constants.TRIP_START_LON_KEY, trip.getStartLocation().getLongitude());
-        dataBuilder.putDouble(Constants.TRIP_END_LAT_KEY, trip.getEndLocation().getLatitude());
-        dataBuilder.putDouble(Constants.TRIP_END_LON_KEY, trip.getEndLocation().getLongitude());
-        dataBuilder.putStringArray(Constants.TRIP_NOTES_KEY, new String[]{"ahhhh", "afdf"});
-        dataBuilder.putString(Constants.TRIP_DATE_KEY, trip.getTripDate());
-        dataBuilder.putInt(Constants.TRIP_TYPE, trip.getTripType());
+        long milliseconds = getDifferenceMilliseconds(trip.getTripDate());
 
         OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(TripWorker.class)
-                .setInputData(dataBuilder.build())
-                .setInitialDelay(5000, TimeUnit.MILLISECONDS)
+                .setInputData(getDataBuilder(trip).build())
+                .setInitialDelay(milliseconds, TimeUnit.MILLISECONDS)
                 .build();
 
         workManager.enqueueUniqueWork(trip.getTripId(), ExistingWorkPolicy.REPLACE, request);
@@ -90,5 +59,32 @@ public class WorkManagerViewModel {
         GregorianCalendar c2 = new GregorianCalendar();
 
         return c1.getTimeInMillis() - c2.getTimeInMillis();
+    }
+
+    private Data.Builder getDataBuilder(Trip trip) {
+        Data.Builder dataBuilder = new Data.Builder();
+
+        dataBuilder.putString(Constants.TRIP_ID_KEY, trip.getTripId());
+        dataBuilder.putString(Constants.TRIP_NAME_KEY, trip.getTripName());
+        dataBuilder.putInt(Constants.TRIP_STATUS, trip.getTripStatus());
+        dataBuilder.putString(Constants.TRIP_START_NAME, trip.getStartLocation().getLocationName());
+        dataBuilder.putString(Constants.TRIP_END_NAME, trip.getEndLocation().getLocationName());
+        dataBuilder.putDouble(Constants.TRIP_START_LAT_KEY, trip.getStartLocation().getLatitude());
+        dataBuilder.putDouble(Constants.TRIP_START_LON_KEY, trip.getStartLocation().getLongitude());
+        dataBuilder.putDouble(Constants.TRIP_END_LAT_KEY, trip.getEndLocation().getLatitude());
+        dataBuilder.putDouble(Constants.TRIP_END_LON_KEY, trip.getEndLocation().getLongitude());
+
+        if (trip.getNotes() != null) {
+            String[] notesArray = new String[trip.getNotes().size()];
+            trip.getNotes().toArray(notesArray);
+            dataBuilder.putStringArray(Constants.TRIP_NOTES_KEY, notesArray);
+        } else {
+            dataBuilder.putStringArray(Constants.TRIP_NOTES_KEY, new String[]{});
+        }
+
+        dataBuilder.putString(Constants.TRIP_DATE_KEY, trip.getTripDate());
+        dataBuilder.putInt(Constants.TRIP_TYPE, trip.getTripType());
+
+        return dataBuilder;
     }
 }

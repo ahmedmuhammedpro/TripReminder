@@ -51,18 +51,7 @@ public class TripNotification {
 
     private NotificationCompat.Builder getNotificationBuilder() {
         Intent intent = new Intent(context, TripAlertActivity.class);
-        intent.putExtra(Constants.TRIP_ID_KEY, trip.getTripId());
-        intent.putExtra(Constants.TRIP_NAME_KEY, trip.getTripName());
-        intent.putExtra(Constants.TRIP_STATUS, trip.getTripStatus());
-        intent.putExtra(Constants.TRIP_START_NAME, trip.getStartLocation().getLocationName());
-        intent.putExtra(Constants.TRIP_END_NAME, trip.getEndLocation().getLocationName());
-        intent.putExtra(Constants.TRIP_START_LAT_KEY, trip.getStartLocation().getLatitude());
-        intent.putExtra(Constants.TRIP_START_LON_KEY, trip.getStartLocation().getLongitude());
-        intent.putExtra(Constants.TRIP_END_LAT_KEY, trip.getEndLocation().getLatitude());
-        intent.putExtra(Constants.TRIP_END_LON_KEY, trip.getEndLocation().getLongitude());
-        intent.putExtra(Constants.TRIP_NOTES_KEY, (String[]) trip.getNotes().toArray());
-        intent.putExtra(Constants.TRIP_DATE_KEY, trip.getTripDate());
-        intent.putExtra(Constants.TRIP_TYPE, trip.getTripType());
+        intent.putExtra(Constants.TRIP_OB_KEY, trip);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, Constants.NOTIFICATION_ID,
                 intent, PendingIntent.FLAG_ONE_SHOT);

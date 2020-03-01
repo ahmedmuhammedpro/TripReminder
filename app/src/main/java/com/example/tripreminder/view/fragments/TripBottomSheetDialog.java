@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
+import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.view.adapters.MainAdapter;
 import com.example.tripreminder.viewmodel.BottomSheetViewModel;
 import com.example.tripreminder.viewmodel.workmanager.WorkManagerViewModel;
@@ -30,7 +31,7 @@ public class TripBottomSheetDialog extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Trip trip = (Trip) getArguments().getSerializable("xx");
+        Trip trip = (Trip) getArguments().getSerializable(Constants.TRIP_OB_KEY);
         View view = inflater.inflate(R.layout.bottom_sheet_dialog, container, false);
 
         bottomSheetViewModel = ViewModelProviders.of(getActivity()).get(BottomSheetViewModel.class);
@@ -47,6 +48,7 @@ public class TripBottomSheetDialog extends BottomSheetDialogFragment {
                     @Override
                     public void onChanged(Trip trip) {
                         Toast.makeText(getActivity(), "Trip Deleted", Toast.LENGTH_SHORT).show();
+                        dismiss();
                     }
                 });
             }
@@ -57,20 +59,11 @@ public class TripBottomSheetDialog extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 WorkManagerViewModel workManagerViewModel = new WorkManagerViewModel(getActivity());
                 workManagerViewModel.editRequest(trip);
+                dismiss();
             }
         });
+
         return view;
     }
 
-    private String getNewDate(String tripDate) {
-        String[] strings = tripDate.split("-");
-        int day = Integer.parseInt(strings[0]);
-        int month = Integer.parseInt(strings[1]) - 1;
-        int year = Integer.parseInt(strings[2]);
-        int hour = Integer.parseInt(strings[3]);
-        int minute = Integer.parseInt(strings[4]) - 1;
-        int seconds = (int) ((System.currentTimeMillis() / 1000) % 60);
-
-        return "" + day + "-" + month + "-" + "-" + year + "-" + hour + "-" + minute + "-" + seconds;
-    }
 }

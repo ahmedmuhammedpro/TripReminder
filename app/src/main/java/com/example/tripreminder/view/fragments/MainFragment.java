@@ -36,6 +36,7 @@ public class MainFragment extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayout noTripsLayout;
     private MainViewModelInterface viewModel;
+    private List<Trip> tripList;
 
     public MainFragment() {
     }
@@ -60,18 +61,27 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(List<Trip> trips) {
                 if (trips != null && !trips.isEmpty()) {
-                    MainAdapter adapter = new MainAdapter(getActivity(), trips);
+                    tripList = trips;
+                    for (int i = 0; i < tripList.size(); i++) {
+                        Trip currentTrip = tripList.get(i);
+                        viewModel.getTripNotes(currentTrip.getTripId()).observe(MainFragment.this, new Observer<Vector<String>>() {
+                            @Override
+                            public void onChanged(Vector<String> strings) {
+                                currentTrip.setNotes(strings);
+                            }
+                        });
+                    }
+
+                    MainAdapter adapter = new MainAdapter(getActivity(), tripList);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);
                     noTripsLayout.setVisibility(INVISIBLE);
-
                 } else {
                     recyclerView.setVisibility(INVISIBLE);
                     noTripsLayout.setVisibility(VISIBLE);
                 }
             }
         });
-
 
         return v;
     }
