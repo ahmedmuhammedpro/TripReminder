@@ -28,6 +28,7 @@ public class MainViewModel extends ViewModel implements MainViewModelInterface {
     public void updateTrip(Trip trip) {
 
     }
+
     @Override
     public MutableLiveData<Vector<String>> getTripNotes(String tripId){
         return tripRepositoryImp.getTripNotes(tripId);

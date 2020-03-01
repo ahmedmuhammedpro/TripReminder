@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -24,6 +25,7 @@ import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.view.adapters.MainAdapter;
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.view.adapters.SwipeToDeleteCallBack;
+import com.example.tripreminder.view.adapters.SwipeToEditCallBack;
 import com.example.tripreminder.viewmodel.MainViewModel;
 import com.example.tripreminder.viewmodel.MainViewModelInterface;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,12 +39,14 @@ import static android.view.View.INVISIBLE;
 public class MainFragment extends Fragment {
 
     public static final String TAG = "MainFragment";
-
+    public static final String TRIP_Object_FROM_MAIN = "tripMain";
     private RecyclerView recyclerView;
     private LinearLayout noTripsLayout;
     private MainViewModelInterface viewModel;
     MainAdapter adapter;
     Vector<String> allNotes;
+    private List<Trip> tripList;
+
     public MainFragment() {
     }
 
@@ -66,12 +70,23 @@ public class MainFragment extends Fragment {
         viewModel.getAllTrips(MainActivity.userId).observe(this, new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
+                adapter = new MainAdapter(getActivity(), trips);
                 if (trips != null && !trips.isEmpty()) {
-                    adapter = new MainAdapter(getActivity(), trips , viewModel);
+                    tripList = trips;
+                    for (int i = 0; i < tripList.size(); i++) {
+                        Trip currentTrip = tripList.get(i);
+                        viewModel.getTripNotes(currentTrip.getTripId()).observe(MainFragment.this, new Observer<Vector<String>>() {
+                            @Override
+                            public void onChanged(Vector<String> strings) {
+                                currentTrip.setNotes(strings);
+                            }
+                        });
+                    }
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);
                     noTripsLayout.setVisibility(INVISIBLE);
                     enableSwipeToDeleteAndUndo();
+                    enableSwipeToEdit();
 
                 } else {
                     recyclerView.setVisibility(INVISIBLE);
@@ -79,7 +94,6 @@ public class MainFragment extends Fragment {
                 }
             }
         });
-
 
         return v;
     }
@@ -115,18 +129,37 @@ public class MainFragment extends Fragment {
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchhelper.attachToRecyclerView(recyclerView);
     }
-  public  Vector<String> getNotes (String tripId){
-        viewModel.getTripNotes(tripId).observe(this, new Observer<Vector<String>>() {
+    private void enableSwipeToEdit() {
+        SwipeToEditCallBack swipeToDeleteCallback = new SwipeToEditCallBack(getContext()) {
             @Override
-            public void onChanged(Vector<String> notes) {
-                if(notes!=null && !notes.isEmpty()) {
-                    MainFragment.this.allNotes= notes;
-                }else{
-                    //no notes for this trip
-                }
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+                final int position = viewHolder.getAdapterPosition();
+                final Trip item = adapter.getData().get(position);
+
+                Snackbar snackbar = Snackbar
+                        .make(getView(), "Are you sure you want to Edit it? ", Snackbar.LENGTH_LONG);
+                snackbar.setAction("YES", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AddTripFragment1 fone = new AddTripFragment1();
+                        FragmentManager manager = MainFragment.super.getActivity().getSupportFragmentManager();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(TRIP_Object_FROM_MAIN, item);
+                        fone.setArguments(bundle);
+                        manager.beginTransaction()
+                                .replace(R.id.container, fone).commit();
+                    }
+                });
+
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+
             }
-        });
-        return allNotes;
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 
 }

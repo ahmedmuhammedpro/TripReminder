@@ -11,21 +11,18 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
 import com.example.tripreminder.R;
+import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.view.activities.TripAlertActivity;
 
 public class TripNotification {
 
     private Context context;
     private NotificationManager notificationManager;
-    private String tripId, tripName, tripStartLocationName, tripEndLocationName;
+    private Trip trip;
 
-    public TripNotification(Context context, String tripId, String tripName,
-                            String tripStartLocationName, String tripEndLocationName) {
+    public TripNotification(Context context, Trip trip) {
         this.context = context;
-        this.tripId = tripId;
-        this.tripName = tripName;
-        this.tripStartLocationName = tripStartLocationName;
-        this.tripEndLocationName = tripEndLocationName;
+        this.trip = trip;
         createNotificationChannel();
     }
 
@@ -54,10 +51,7 @@ public class TripNotification {
 
     private NotificationCompat.Builder getNotificationBuilder() {
         Intent intent = new Intent(context, TripAlertActivity.class);
-        intent.putExtra(Constants.TRIP_ID_KEY, tripId);
-        intent.putExtra(Constants.TRIP_NAME_KEY, tripName);
-        intent.putExtra(Constants.TRIP_START_LOCATION_KEY, tripStartLocationName);
-        intent.putExtra(Constants.TRIP_END_LOCATION_KEY, tripEndLocationName);
+        intent.putExtra(Constants.TRIP_OB_KEY, trip);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, Constants.NOTIFICATION_ID,
                 intent, PendingIntent.FLAG_ONE_SHOT);
@@ -66,7 +60,7 @@ public class TripNotification {
                 .setContentIntent(pendingIntent)
                 .setContentTitle("upcoming trip")
                 .setSmallIcon(R.drawable.ic_notification)
-                .setContentText("you trip " + tripName + " is ready started!")
+                .setContentText("you trip " + trip.getTripName() + " is ready started!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setOngoing(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);

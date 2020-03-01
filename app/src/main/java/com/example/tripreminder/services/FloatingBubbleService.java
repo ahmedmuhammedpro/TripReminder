@@ -1,13 +1,8 @@
 package com.example.tripreminder.services;
 
-
-import android.annotation.SuppressLint;
-import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.*;
@@ -22,8 +17,6 @@ import com.example.tripreminder.R;
 import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.view.activities.MainActivity;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 public class FloatingBubbleService extends Service {
 
@@ -33,7 +26,7 @@ public class FloatingBubbleService extends Service {
     private View floatingBubbleView ;
     private WindowManager windowManager;
     RelativeLayout layout;
-    String[] notes =  null;
+    String[] notes;
 
     private WindowManager.LayoutParams mCloseViewParams;
 
@@ -44,6 +37,7 @@ public class FloatingBubbleService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         notes = intent.getStringArrayExtra(Constants.TRIP_NOTES_KEY);
+        Log.i("notes", "not: "+ notes);
         handleStart();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -55,7 +49,7 @@ public class FloatingBubbleService extends Service {
 
     }
 
-    @SuppressLint("NewApi")
+
     private void handleFloatingBubble() {
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -74,7 +68,7 @@ public class FloatingBubbleService extends Service {
         }
         final View collapsedView = floatingBubbleView.findViewById(R.id.collapse_view);
         final LinearLayout expandedView = floatingBubbleView.findViewById(R.id.expanded_container);
-      if(notes != null || notes.length >0) {
+      if(notes != null && notes.length >0) {
           for (String note : notes) {
               LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
                       LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -82,14 +76,14 @@ public class FloatingBubbleService extends Service {
               box.setLayoutParams(lparams);
               box.setText(note);
               box.setPadding(5,5,5,5);
-              box.setBackground(getDrawable( R.drawable.custom_rounded_view_light));
+              //box.setBackground(getDrawable( R.drawable.custom_rounded_view_light));
               box.setTextSize(14);
               expandedView.addView(box);
           }
       }else{
           TextView tv = new TextView(this);
           tv.setText("No notes to show !");
-          tv.setBackground(getDrawable( R.drawable.custom_rounded_view_light));
+         // tv.setBackground(getDrawable( R.drawable.custom_rounded_view_light));
           tv.setTextSize(14);
           expandedView.addView(tv);
       }

@@ -12,6 +12,15 @@
         android:theme="@style/AppThemeAddTrip"
         tools:layout_editor_absoluteY="1dp">
 
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_done"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/tripnameLayout"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tripnameLayout"
             android:layout_width="300dp"
@@ -153,7 +162,7 @@
             android:id="@+id/dateTxt"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:editable="@bool/enable_system_alarm_service_default"
+            android:editable="false"
             android:ems="10"
             android:hint="@string/dateFormat"
             android:inputType="date"

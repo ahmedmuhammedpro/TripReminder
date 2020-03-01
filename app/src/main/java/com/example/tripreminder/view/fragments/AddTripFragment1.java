@@ -54,7 +54,7 @@ public class AddTripFragment1 extends Fragment {
     public static final String TIME_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_1 = "dd-MMM-yyyy";
     private ChipGroup tripTypes;
-    private Button setDate, setTime ,nextBtn;
+    private Button setDate, setTime ,nextBtn , saveBtn;
     private TextView dateTxt, timeTxt;
     private AutoCompleteTextView startPointTxt, endPointTxt;
     private TextInputEditText nameTxt;
@@ -62,6 +62,7 @@ public class AddTripFragment1 extends Fragment {
     private  Trip trip;
     String dateString;
     int countData=0;
+    Bundle bundleMainFragment;
     public AddTripFragment1() {
         // Required empty public constructor
     }
@@ -89,6 +90,7 @@ public class AddTripFragment1 extends Fragment {
         setTime = view.findViewById(R.id.timeBtn);
         dateTxt = view.findViewById(R.id.dateTxt);
         timeTxt = view.findViewById(R.id.timeTxt);
+        saveBtn = view.findViewById(R.id.saveBtn);
         startPointTxt = view.findViewById(R.id.startPointTxt);
         endPointTxt = view.findViewById(R.id.endPointTxt);
         nextBtn.setEnabled(false);
@@ -227,6 +229,19 @@ public class AddTripFragment1 extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_trip_fragment1, container, false);
         setupView(view);
+        bundleMainFragment = getArguments();
+      if (bundleMainFragment != null) {
+          Trip mainTrip = (Trip) bundleMainFragment.getSerializable(MainFragment.TRIP_Object_FROM_MAIN);
+          if (trip != null) {
+              nameTxt.setText(mainTrip.getTripName());
+              startPointTxt.setText(mainTrip.getStartLocation().getLocationName());
+              endPointTxt.setText(mainTrip.getStartLocation().getLocationName());
+              dateTxt.setText(getDate(mainTrip.getTripDate()));
+              timeTxt.setText(getTime(mainTrip.getTripDate()));
+              // tripTypes.setSingleSelection(mainTrip.getTripType() == 1 ?  : 1);
+              nextBtn.setEnabled(true);
+          }
+      }
         setupAdapters();
         setupListeners();
         return view;
@@ -253,4 +268,23 @@ public class AddTripFragment1 extends Fragment {
             }
         });
     }
+
+  private String  getDate(String dateString){
+      String[] strings = dateString.split("-");
+      int day = Integer.parseInt(strings[0]);
+      int month = Integer.parseInt(strings[1]);
+      int year = Integer.parseInt(strings[2]);
+      Calendar c = Calendar.getInstance();
+      c.set(year, month, day);
+      return DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+
+  }
+    private String  getTime(String dateString){
+        String[] strings = dateString.split("-");
+        int hour = Integer.parseInt(strings[3]);
+        int minute = Integer.parseInt(strings[4]);
+        return hour+":"+minute;
+
+    }
+
 }

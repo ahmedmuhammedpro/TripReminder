@@ -13,7 +13,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingBottom="10dp">
 
 
@@ -96,17 +96,16 @@
 
         <TextView
             android:id="@+id/trip_hour"
-            android:layout_width="100dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="09:15  AM"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/trip_start_location"
             app:layout_constraintStart_toStartOf="@+id/trip_date"
             app:layout_constraintTop_toBottomOf="@+id/trip_start_location" />
 
         <TextView
             android:id="@+id/trip_date"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
@@ -148,8 +147,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_note_expand"
-            android:layout_width="353dp"
-            android:layout_height="37dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/trip_options"
@@ -168,8 +167,9 @@
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/notesGroupItem"
-                android:layout_width="349dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="30dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:background="@drawable/custom_chipgroup"
