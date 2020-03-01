@@ -19,6 +19,7 @@ import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.view.fragments.TripBottomSheetDialog;
+import com.example.tripreminder.viewmodel.MainViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,6 +50,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             bundle.putSerializable(Constants.TRIP_OB_KEY, currentTrip);
             bottomSheetDialog.setArguments(bundle);
             bottomSheetDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), TripBottomSheetDialog.TAG);
+        });
+
+        mainViewHolder.startTripButton.setOnClickListener(v -> {
+            Trip trip = tripList.get(mainViewHolder.getAdapterPosition());
+            trip.setTripStatus(Trip.DONE);
+            MainViewModel mainViewModel = new MainViewModel();
+            mainViewModel.updateTripStatus(trip.getTripId(), trip.getTripStatus());
         });
         return mainViewHolder;
     }
