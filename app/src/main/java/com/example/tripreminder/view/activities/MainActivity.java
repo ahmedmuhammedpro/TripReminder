@@ -3,11 +3,14 @@ package com.example.tripreminder.view.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
+import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.map_directions.TaskLoadedCallback;
 import com.example.tripreminder.view.fragments.AddTripFragment1;
 import com.example.tripreminder.view.fragments.FeedbackFragment;
@@ -101,5 +104,11 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
 
     private void signOut(){
 
+        SharedPreferences sharedPreferences = getSharedPreferences(SplashScreenActivity.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SplashScreenActivity.lOGGED_IN_KEY,false);
+        editor.commit();
     }
+
 }

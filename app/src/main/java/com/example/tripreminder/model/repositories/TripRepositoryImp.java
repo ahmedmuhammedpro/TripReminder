@@ -19,12 +19,17 @@ public class TripRepositoryImp {
     public MutableLiveData<Trip> deleteTrip(String tripID){
         return tripFirestoreHandler.deleteTrip(tripID);
     }
-
+    public MutableLiveData<Trip> updateTrip(Trip trip){
+        return tripFirestoreHandler.updateTrip(trip);
+    }
     public LiveData<List<Trip>> getUserTrips(String userId){
         return tripFirestoreHandler.getUserTrips(userId);
     }
 
     public MutableLiveData<Vector<String>> getTripNotes(String tripId) {
         return  tripFirestoreHandler.getTripNotes(tripId);
+    }
+    public MutableLiveData<Trip> updateTripStatus(String tripId,int tripStatus){
+        return tripFirestoreHandler.updateTripStatus(tripId,tripStatus);
     }
 }
