@@ -31,7 +31,7 @@ public class TripWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-
+        Log.i("ahmed", "entered");
         // Getting bound data with work manager request
         Data data = getInputData();
 

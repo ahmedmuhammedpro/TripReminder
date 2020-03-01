@@ -20,13 +20,14 @@ public class MainViewModel extends ViewModel implements MainViewModelInterface {
     }
 
     @Override
-    public void deleteTrip(Trip trip) {
-
+    public MutableLiveData<Trip> deleteTrip(String tripID){
+        return tripRepositoryImp.deleteTrip(tripID);
     }
 
     @Override
-    public void updateTrip(Trip trip) {
+    public MutableLiveData<Trip> updateTrip(Trip trip) {
 
+        return tripRepositoryImp.updateTrip(trip);
     }
 
     @Override

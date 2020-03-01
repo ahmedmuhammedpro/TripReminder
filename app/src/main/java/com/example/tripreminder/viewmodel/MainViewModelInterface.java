@@ -12,9 +12,9 @@ public interface MainViewModelInterface {
 
     LiveData<List<Trip>> getAllTrips(String userId);
 
-    void deleteTrip(Trip trip);
+    public MutableLiveData<Trip> deleteTrip(String tripID);
 
-    void updateTrip(Trip trip);
+    public MutableLiveData<Trip> updateTrip(Trip trip);
 
     public MutableLiveData<Vector<String>> getTripNotes(String tripId);
 }

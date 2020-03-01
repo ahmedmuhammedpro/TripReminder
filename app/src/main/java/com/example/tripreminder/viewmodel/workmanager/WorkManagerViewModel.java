@@ -29,7 +29,7 @@ public class WorkManagerViewModel {
 
         OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(TripWorker.class)
                 .setInputData(getDataBuilder(trip).build())
-                .setInitialDelay(milliseconds, TimeUnit.MILLISECONDS)
+                .setInitialDelay(10000, TimeUnit.MILLISECONDS)
                 .build();
 
         workManager.enqueueUniqueWork(trip.getTripId(), ExistingWorkPolicy.APPEND, request);
