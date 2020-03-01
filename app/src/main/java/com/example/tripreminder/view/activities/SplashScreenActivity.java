@@ -19,8 +19,9 @@ import com.example.tripreminder.viewmodel.LoginViewModel;
 
 public class SplashScreenActivity extends AppCompatActivity implements Runnable{
 
-    private final String SHARED_PREFERENCES_FILE_NAME="loggedInUserInfo",EMAIL_KEY="email",PASSWORD_KEY="password";
-    private final String lOGGED_IN_KEY="loggedIn";
+    public static final String SHARED_PREFERENCES_FILE_NAME="loggedInUserInfo",EMAIL_KEY="email",PASSWORD_KEY="password";
+    public static final String lOGGED_IN_KEY="loggedIn";
+    public static final String USERNAME_KEY = "username";
     boolean loggedIn=false;
     public static final String USER_ID_TAG="userID";
     private static final int RC_SIGN_IN = 1;

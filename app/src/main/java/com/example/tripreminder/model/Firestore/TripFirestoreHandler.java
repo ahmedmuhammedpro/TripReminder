@@ -164,7 +164,7 @@ public class TripFirestoreHandler {
         tripValues.put(START_LOCATION,trip.getStartLocation());
         tripValues.put(END_LOCATION,trip.getEndLocation());
 
-        dbFirestoreInstance.collection("trips").document(trip.getTripId()).set(tripValues).addOnCompleteListener(new OnCompleteListener<Void>() {
+        dbFirestoreInstance.collection("trips").document(trip.getTripId()).set(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 
