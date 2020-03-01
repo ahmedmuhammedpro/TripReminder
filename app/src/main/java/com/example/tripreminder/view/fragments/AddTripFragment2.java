@@ -43,7 +43,8 @@ public class AddTripFragment2 extends Fragment {
     TextInputLayout noteLayout;
     SubmitButton addTripBtn;
     AddTripViewModel addTripViewModel;
-
+    Trip trip;
+    String SAVE_CHANGES = "save changes";
     public AddTripFragment2() {
         // Required empty public constructor
     }
@@ -80,21 +81,23 @@ public class AddTripFragment2 extends Fragment {
             @Override
             public void onClick(View view) {
                 Vector<String> notes = addChipsIntoVector(allNotes);
-                Bundle bundle = getArguments();
-                Trip trip = (Trip) bundle.getSerializable(AddTripFragment1.TRIP_Object);
                 trip.setNotes(notes);
-                addTripViewModel.addTrip(trip).observe(AddTripFragment2.this, new Observer<Trip>() {
-                    @Override
-                    public void onChanged(Trip trip) {
-                        Toast.makeText(getActivity(), "Trip details:" + trip.getTripDate() + trip.getTripName(), Toast.LENGTH_SHORT).show();
-                        WorkManagerViewModel workManagerViewModel = new WorkManagerViewModel(getActivity());
-                        workManagerViewModel.addTripToWorkManager(trip);
-                        MainFragment fmain = new MainFragment();
-                        FragmentManager manager = AddTripFragment2.super.getActivity().getSupportFragmentManager();
-                        manager.beginTransaction()
-                                .replace(R.id.container, fmain).commit();
-                    }
-                });
+              if(addTripBtn.getText() != SAVE_CHANGES) {
+                  addTripViewModel.addTrip(trip).observe(AddTripFragment2.this, new Observer<Trip>() {
+                      @Override
+                      public void onChanged(Trip trip) {
+                          Toast.makeText(getActivity(), "Trip details:" + trip.getTripDate() + trip.getTripName(), Toast.LENGTH_SHORT).show();
+                          WorkManagerViewModel workManagerViewModel = new WorkManagerViewModel(getActivity());
+                          workManagerViewModel.addTripToWorkManager(trip);
+                          MainFragment fmain = new MainFragment();
+                          FragmentManager manager = AddTripFragment2.super.getActivity().getSupportFragmentManager();
+                          manager.beginTransaction()
+                                  .replace(R.id.container, fmain).commit();
+                      }
+                  });
+              }else{
+                  //TODO: update trip
+              }
             }
         });
         cancelTripBtn.setOnClickListener(new View.OnClickListener() {
@@ -145,8 +148,21 @@ public class AddTripFragment2 extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_trip_fragment2, container, false);
         setup(view);
+        editSetup();
+
         return view;
     }
 
+  private void editSetup (){
+      Bundle bundle = getArguments();
+      trip = (Trip) bundle.getSerializable(AddTripFragment1.TRIP_Object);
+      if(trip.getNotes() != null){
+          for(String note : trip.getNotes()){
+              Chip chip =  addNoteChip(allNotes,note);
+              allNotes.addView(chip);
+          }
+          addTripBtn.setText(SAVE_CHANGES);
+      }
 
+   }
 }

@@ -54,12 +54,13 @@ public class AddTripFragment1 extends Fragment {
     public static final String TIME_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_1 = "dd-MMM-yyyy";
     private ChipGroup tripTypes;
+    private Chip trip1,trip2;
     private Button setDate, setTime ,nextBtn , saveBtn;
     private TextView dateTxt, timeTxt;
     private AutoCompleteTextView startPointTxt, endPointTxt;
     private TextInputEditText nameTxt;
     private int mYear, mMonth, mDay, mHour, mMinute,tripType;
-    private  Trip trip;
+    private  Trip trip , mainTrip;
     String dateString;
     int countData=0;
     Bundle bundleMainFragment;
@@ -84,6 +85,8 @@ public class AddTripFragment1 extends Fragment {
     private void setupView(View view) {
         trip = new Trip();
         tripTypes = view.findViewById(R.id.chipGroupTripTypes);
+        trip1 = view.findViewById(R.id.trip1);
+        trip2 = view.findViewById(R.id.trip2);
         nextBtn = view.findViewById(R.id.nextBtn);
         nameTxt = view.findViewById(R.id.tripNameTxt);
         setDate = view.findViewById(R.id.dateBtn);
@@ -182,46 +185,54 @@ public class AddTripFragment1 extends Fragment {
             @Override
             public void onCheckedChanged(ChipGroup group, @IdRes int checkedId) {
                 // Handle the checked chip change.
-                int chipsCount = group.getChildCount();
-                if (chipsCount > 0) {
-                    int i = 0;
-                    while (i < chipsCount) {
-                        Chip chip = (Chip) group.getChildAt(i);
-                        if (chip.isChecked()) {
-                            tripType = i + 1;
-                            countData +=1;
+                           if(trip1.isChecked())
+                              tripType = 1;
+                           if(trip2.isChecked())
+                               tripType = 2;
 
+                            trip.setTripType(tripType);
+                            countData +=1;
                             if ( countData>=5 && !nameTxt.getText().toString().isEmpty()) {
                                 nextBtn.setEnabled(true);
                             }
-                        }
-                        i++;
-                    }
                 }
-            }
         });
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                  if(nextBtn.isEnabled())  {
-                    trip.setTripType(tripType);
-                    trip.setTripStatus(Trip.UPCOMING);
-                    trip.setTripName(nameTxt.getText().toString());
-                    trip.setUserID(MainActivity.userId);
-                    trip.setTripDate(dateString);
-                    trip.getStartLocation().setLocationName(startPointTxt.getText().toString());
-                    trip.getEndLocation().setLocationName(endPointTxt.getText().toString());
+                if (mainTrip == null) {
+                    if (nextBtn.isEnabled()) {
+
+                        trip.setTripStatus(Trip.UPCOMING);
+                        trip.setTripName(nameTxt.getText().toString());
+                        trip.setUserID(MainActivity.userId);
+                        trip.setTripDate(dateString);
+                        trip.getStartLocation().setLocationName(startPointTxt.getText().toString());
+                        trip.getEndLocation().setLocationName(endPointTxt.getText().toString());
+                        AddTripFragment2 ftwo = new AddTripFragment2();
+                        FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(TRIP_Object, trip);
+                        ftwo.setArguments(bundle);
+                        manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
+                    }
+                }else{
                     AddTripFragment2 ftwo = new AddTripFragment2();
                     FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(TRIP_Object, trip);
+                    bundle.putSerializable(TRIP_Object, mainTrip);
                     ftwo.setArguments(bundle);
                     manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
                 }
             }
         });
 
-
+      saveBtn.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            //
+          }
+      });
     }
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
@@ -231,14 +242,21 @@ public class AddTripFragment1 extends Fragment {
         setupView(view);
         bundleMainFragment = getArguments();
       if (bundleMainFragment != null) {
-          Trip mainTrip = (Trip) bundleMainFragment.getSerializable(MainFragment.TRIP_Object_FROM_MAIN);
+          mainTrip = (Trip) bundleMainFragment.getSerializable(MainFragment.TRIP_Object_FROM_MAIN);
           if (trip != null) {
+              saveBtn.setVisibility(View.VISIBLE);
               nameTxt.setText(mainTrip.getTripName());
               startPointTxt.setText(mainTrip.getStartLocation().getLocationName());
-              endPointTxt.setText(mainTrip.getStartLocation().getLocationName());
+              endPointTxt.setText(mainTrip.getEndLocation().getLocationName());
               dateTxt.setText(getDate(mainTrip.getTripDate()));
               timeTxt.setText(getTime(mainTrip.getTripDate()));
-              // tripTypes.setSingleSelection(mainTrip.getTripType() == 1 ?  : 1);
+              int type = mainTrip.getTripType() ;
+              Log.i("type","type int:"+type);
+              if(type == 1){
+                  trip1.setChecked(true);
+              }else{
+                  trip2.setChecked(true);
+              }
               nextBtn.setEnabled(true);
           }
       }

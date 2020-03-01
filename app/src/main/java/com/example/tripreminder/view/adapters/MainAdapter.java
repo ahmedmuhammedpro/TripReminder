@@ -85,8 +85,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                 holder.tripNotesBtn.setBackgroundResource(R.drawable.ic_arrow_upward_black_24dp);
                 allNotes = tripList.get(position).getNotes();
                if(!isAdded) {
-                   Log.i("notes: ", allNotes.toString());
-                   if (allNotes.size() != 0) {
+                   if (allNotes!= null && allNotes.size() != 0) {
                        for (String txt : allNotes) {
                            Chip chip = addNoteChip(txt);
                            holder.notesGroup.addView(chip);
@@ -147,7 +146,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         return chip;
     }
 
-    //swiper Items setup
+    //swiper delete Items setup
     public void removeItem(int position) {
         tripList.remove(position);
         notifyItemRemoved(position);
