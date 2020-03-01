@@ -78,17 +78,16 @@ public class FloatingBubbleService extends Service {
           for (String note : notes) {
               LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
                       LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-              CheckBox tv = new CheckBox(this);
-              tv.setLayoutParams(lparams);
-              tv.setText(note);
-              tv.setPadding(5,5,5,5);
-              tv.setBackground(getDrawable( R.drawable.custom_rounded_view_light));
-              tv.setTextSize(14);
-              expandedView.addView(tv);
+              CheckBox box = new CheckBox(this);
+              box.setLayoutParams(lparams);
+              box.setText(note);
+              box.setPadding(5,5,5,5);
+              box.setBackground(getDrawable( R.drawable.custom_rounded_view_light));
+              box.setTextSize(14);
+              expandedView.addView(box);
           }
       }else{
-          CheckBox tv = new CheckBox(this);
-
+          TextView tv = new TextView(this);
           tv.setText("No notes to show !");
           tv.setBackground(getDrawable( R.drawable.custom_rounded_view_light));
           tv.setTextSize(14);

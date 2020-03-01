@@ -1,11 +1,25 @@
-package com.example.tripreminder.view.activities;
+package com.example.tripreminder.view.fragments;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.User;
+import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.viewmodel.LoginViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -15,18 +29,13 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class LoginFragment extends Fragment {
 
+    TextView newUserTextView;
     private final String SHARED_PREFERENCES_FILE_NAME="loggedInUserInfo",EMAIL_KEY="email",PASSWORD_KEY="password";
     private final String lOGGED_IN_KEY="loggedIn",USER_ID_KEY="UserId";
     boolean loggedIn=false;
@@ -36,69 +45,82 @@ public class LoginActivity extends AppCompatActivity {
     SignInButton googleSignInButton;
     EditText emailEditText,passwordEditText;
     LoginViewModel loginViewModel;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        setup();
+    View view;
+    public LoginFragment() {
+        // Required empty public constructor
     }
 
 
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_login, container, false);
+        setup();
+        return view;
+    }
 
     private void setup(){
+
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
-        //readFromSharedPreferences();
+        newUserTextView = view.findViewById(R.id.newUserTextView);
 
-        loginButton = findViewById(R.id.loginButton);
-        emailEditText = findViewById(R.id.emailEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
-        googleSignInButton = findViewById(R.id.googleSignInButton);
+        loginButton = view.findViewById(R.id.loginButton);
+        emailEditText = view.findViewById(R.id.emailEditText);
+        passwordEditText = view.findViewById(R.id.passwordEditText);
+        googleSignInButton = view.findViewById(R.id.googleSignInButton);
 
+        setClickListners();
+
+    }
+
+    private void setClickListners(){
+        newUserTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.fragment_enter_right_to_left,R.anim.fragment_exit_to_left)
+                        .replace(R.id.authenticationFrameLayout, new RegisterFragment()).commit();
+            }
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
-                login(email,password);
+                String email = emailEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
+
+                if(email.equals("") || password.equals(""))
+                    Toast.makeText(getActivity(), "You must enter all fields first", Toast.LENGTH_SHORT).show();
+                else
+                    login(email,password);
             }
         });
+
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 googleSignIn();
             }
         });
-
     }
-
     private void googleSignIn(){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        getActivity().startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RC_SIGN_IN && resultCode == RESULT_OK){
-
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
-    }
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    public void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             // Signed in successfully, show authenticated UI.
             User user = new User();
             user.setEmail(account.getEmail());
             user.setUserId(account.getId());
+            user.setUsername(account.getDisplayName());
             loginViewModel.registerIfNewGoogleAccount(user);
             updateUI(account,user);
         } catch (ApiException e) {
@@ -109,14 +131,13 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(GoogleSignInAccount account,User user) {
 
         if(account!=null) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.putExtra(USER_ID_TAG, user.getUserId());
             startActivity(intent);
         }
     }
 
     private void login(String email,String password){
-
 
         if(!email.trim().equals("") && !password.trim().equals("")) {
             User user = new User();
@@ -127,15 +148,15 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (loggedInUser != null) {
                     if(loggedInUser.getUserId().equals("-1")){
-                        Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Login failed", Toast.LENGTH_SHORT).show();
 
                     }else {
 
                         if(!loggedIn) {
                             writeInSharedPreferences(loggedInUser);
                         }
-                        Toast.makeText(this, "Login Successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(this, MainActivity.class);
+                        Toast.makeText(getActivity(), "Login Successfully", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.putExtra(USER_ID_TAG, loggedInUser.getUserId());
                         startActivity(intent);
                     }
@@ -144,12 +165,12 @@ public class LoginActivity extends AppCompatActivity {
             });
         }
         else{
-            Toast.makeText(this, "Please enter email and password before login", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please enter email and password before login", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void writeInSharedPreferences(User loggedInUser) {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(EMAIL_KEY,loggedInUser.getEmail());
@@ -159,20 +180,5 @@ public class LoginActivity extends AppCompatActivity {
         editor.commit();
     }
 
-   /* private void readFromSharedPreferences(){
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-        loggedIn = sharedPreferences.getBoolean(lOGGED_IN_KEY,false);
-        if(loggedIn) {
-            String email = sharedPreferences.getString(EMAIL_KEY, "empty");
-            String password = sharedPreferences.getString(PASSWORD_KEY, "empty");
-            String userID = sharedPreferences.getString(USER_ID_TAG, "empty");
-            //login(email,password);
-            Toast.makeText(this, "Login Successfully", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra(USER_ID_TAG, userID);
-            startActivity(intent);
-        }
-    }
-*/
 }

@@ -29,6 +29,7 @@ import com.example.tripreminder.viewmodel.MainViewModelInterface;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.Vector;
 
 import static android.view.View.VISIBLE;
 import static android.view.View.INVISIBLE;
@@ -41,6 +42,7 @@ public class MainFragment extends Fragment {
     private LinearLayout noTripsLayout;
     private MainViewModelInterface viewModel;
     MainAdapter adapter;
+    Vector<String> allNotes;
     public MainFragment() {
     }
 
@@ -48,6 +50,7 @@ public class MainFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new MainViewModel();
+        allNotes = new Vector<>();
     }
 
     @Override
@@ -64,11 +67,12 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(List<Trip> trips) {
                 if (trips != null && !trips.isEmpty()) {
-                    adapter = new MainAdapter(getActivity(), trips);
+                    adapter = new MainAdapter(getActivity(), trips , viewModel);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);
                     noTripsLayout.setVisibility(INVISIBLE);
                     enableSwipeToDeleteAndUndo();
+
                 } else {
                     recyclerView.setVisibility(INVISIBLE);
                     noTripsLayout.setVisibility(VISIBLE);
@@ -93,11 +97,10 @@ public class MainFragment extends Fragment {
                 adapter.removeItem(position);
 
                 Snackbar snackbar = Snackbar
-                        .make(getView(), "Item was removed from the list.", Snackbar.LENGTH_INDEFINITE);
+                        .make(getView(), "Item was removed from the list.", Snackbar.LENGTH_LONG);
                 snackbar.setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         adapter.restoreItem(item, position);
                         recyclerView.scrollToPosition(position);
                     }
@@ -112,4 +115,18 @@ public class MainFragment extends Fragment {
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchhelper.attachToRecyclerView(recyclerView);
     }
+  public  Vector<String> getNotes (String tripId){
+        viewModel.getTripNotes(tripId).observe(this, new Observer<Vector<String>>() {
+            @Override
+            public void onChanged(Vector<String> notes) {
+                if(notes!=null && !notes.isEmpty()) {
+                    MainFragment.this.allNotes= notes;
+                }else{
+                    //no notes for this trip
+                }
+            }
+        });
+        return allNotes;
+    }
+
 }

@@ -29,4 +29,11 @@
     <string name="Email">Email</string>
     <string name="Password">Password</string>
     <string name="LoginButtonText">Login</string>
+    <string name="PastTripsTab">Past Trips</string>
+    <string name="MapTapText">Map</string>
+    <string name="TripReminderSplashText">Trip Reminder</string>
+    <string name="NewUserRegisterText">New User?</string>
+    <string name="Name">Name</string>
+    <string name="RegisterButtonText">Register</string>
+    <string name="ConfirmPasswordHint">Confirm Password</string>
 </resources>

@@ -18,11 +18,15 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
+import com.example.tripreminder.view.fragments.MainFragment;
 import com.example.tripreminder.view.fragments.TripBottomSheetDialog;
+import com.example.tripreminder.viewmodel.MainViewModel;
+import com.example.tripreminder.viewmodel.MainViewModelInterface;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -37,12 +41,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     private Context context;
     private List<Trip> tripList;
     private SimpleDateFormat format;
-    Vector<String>  allNotes;
+    private MainViewModelInterface viewModel;
+    Vector<String> allNotes;
+    MainFragment mainFragment ;
     public static final String TRIP_ID_KEY="tripID";
-    public MainAdapter(Context context,  List<Trip> tripList) {
+    public MainAdapter(Context context,  List<Trip> tripList, MainViewModelInterface viewModel) {
         this.context = context;
         this.tripList = tripList;
+        this.viewModel = viewModel;
         allNotes = new Vector<>();
+        mainFragment = new MainFragment();
         format = new SimpleDateFormat("dd-M-yyyy hh:mm:ss", Locale.US);
     }
 
@@ -79,8 +87,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         });
         holder.tripStartLocationTV.setText( tripList.get(position).getStartLocation().getLocationName());
         holder.tripEndLocationTV.setText( tripList.get(position).getEndLocation().getLocationName());
-       allNotes = tripList.get(position).getNotes();
-       // Log.i("notes: ",allNotes.toString());
+        allNotes = mainFragment.getNotes(tripList.get(position).getTripId());
+        Log.i("notes: ",allNotes.toString());
 //      if(allNotes.size() != 0) {
 //          for (String txt : allNotes) {
 //              Chip chip = addNoteChip(txt);
@@ -143,4 +151,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     public List<Trip> getData() {
         return tripList;
     }
+
+
 }

@@ -203,6 +203,7 @@ public class AddTripFragment1 extends Fragment {
             public void onClick(View view) {
                   if(nextBtn.isEnabled())  {
                     trip.setTripType(tripType);
+                    trip.setTripStatus(Trip.UPCOMING);
                     trip.setTripName(nameTxt.getText().toString());
                     trip.setUserID(MainActivity.userId);
                     trip.setTripDate(dateString);
