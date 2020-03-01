@@ -38,9 +38,12 @@ public class TripAlertActivity extends AppCompatActivity {
 
         // Get intent and it's extras
         intent = getIntent();
-        notes = intent.getStringArrayExtra(Constants.TRIP_NOTES_KEY);
-        Trip trip = (Trip) intent.getExtras().getSerializable(Constants.TRIP_OB_KEY);
 
+        Trip trip = (Trip) intent.getExtras().getSerializable(Constants.TRIP_OB_KEY);
+        if (trip.getNotes() != null) {
+            String[] notesArray = new String[trip.getNotes().size()];
+            notes =  trip.getNotes().toArray(notesArray);
+        }
         // Create TripNotification object
         TripNotification tripNotification = new TripNotification(this, trip);
 
