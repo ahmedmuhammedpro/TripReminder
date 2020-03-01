@@ -172,11 +172,14 @@ public class TripFirestoreHandler {
                     String documentID = trip.getTripId();
                     int counter=1;
                     Vector<String> notes = trip.getNotes();
-                    Iterator iterator = notes.iterator();
-                    HashMap<String,Object> noteValues = new HashMap<>();
-                    while(iterator.hasNext()){
-                        noteValues.put(""+counter,String.valueOf(iterator.next()));
-                        counter++;
+                    HashMap<String, Object> noteValues = new HashMap<>();
+                    if(notes!=null) {
+                        Iterator iterator = notes.iterator();
+
+                        while (iterator.hasNext()) {
+                            noteValues.put("" + counter, String.valueOf(iterator.next()));
+                            counter++;
+                        }
                     }
 
                     dbFirestoreInstance.collection("notes").document(documentID).set(noteValues).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -224,5 +227,36 @@ public class TripFirestoreHandler {
         return notesMutableLiveData;
 
 
+    }
+    public MutableLiveData<Trip> updateTripStatus(String tripId,int tripStatus){
+
+        MutableLiveData<Trip> updatedTripData = new MutableLiveData<>();
+
+        Trip trip = new Trip();
+
+        dbFirestoreInstance.collection("trips").document(tripId).update(TRIP_STATUS,tripStatus).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                if(task.isSuccessful()){
+
+                    trip.setTripId(tripId);
+                    updatedTripData.postValue(trip);
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                trip.setTripId("-1");
+                //return error message in
+                trip.setTripName(e.getMessage());
+                updatedTripData.postValue(trip);
+                Log.d("Error", "error in update status :"+e.getMessage());
+            }
+        });
+
+
+        return  updatedTripData;
     }
 }

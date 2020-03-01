@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.tripreminder.R;
+import com.example.tripreminder.model.Firestore.TripFirestoreHandler;
 import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.view.adapters.MainAdapter;
 import com.example.tripreminder.model.Entities.Trip;
@@ -64,7 +65,6 @@ public class MainFragment extends Fragment {
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);
                     noTripsLayout.setVisibility(INVISIBLE);
-
                 } else {
                     recyclerView.setVisibility(INVISIBLE);
                     noTripsLayout.setVisibility(VISIBLE);
