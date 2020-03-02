@@ -23,13 +23,13 @@ import com.example.tripreminder.view.fragments.ProfileFragment;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity implements TaskLoadedCallback {
 
-    int testMapCounter =1;
     int previousFragmentNumber=2;
     private Fragment selectedFragment;
     public static String userId="";
-    Polyline currentPolyline;
     public static final String USER_ID_TAG="userID";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,29 +93,15 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     //for googleMap line drawing
     @Override
     public void onTaskDone(Object... values) {
-        //if (currentPolyline != null)
-          //  currentPolyline.remove();
+
+        Random rnd = new Random();
+
 
         if(getSupportFragmentManager().getFragments().get(1)instanceof PastTripsMapFragment) {
-            if(testMapCounter ==1) {
-                ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(Color.BLUE);
-                testMapCounter++;
-            }
-            else{
-                ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(Color.RED);
-            }
+
+            ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(  Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
+
         }
-    }
-
-    public void signOut(){
-
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(Constants.lOGGED_IN_KEY,false);
-        editor.commit();
-        Intent intent = new Intent(this,AuthenticationActivity.class);
-        startActivity(intent);
     }
 
 }

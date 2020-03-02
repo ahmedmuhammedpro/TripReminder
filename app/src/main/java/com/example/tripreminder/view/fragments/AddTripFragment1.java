@@ -63,7 +63,7 @@ public class AddTripFragment1 extends Fragment {
     private int mYear, mMonth, mDay, mHour, mMinute,tripType;
     private  Trip trip , mainTrip;
     ConstraintLayout roundTripeLayout ;
-    String dateString;
+    String dateString,dateStringRound;
     int countData=0;
     Bundle bundleMainFragment;
     public AddTripFragment1() {
@@ -95,10 +95,16 @@ public class AddTripFragment1 extends Fragment {
         setTime = view.findViewById(R.id.timeBtn);
         dateTxt = view.findViewById(R.id.dateTxt);
         timeTxt = view.findViewById(R.id.timeTxt);
+        dateTxt.setKeyListener(null);
+        timeTxt.setKeyListener(null);
         saveBtn = view.findViewById(R.id.saveBtn);
         startPointTxt = view.findViewById(R.id.startPointTxt);
         endPointTxt = view.findViewById(R.id.endPointTxt);
         roundTripeLayout = view.findViewById(R.id.roundLayoutDate);
+        setDateRound = view.findViewById(R.id.dateBtnRound);
+        setTimeRound = view.findViewById(R.id.timeBtnRound);
+        timeTxtRound = view.findViewById(R.id.timeTxtRound);
+        dateTxtRound = view.findViewById(R.id.dateTxtRound);
         nextBtn.setEnabled(false);
     }
     private void setupAdapters(){
@@ -160,6 +166,7 @@ public class AddTripFragment1 extends Fragment {
                                }
                             }
                         }, mYear, mMonth, mDay);
+                datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
                 datePickerDialog.show();
             }
         });
@@ -199,13 +206,13 @@ public class AddTripFragment1 extends Fragment {
             public void onCheckedChanged(ChipGroup group, @IdRes int checkedId) {
                 // Handle the checked chip change.
                            if(trip1.isChecked()) {
-                               if (roundTripeLayout.getVisibility() == View.VISIBLE)
-                                   roundTripeLayout.setVisibility(View.GONE);
                                tripType = 1;
                            }
                            if(trip2.isChecked()) {
                                tripType = 2;
                                roundTripeLayout.setVisibility(View.VISIBLE);
+                           }else {
+                               roundTripeLayout.setVisibility(View.GONE);
                            }
 
                             trip.setTripType(tripType);
@@ -230,6 +237,7 @@ public class AddTripFragment1 extends Fragment {
                         FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(TRIP_Object, trip);
+                        bundle.putString("tripRound",dateStringRound);
                         ftwo.setArguments(bundle);
                         manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
                     }
@@ -237,18 +245,74 @@ public class AddTripFragment1 extends Fragment {
                     AddTripFragment2 ftwo = new AddTripFragment2();
                     FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
                     Bundle bundle = new Bundle();
+                    mainTrip.setUserID(MainActivity.userId);
+                    mainTrip.setTripStatus(Trip.UPCOMING);
                     mainTrip.setTripName(nameTxt.getText().toString());
                     mainTrip.setTripDate(dateString);
-                    mainTrip.setTripType(tripType);
+                    //mainTrip.setTripType(tripType);
                     mainTrip.getStartLocation().setLocationName(startPointTxt.getText().toString());
                     mainTrip.getEndLocation().setLocationName(endPointTxt.getText().toString());
                     bundle.putSerializable(TRIP_Object, mainTrip);
+                    bundle.putString("tripRound",dateStringRound);
                     ftwo.setArguments(bundle);
                     manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
                 }
             }
         });
+        setDateRound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get Current Date
+                final Calendar c = Calendar.getInstance();
+                Date date = getDate(dateString);
+                c.setTime(date);
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
 
+                // Launch Date Picker Dialog
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddTripFragment1.super.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                c.set(year, monthOfYear, dayOfMonth);
+                                String date = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+                                dateTxtRound.setText(date);
+                                monthOfYear += 1;
+                                if(mainTrip == null) {
+                                    dateStringRound = "" + dayOfMonth + "-" + monthOfYear + "-" + year;
+                                }
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.getDatePicker().setMinDate(date.getTime());
+                datePickerDialog.show();
+
+            }
+        });
+        setTimeRound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get Current Time
+                final Calendar c = Calendar.getInstance();
+                c.setTime(getCurrentTime());
+                mHour = c.get(Calendar.HOUR_OF_DAY);
+                mMinute = c.get(Calendar.MINUTE);
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(AddTripFragment1.super.getContext(),
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay,
+                                                  int minute) {
+                                timeTxtRound.setText(hourOfDay + ":" + minute);
+                                if(mainTrip == null) {
+                                    dateStringRound += "-" + hourOfDay + "-" + minute;
+                                }
+                            }
+                        }, mHour, mMinute, true);
+                timePickerDialog.show();
+            }
+        });
     }
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
@@ -263,9 +327,11 @@ public class AddTripFragment1 extends Fragment {
               nameTxt.setText(mainTrip.getTripName());
               startPointTxt.setText(mainTrip.getStartLocation().getLocationName());
               endPointTxt.setText(mainTrip.getEndLocation().getLocationName());
-              dateTxt.setText(getDate(mainTrip.getTripDate()));
+              dateTxt.setText(DateFormat.getDateInstance(DateFormat.FULL).format(getDate(mainTrip.getTripDate())));
               timeTxt.setText(getTime(mainTrip.getTripDate()));
               dateString = mainTrip.getTripDate();
+             // tripTypes.setEnabled(false);
+              tripTypes.setActivated(false);
               int type = mainTrip.getTripType() ;
               Log.i("type","type int:"+type);
               if(type == 1){
@@ -303,14 +369,14 @@ public class AddTripFragment1 extends Fragment {
         });
     }
 
-  private String  getDate(String dateString){
+  private Date  getDate(String dateString){
       String[] strings = dateString.split("-");
       int day = Integer.parseInt(strings[0]);
       int month = Integer.parseInt(strings[1]);
       int year = Integer.parseInt(strings[2]);
       Calendar c = Calendar.getInstance();
       c.set(year, month, day);
-      return DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+      return c.getTime();
 
   }
     private String  getTime(String dateString){

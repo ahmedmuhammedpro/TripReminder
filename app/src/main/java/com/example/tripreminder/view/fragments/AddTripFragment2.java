@@ -43,7 +43,7 @@ public class AddTripFragment2 extends Fragment {
     TextInputLayout noteLayout;
     SubmitButton addTripBtn;
     AddTripViewModel addTripViewModel;
-    Trip trip;
+    Trip trip ,trip2;
     String SAVE_CHANGES = "save changes";
     public AddTripFragment2() {
         // Required empty public constructor
@@ -84,6 +84,15 @@ public class AddTripFragment2 extends Fragment {
                 Vector<String> notes = addChipsIntoVector(allNotes);
                 trip.setNotes(notes);
               if(addTripBtn.getText() != SAVE_CHANGES) {
+                if(trip2 != null) {
+                    trip2.setNotes(notes);
+                    addTripViewModel.addTrip(trip2).observe(AddTripFragment2.this, new Observer<Trip>() {
+                        @Override
+                        public void onChanged(Trip trip) {
+                            workManagerViewModel.addTripToWorkManager(trip2);
+                        }
+                    });
+                }
                   addTripViewModel.addTrip(trip).observe(AddTripFragment2.this, new Observer<Trip>() {
                       @Override
                       public void onChanged(Trip trip) {
@@ -162,6 +171,18 @@ public class AddTripFragment2 extends Fragment {
   private void editSetup (){
       Bundle bundle = getArguments();
       trip = (Trip) bundle.getSerializable(AddTripFragment1.TRIP_Object);
+      String round = bundle.getString("tripRound");
+      if(round != null){
+          trip2 = new Trip();
+          trip2.setUserID(trip.getUserID());
+          trip2.setTripStatus(Trip.UPCOMING);
+          trip2.setTripName(trip.getTripName()+" - (return)");
+          trip2.setTripDate(round);
+          trip2.setStartLocation(trip.getEndLocation());
+          trip2.setEndLocation(trip.getStartLocation());
+          trip2.setTripType(2);
+      }
+
       if(trip.getNotes() != null){
           for(String note : trip.getNotes()){
               Chip chip =  addNoteChip(allNotes,note);
