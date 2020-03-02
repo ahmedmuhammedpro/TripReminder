@@ -286,7 +286,7 @@ public class TripFirestoreHandler {
 
         MutableLiveData<List<Trip>> tripsListLiveData = new MutableLiveData<>();
 
-        dbFirestoreInstance.collection("trips").whereEqualTo("userId",userId).whereIn("tripStatus", Arrays.asList(Trip.DONE, Trip.CANCELLED)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        dbFirestoreInstance.collection("trips").whereEqualTo("userId",userId).whereIn("tripStatus", Arrays.asList(Trip.DONE, Trip.CANCELED)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
