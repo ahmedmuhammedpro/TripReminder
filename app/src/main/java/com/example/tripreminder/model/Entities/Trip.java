@@ -8,6 +8,7 @@ public class Trip implements Serializable {
 
     public static final int UPCOMING = 1;
     public static final int DONE = 2;
+    public static final int CANCELLED = 2;
 
     private String userID;
     private String tripId;
