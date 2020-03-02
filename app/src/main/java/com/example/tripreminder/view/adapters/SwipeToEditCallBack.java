@@ -35,11 +35,10 @@ abstract public class SwipeToEditCallBack extends ItemTouchHelper.Callback {
     public SwipeToEditCallBack(Context context) {
         mContext = context;
         mBackground = new ColorDrawable();
-        backgroundColor = Color.parseColor("#c0cfff");
+        backgroundColor = Color.parseColor("#ffffff");
         mClearPaint = new Paint();
         mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.ADD));
         editDrawable = ContextCompat.getDrawable(mContext, R.drawable.ic_rename);
-        edit = new TextView(mContext);
         intrinsicWidth = editDrawable.getIntrinsicWidth();
         intrinsicHeight = editDrawable.getIntrinsicHeight();
 
@@ -76,18 +75,17 @@ abstract public class SwipeToEditCallBack extends ItemTouchHelper.Callback {
         mBackground.setBounds(itemView.getLeft() , itemView.getTop(), itemView.getLeft() + (int) dX, itemView.getBottom());
         mBackground.draw(c);
 
-        int editIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
-        int editIconMargin = (itemHeight - intrinsicHeight) / 2;
-        int editIconLeft = itemView.getLeft() - editIconMargin - intrinsicWidth;
-        int editIconRight = itemView.getLeft() - editIconMargin;
-        int editIconBottom = editIconTop + intrinsicHeight;
+        int deleteIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+        int deleteIconMargin = (itemHeight - intrinsicHeight) / 2;
+       // int deleteIconLeft = itemView.getLeft() - deleteIconMargin ;
+       // int deleteIconRight = itemView.getLeft() - deleteIconMargin -intrinsicWidth;
+        int deleteIconBottom = deleteIconTop + intrinsicHeight;
+        int deleteIconLeft = itemView.getRight() - deleteIconMargin - intrinsicWidth;
+        int deleteIconRight = itemView.getRight() - deleteIconMargin;
+        
+        editDrawable.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom);
+        editDrawable.draw(c);
 
-
-        editDrawable.setBounds(editIconLeft, editIconTop, editIconRight, editIconBottom);
-       // editDrawable.draw(c);
-        editDrawable.setBounds(editIconLeft - 20, editIconTop, editIconRight, editIconBottom);
-        edit.setText("Edit");
-        edit.draw(c);
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
 

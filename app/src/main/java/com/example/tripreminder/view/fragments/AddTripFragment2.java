@@ -96,7 +96,6 @@ public class AddTripFragment2 extends Fragment {
                       }
                   });
               }else{
-                  //TODO: update trip
                   addTripViewModel.updateTrip(trip).observe(AddTripFragment2.this, new Observer<Trip>() {
                       @Override
                       public void onChanged(Trip trip) {
