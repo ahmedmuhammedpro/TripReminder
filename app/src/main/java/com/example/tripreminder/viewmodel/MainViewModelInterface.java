@@ -17,4 +17,6 @@ public interface MainViewModelInterface {
     public MutableLiveData<Trip> updateTrip(Trip trip);
 
     public MutableLiveData<Vector<String>> getTripNotes(String tripId);
+
+    public LiveData<List<Trip>> getpastTrips(String userId);
 }
