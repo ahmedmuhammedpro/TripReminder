@@ -99,6 +99,7 @@ public class AddTripFragment2 extends Fragment {
                   addTripViewModel.updateTrip(trip).observe(AddTripFragment2.this, new Observer<Trip>() {
                       @Override
                       public void onChanged(Trip trip) {
+                          trip.setUserID(MainActivity.userId);
                           workManagerViewModel.editRequest(trip);
                       }
                   });
