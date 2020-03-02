@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
@@ -167,7 +168,7 @@ public class LoginFragment extends Fragment {
             });
         }
         else{
-            Toast.makeText(getActivity(), "Please enter email and password before login", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please enter email and password before login and remove spaces if found", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -181,6 +182,21 @@ public class LoginFragment extends Fragment {
         editor.putString(USER_ID_TAG,loggedInUser.getUserId());
         editor.putBoolean(lOGGED_IN_KEY,true);
         editor.commit();
+    }
+
+    private  void resetPassword(String email){
+        loginViewModel.resetPassword(email).observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                if(!user.getUserId().equals("-1")){
+                    Toast.makeText(getActivity(), "Reset password email is sent", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    //print error message written in userEmail
+                    Toast.makeText(getActivity(), user.getUsername(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 

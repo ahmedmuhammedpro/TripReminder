@@ -18,4 +18,6 @@ public class LoginViewModel extends ViewModel {
     public void registerIfNewGoogleAccount(User user){
         userRepositoryImp.registerGoogleUSer(user);
     }
+
+    public MutableLiveData<User>  resetPassword(String email){return userRepositoryImp.resetPassword(email);}
 }

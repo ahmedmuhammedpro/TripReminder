@@ -176,4 +176,26 @@ public class UserFirestoreHandler {
         return userRegistered;
     }
 
+    public MutableLiveData<User>  resetPassword(String email){
+        MutableLiveData<User> forgotPasswordEmailSent = new MutableLiveData<>();
+        User user = new User();
+        auth.getInstance().sendPasswordResetEmail("user@example.com")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("test", "Email sent.");
+                            user.setEmail(email);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                user.setEmail("-1");
+                //return error message in username
+                user.setUsername(e.getMessage());
+            }
+        });
+        return forgotPasswordEmailSent;
+    }
 }

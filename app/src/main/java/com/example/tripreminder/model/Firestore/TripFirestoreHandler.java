@@ -33,7 +33,7 @@ import java.util.Vector;
 public class TripFirestoreHandler {
 
     private final String TRIP_NAME_KEY="tripName",USER_ID_KEY="userId",DATE_KEY="tripDate",START_LOCATION="startLocation";
-    private final String END_LOCATION = "endLocation",TRIP_STATUS="tripStatus";
+    private final String END_LOCATION = "endLocation",TRIP_STATUS="tripStatus",TRIP_TYPE="tripType";
     private FirebaseFirestore dbFirestoreInstance = FirebaseFirestore.getInstance();
 
     public MutableLiveData<Trip> addTrip(Trip trip){
@@ -45,6 +45,8 @@ public class TripFirestoreHandler {
         tripValues.put(START_LOCATION,trip.getStartLocation());
         tripValues.put(END_LOCATION,trip.getEndLocation());
         tripValues.put(TRIP_STATUS,trip.getTripStatus());
+        tripValues.put(TRIP_TYPE,trip.getTripType());
+
         MutableLiveData<Trip> tripAdded = new MutableLiveData<>();
 
         dbFirestoreInstance.collection("trips").add(tripValues).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
@@ -159,12 +161,11 @@ public class TripFirestoreHandler {
 
         HashMap<String,Object> tripValues = new HashMap<>();
         tripValues.put(TRIP_NAME_KEY,trip.getTripName());
-        tripValues.put(USER_ID_KEY,trip.getUserID());
         tripValues.put(DATE_KEY,trip.getTripDate());
         tripValues.put(START_LOCATION,trip.getStartLocation());
         tripValues.put(END_LOCATION,trip.getEndLocation());
 
-        dbFirestoreInstance.collection("trips").document(trip.getTripId()).set(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
+        dbFirestoreInstance.collection("trips").document(trip.getTripId()).set(tripValues).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 
@@ -260,4 +261,52 @@ public class TripFirestoreHandler {
 
         return  updatedTripData;
     }
+    public LiveData<List<Trip>> getpastTrips(String userId) {
+
+        MutableLiveData<List<Trip>> tripsListLiveData = new MutableLiveData<>();
+
+        dbFirestoreInstance.collection("trips").whereEqualTo("userId",userId).whereEqualTo("tripStatus",2).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                List<Trip>tripsList = new ArrayList<>();
+                if(task.isComplete()){
+                    QuerySnapshot querySnapshot = task.getResult();;
+                    for (QueryDocumentSnapshot document : querySnapshot) {
+                        String tripId = document.getId();
+                        String tripName = String.valueOf(document.getData().get("tripName"));
+                        Trip trip = new Trip();
+                        trip.setTripName(tripName);
+                        trip.setTripId(tripId);
+                        trip.setTripDate((String)document.getData().get("tripDate"));
+                        HashMap location = (HashMap) document.getData().get("startLocation");
+                        Double latitude = (Double) location.get("latitude");
+                        Double longitude = (Double) location.get("longitude");
+                        String locationName = (String) location.get("locationName");
+
+                        trip.setStartLocation(new TripLocation(latitude,longitude,locationName ));
+
+                        HashMap endLocation= (HashMap) document.getData().get("endLocation");
+                        Double endLatitude = (Double) endLocation.get("latitude");
+                        Double endLongitude = (Double) endLocation.get("longitude");
+                        String endLocationName = (String) endLocation.get("locationName");
+
+                        trip.setEndLocation(new TripLocation(endLatitude,endLongitude,endLocationName ));
+
+
+                        tripsList.add(trip);
+                    }
+                    tripsListLiveData.postValue(tripsList);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+        return tripsListLiveData;
+    }
+
+
 }
