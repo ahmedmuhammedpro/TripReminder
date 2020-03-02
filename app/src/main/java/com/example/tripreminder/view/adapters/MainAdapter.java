@@ -56,6 +56,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         MainViewHolder mainViewHolder = new MainViewHolder(view);
         mainViewHolder.tripNotesBtn.setOnClickListener(v -> {
             Trip currentTrip = tripList.get(mainViewHolder.getAdapterPosition());
+            Log.i("adapter","trip type"+currentTrip.getTripType());
             TripBottomSheetDialog bottomSheetDialog = new TripBottomSheetDialog();
             Bundle bundle = new Bundle();
             bundle.putSerializable(Constants.TRIP_OB_KEY, currentTrip);
@@ -84,7 +85,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                 holder.notesLayout.setVisibility(View.VISIBLE);
                 holder.tripNotesBtn.setBackgroundResource(R.drawable.ic_arrow_upward_black_24dp);
                 allNotes = tripList.get(position).getNotes();
-
+                Log.i("adapter2","trip type"+tripList.get(position).getTripType());
                 if (!isAdded) {
                     if (allNotes != null && allNotes.size() != 0) {
                         for (String txt : allNotes) {
