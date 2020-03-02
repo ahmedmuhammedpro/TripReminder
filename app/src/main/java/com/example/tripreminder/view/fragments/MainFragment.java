@@ -1,7 +1,11 @@
 package com.example.tripreminder.view.fragments;
 
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,14 +18,18 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Firestore.TripFirestoreHandler;
+import com.example.tripreminder.services.FloatingBubbleService;
+import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.view.adapters.MainAdapter;
 import com.example.tripreminder.model.Entities.Trip;
@@ -33,6 +41,7 @@ import com.example.tripreminder.viewmodel.workmanager.WorkManagerViewModel;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -40,7 +49,7 @@ import static android.view.View.VISIBLE;
 import static android.view.View.INVISIBLE;
 
 public class MainFragment extends Fragment {
-
+    public static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
     public static final String TAG = "MainFragment";
     public static final String TRIP_Object_FROM_MAIN = "tripMain";
     private RecyclerView recyclerView;
@@ -52,6 +61,34 @@ public class MainFragment extends Fragment {
     private List<Trip> tripList;
     private boolean isDeleteActionClicked;
     private boolean isEditActionClicked;
+    private String[] notes;
+    private RecyclerItemInterface itemInterface = (view, position) -> {
+        Trip trip = tripList.get(position);
+        trip.setTripDate(getCurrentDate());
+        trip.setTripStatus(Trip.DONE);
+        viewModel.updateTrip(trip);
+        workManagerViewModel.deleteRequest(trip.getTripId());
+
+        //check permission overlay first
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getActivity().getApplicationContext())) {
+            //If the draw over permission is not available open the settings screen
+            //to grant the permission.
+            Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getActivity().getPackageName()));
+            startActivityForResult(permissionIntent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
+        } else {
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW);
+            mapIntent.setData(Uri.parse("http://maps.google.com/maps?" +
+                    "saddr=" + trip.getStartLocation().getLatitude() + "," + trip.getStartLocation().getLongitude() +
+                    "&daddr=" + trip.getEndLocation().getLatitude() + "," + trip.getEndLocation().getLongitude()));
+            startActivity(mapIntent);
+            //start bubble service
+            notes = new String[trip.getNotes().size()];
+            trip.getNotes().toArray(notes);
+            initializeFloatingBubble(notes);
+        }
+
+    };
 
     public MainFragment() {
     }
@@ -91,7 +128,7 @@ public class MainFragment extends Fragment {
                         });
                     }
 
-                    adapter = new MainAdapter(getActivity(), tripList);
+                    adapter = new MainAdapter(getActivity(), tripList, itemInterface);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);
                     noTripsLayout.setVisibility(INVISIBLE);
@@ -206,4 +243,41 @@ public class MainFragment extends Fragment {
         itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 
+    private void initializeFloatingBubble(String[] notes) {
+        Log.i("bubble","start service ");
+        Intent intentBubble = new Intent(getActivity(), FloatingBubbleService.class);
+        intentBubble.putExtra(Constants.TRIP_NOTES_KEY, notes);
+        getActivity().startService(intentBubble);
+    }
+
+    public interface RecyclerItemInterface {
+        void onItemClick(View view, int position);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CODE_DRAW_OVER_OTHER_APP_PERMISSION) {
+
+            //Check if the permission is granted or not.
+            if ( grantResults.length >0 &&grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
+                getActivity().finishActivity(CODE_DRAW_OVER_OTHER_APP_PERMISSION);
+                initializeFloatingBubble(notes);
+
+            } else { //Permission is not available
+                Toast.makeText(getActivity().getApplicationContext(), "Draw over other app permission not available. Closing the application", Toast.LENGTH_SHORT).show();
+                // getActivity().finish();
+            }
+        }
+    }
+
+    private String getCurrentDate() {
+        GregorianCalendar g = new GregorianCalendar();
+
+        return  g.get(GregorianCalendar.DAY_OF_MONTH) + "-" +
+                g.get(GregorianCalendar.MONTH) + "-" +
+                g.get(GregorianCalendar.YEAR) + "-" +
+                g.get(GregorianCalendar.HOUR_OF_DAY) + "-" +
+                g.get(GregorianCalendar.MINUTE);
+    }
 }

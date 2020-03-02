@@ -4,10 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -23,10 +20,12 @@ import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.utils.AudioPlayer;
 import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.utils.TripNotification;
+import com.example.tripreminder.viewmodel.MainViewModel;
 
 public class TripAlertActivity extends AppCompatActivity {
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
     private AudioPlayer audioPlayer;
+    private MainViewModel mainViewModel;
     Intent intent;
     String[] notes = null;
     @Override
@@ -44,6 +43,10 @@ public class TripAlertActivity extends AppCompatActivity {
             String[] notesArray = new String[trip.getNotes().size()];
             notes =  trip.getNotes().toArray(notesArray);
         }
+
+        // View model
+        mainViewModel = new MainViewModel();
+
         // Create TripNotification object
         TripNotification tripNotification = new TripNotification(this, trip);
 
@@ -54,6 +57,7 @@ public class TripAlertActivity extends AppCompatActivity {
         alertDialog.setTitle(alertDialogTitle);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,
                 getResources().getString(R.string.dialog_snooze_button), (dialog, which) -> {
+                    mainViewModel.updateTripStatus(trip.getTripId(), Trip.DONE);
                     tripNotification.sendNotification();
                     alertDialog.dismiss();
                     finish();
@@ -61,6 +65,10 @@ public class TripAlertActivity extends AppCompatActivity {
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                 getResources().getString(R.string.dialog_start_button), (dialog, which) -> {
+
+                    // Update trip to be done
+                    mainViewModel.updateTripStatus(trip.getTripId(), Trip.DONE);
+                    tripNotification.cancelNotification();
 
                     //check permission overlay first
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this.getApplicationContext())) {
@@ -85,6 +93,7 @@ public class TripAlertActivity extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
                 getResources().getString(R.string.dialog_cancel_button), (dialog, which) -> {
                     tripNotification.cancelNotification();
+                    mainViewModel.updateTripStatus(trip.getTripId(), Trip.CANCELED);
                     alertDialog.dismiss();
                     finish();
                 });
@@ -114,6 +123,7 @@ public class TripAlertActivity extends AppCompatActivity {
         super.onDestroy();
         audioPlayer.releaseMediaPlayer();
     }
+
   //setup bubble service
     private void initializeFloatingBubble() {
         Log.i("bubble","start service ");

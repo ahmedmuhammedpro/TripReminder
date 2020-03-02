@@ -14,16 +14,15 @@ import android.widget.Toast;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.User;
+import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.view.fragments.MainFragment;
 import com.example.tripreminder.viewmodel.LoginViewModel;
 
 public class SplashScreenActivity extends AppCompatActivity implements Runnable{
 
-    public static final String SHARED_PREFERENCES_FILE_NAME="loggedInUserInfo",EMAIL_KEY="email",PASSWORD_KEY="password";
-    public static final String lOGGED_IN_KEY="loggedIn";
-    public static final String USERNAME_KEY = "username";
+
     boolean loggedIn=false;
-    public static final String USER_ID_TAG="userID";
+
     private static final int RC_SIGN_IN = 1;
     LoginViewModel loginViewModel;
     String email="",username="",userID="";
@@ -48,10 +47,11 @@ public class SplashScreenActivity extends AppCompatActivity implements Runnable{
                 if(loggedIn) {
                     Toast.makeText(SplashScreenActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-                    intent.putExtra(USER_ID_TAG, userID);
-                    intent.putExtra(USERNAME_KEY,username);
+                    intent.putExtra(Constants.USER_ID_TAG, userID);
+                    intent.putExtra(Constants.USERNAME_KEY,username);
+                    intent.putExtra(Constants.EMAIL_KEY,email);
                     startActivity(intent);
-                    //login(email, password);
+
                 }
                 else{
                     Intent intent = new Intent(SplashScreenActivity.this, AuthenticationActivity.class);
@@ -81,12 +81,12 @@ public class SplashScreenActivity extends AppCompatActivity implements Runnable{
             password = sharedPreferences.getString(PASSWORD_KEY, "empty");
         }*/
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-        loggedIn = sharedPreferences.getBoolean(lOGGED_IN_KEY,false);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        loggedIn = sharedPreferences.getBoolean(Constants.lOGGED_IN_KEY,false);
         if(loggedIn) {
-            email = sharedPreferences.getString(EMAIL_KEY, "empty");
-            userID = sharedPreferences.getString(USER_ID_TAG, "empty");
-            username = sharedPreferences.getString(USERNAME_KEY,"empty");
+            email = sharedPreferences.getString(Constants.EMAIL_KEY, "empty");
+            userID = sharedPreferences.getString(Constants.USER_ID_TAG, "empty");
+            username = sharedPreferences.getString(Constants.USERNAME_KEY,"empty");
             //login(email,password);
         /*Toast.makeText(this, "Login Successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, MainActivity.class);

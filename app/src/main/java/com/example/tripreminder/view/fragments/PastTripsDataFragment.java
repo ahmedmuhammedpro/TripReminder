@@ -63,7 +63,7 @@ public class PastTripsDataFragment extends Fragment {
         pastTripsViewModel.getPastTrips(MainActivity.userId).observe(this, new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
-                adapter = new MainAdapter(getActivity(), trips);
+                adapter = new MainAdapter(getActivity(), trips, null);
                 if (trips != null && !trips.isEmpty()) {
                     tripList = trips;
                     for (int i = 0; i < tripList.size(); i++) {

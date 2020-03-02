@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.utils.Constants;
+import com.example.tripreminder.view.fragments.MainFragment;
 import com.example.tripreminder.view.fragments.TripBottomSheetDialog;
 import com.example.tripreminder.viewmodel.MainViewModel;
 
@@ -42,10 +43,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     private MainViewModelInterface viewModel;
     private Vector<String> allNotes;
     boolean isAdded = false;
+    private MainFragment.RecyclerItemInterface itemInterface;
 
-    public MainAdapter(Context context, List<Trip> tripList) {
+    public MainAdapter(Context context, List<Trip> tripList, MainFragment.RecyclerItemInterface itemInterface) {
         this.context = context;
         this.tripList = tripList;
+        this.itemInterface = itemInterface;
         allNotes = new Vector<>();
     }
 
@@ -65,10 +68,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         });
 
         mainViewHolder.startTripButton.setOnClickListener(v -> {
-            Trip trip = tripList.get(mainViewHolder.getAdapterPosition());
-            trip.setTripStatus(Trip.DONE);
-            MainViewModel mainViewModel = new MainViewModel();
-            mainViewModel.updateTripStatus(trip.getTripId(), trip.getTripStatus());
+            itemInterface.onItemClick(v, mainViewHolder.getAdapterPosition());
         });
         return mainViewHolder;
     }
@@ -76,6 +76,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
+        int status = tripList.get(position).getTripStatus();
+
+        if (status == Trip.UPCOMING) {
+            holder.tripStatusTV.setText("UPCOMING");
+        } else if (status == Trip.DONE) {
+            holder.tripStatusTV.setText("DONE");
+        } else if (status == Trip.CANCELED) {
+            holder.tripStatusTV.setText("CANCELED");
+        }
+
         holder.tripDateTV.setText(getDate(tripList.get(position).getTripDate()));
         holder.tripTimeTV.setText(getTime(tripList.get(position).getTripDate()));
         holder.tripNameTV.setText(tripList.get(position).getTripName());

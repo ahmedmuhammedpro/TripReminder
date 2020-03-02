@@ -23,6 +23,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -113,7 +114,10 @@ public class TripFirestoreHandler {
                         Double latitude = (Double) location.get("latitude");
                         Double longitude = (Double) location.get("longitude");
                         String locationName = (String) location.get("locationName");
-
+                        int tripStatus = (int) location.get("tripStatus");
+                        int tripType = (int) location.get("tripType");
+                        trip.setTripType(tripType);
+                        trip.setTripStatus(tripStatus);
                         trip.setStartLocation(new TripLocation(latitude,longitude,locationName ));
 
                         HashMap endLocation= (HashMap) document.getData().get("endLocation");
@@ -282,7 +286,7 @@ public class TripFirestoreHandler {
 
         MutableLiveData<List<Trip>> tripsListLiveData = new MutableLiveData<>();
 
-        dbFirestoreInstance.collection("trips").whereEqualTo("userId",userId).whereEqualTo("tripStatus",Trip.DONE).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        dbFirestoreInstance.collection("trips").whereEqualTo("userId",userId).whereIn("tripStatus", Arrays.asList(Trip.DONE, Trip.CANCELED)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
@@ -300,6 +304,11 @@ public class TripFirestoreHandler {
                         Double latitude = (Double) location.get("latitude");
                         Double longitude = (Double) location.get("longitude");
                         String locationName = (String) location.get("locationName");
+
+                        int tripStatus = (int) location.get("tripStatus");
+                        int tripType = (int) location.get("tripType");
+                        trip.setTripType(tripType);
+                        trip.setTripStatus(tripStatus);
 
                         trip.setStartLocation(new TripLocation(latitude,longitude,locationName ));
 
