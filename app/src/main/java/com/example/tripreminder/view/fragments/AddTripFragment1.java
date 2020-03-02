@@ -328,7 +328,8 @@ public class AddTripFragment1 extends Fragment {
               dateTxt.setText(DateFormat.getDateInstance(DateFormat.FULL).format(getDate(mainTrip.getTripDate())));
               timeTxt.setText(getTime(mainTrip.getTripDate()));
               dateString = mainTrip.getTripDate();
-              tripTypes.setEnabled(false);
+             // tripTypes.setEnabled(false);
+              tripTypes.setActivated(false);
               int type = mainTrip.getTripType() ;
               Log.i("type","type int:"+type);
               if(type == 1){

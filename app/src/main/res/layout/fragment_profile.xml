@@ -4,75 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/ic_gredient_background"
     tools:context=".view.fragments.ProfileFragment">
-
-    <FrameLayout
-        android:id="@+id/frameLayout3"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:background="@drawable/ic_gredient_background"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </FrameLayout>
 
     <TextView
         android:id="@+id/emailTextViewProfile"
+        style="@android:style/Widget.Holo.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="40dp"
         android:text="preview"
-        app:layout_constraintBottom_toBottomOf="@+id/emailTextViewLabel"
-        app:layout_constraintStart_toEndOf="@+id/emailTextViewLabel"
-        app:layout_constraintTop_toTopOf="@+id/emailTextViewLabel"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/emailTextViewLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
-        android:text="@string/EmailTextViewValue"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/nameTextViewLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nameTextViewLabel" />
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/textView10"
+        app:layout_constraintTop_toBottomOf="@+id/nameTextViewProfile" />
 
     <ImageView
         android:id="@+id/profileImageView"
-        android:layout_width="98dp"
+        android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/frameLayout3"
-        app:layout_constraintTop_toTopOf="@+id/frameLayout3"
-        app:srcCompat="@drawable/ic_person_outline_24px" />
-
-    <TextView
-        android:id="@+id/nameTextViewLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginLeft="88dp"
-        android:layout_marginTop="72dp"
-        android:text="@string/Name"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.025"
+        android:layout_marginStart="136dp"
+        android:layout_marginLeft="136dp"
+        android:layout_marginTop="84dp"
+        android:background="@drawable/button_background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImageView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_person_outline_24px" />
 
     <TextView
         android:id="@+id/nameTextViewProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
-        app:layout_constraintBottom_toBottomOf="@+id/nameTextViewLabel"
-        app:layout_constraintStart_toEndOf="@+id/nameTextViewLabel"
-        app:layout_constraintTop_toTopOf="@+id/nameTextViewLabel"
-        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/profileImageView"
+        app:layout_constraintStart_toStartOf="@+id/profileImageView"
+        app:layout_constraintTop_toBottomOf="@+id/profileImageView"
         tools:text="preview" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:background="@android:drawable/ic_dialog_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/emailTextViewProfile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

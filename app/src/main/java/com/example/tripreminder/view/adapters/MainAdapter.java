@@ -155,8 +155,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     private Chip addNoteChip(String text) {
         Chip chip = (Chip) LayoutInflater.from(context).inflate(R.layout.note_item, null, false);
         chip.setText(text);
-        chip.getCloseIcon().setVisible(false, false);
-        chip.setTextIsSelectable(false);
+        chip.setCloseIconVisible(false);
+        chip.setSelected(false);
+       // chip.setTextIsSelectable(false);
         return chip;
     }
 
