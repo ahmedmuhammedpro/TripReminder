@@ -114,6 +114,7 @@ public class TripAlertActivity extends AppCompatActivity {
         super.onDestroy();
         audioPlayer.releaseMediaPlayer();
     }
+
   //setup bubble service
     private void initializeFloatingBubble() {
         Log.i("bubble","start service ");

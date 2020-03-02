@@ -12,11 +12,13 @@ public interface MainViewModelInterface {
 
     LiveData<List<Trip>> getAllTrips(String userId);
 
-    public MutableLiveData<Trip> deleteTrip(String tripID);
+    MutableLiveData<Trip> updateTripStatus(String tripId, int status);
 
-    public MutableLiveData<Trip> updateTrip(Trip trip);
+    MutableLiveData<Trip> deleteTrip(String tripID);
 
-    public MutableLiveData<Vector<String>> getTripNotes(String tripId);
+    MutableLiveData<Trip> updateTrip(Trip trip);
 
-    public LiveData<List<Trip>> getpastTrips(String userId);
+    MutableLiveData<Vector<String>> getTripNotes(String tripId);
+
+    LiveData<List<Trip>> getpastTrips(String userId);
 }
