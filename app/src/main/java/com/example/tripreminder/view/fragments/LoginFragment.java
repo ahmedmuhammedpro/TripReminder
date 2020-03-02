@@ -152,9 +152,7 @@ public class LoginFragment extends Fragment {
                 if (loggedInUser != null) {
                     if(loggedInUser.getUserId().equals("-1")){
                         Toast.makeText(getActivity(), "Login failed", Toast.LENGTH_SHORT).show();
-
                     }else {
-
                         if(!loggedIn) {
                             writeInSharedPreferences(loggedInUser);
                         }
@@ -188,7 +186,7 @@ public class LoginFragment extends Fragment {
         loginViewModel.resetPassword(email).observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                if(!user.getUserId().equals("-1")){
+                if(!user.getEmail().equals("-1")){
                     Toast.makeText(getActivity(), "Reset password email is sent", Toast.LENGTH_SHORT).show();
                 }
                 else{

@@ -11,20 +11,18 @@ import java.util.List;
 
 public class UserRepositoryImp {
 
-UserFirestoreHandler userFirestoreHandler = new UserFirestoreHandler();
+UserFirestoreHandler userFirestoreHandler = UserFirestoreHandler.getInstance();
 
-    public LiveData<List<User>> getUsersList(){
-        return userFirestoreHandler.getUsersList();
+
+    private static UserRepositoryImp userRepositoryImp =null;
+    private UserRepositoryImp(){
+    }
+    public static UserRepositoryImp getInstance(){
+        if(userRepositoryImp == null)
+            userRepositoryImp = new UserRepositoryImp();
+        return userRepositoryImp;
     }
 
-
-    public void deleteUser(String username){
-        userFirestoreHandler.deleteUser(username);
-    }
-
-    public void updateUser(String username,String password){
-        userFirestoreHandler.updateUser(username,password);
-    }
 
     public  MutableLiveData<User> registerGoogleUSer(User user){
         return userFirestoreHandler.registerGoogleUSer(user);
@@ -32,6 +30,7 @@ UserFirestoreHandler userFirestoreHandler = new UserFirestoreHandler();
     public MutableLiveData<User> registerUser(User user){
        return userFirestoreHandler.register(user);
     }
+
 
     public MutableLiveData<User> login(User user){
         return userFirestoreHandler.login(user);

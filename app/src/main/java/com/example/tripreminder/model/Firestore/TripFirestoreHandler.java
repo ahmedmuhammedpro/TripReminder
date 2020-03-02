@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer;
 
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.Entities.TripLocation;
+import com.example.tripreminder.model.repositories.TripRepositoryImp;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -35,6 +36,17 @@ public class TripFirestoreHandler {
     private final String TRIP_NAME_KEY="tripName",USER_ID_KEY="userId",DATE_KEY="tripDate",START_LOCATION="startLocation";
     private final String END_LOCATION = "endLocation",TRIP_STATUS="tripStatus",TRIP_TYPE="tripType";
     private FirebaseFirestore dbFirestoreInstance = FirebaseFirestore.getInstance();
+
+
+    private static TripFirestoreHandler tripFirestoreHandler =null;
+    private TripFirestoreHandler(){
+    }
+
+    public static TripFirestoreHandler getInstance(){
+        if(tripFirestoreHandler == null)
+            tripFirestoreHandler = new TripFirestoreHandler();
+        return tripFirestoreHandler;
+    }
 
     public MutableLiveData<Trip> addTrip(Trip trip){
 
@@ -83,7 +95,7 @@ public class TripFirestoreHandler {
 
         MutableLiveData<List<Trip>> tripsListLiveData = new MutableLiveData<>();
 
-        dbFirestoreInstance.collection("trips").whereEqualTo("userId",userId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        dbFirestoreInstance.collection("trips").whereEqualTo("userId",userId).whereEqualTo("tripStatus",Trip.UPCOMING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
@@ -261,11 +273,11 @@ public class TripFirestoreHandler {
 
         return  updatedTripData;
     }
-    public LiveData<List<Trip>> getpastTrips(String userId) {
+    public LiveData<List<Trip>> getPastTrips(String userId) {
 
         MutableLiveData<List<Trip>> tripsListLiveData = new MutableLiveData<>();
 
-        dbFirestoreInstance.collection("trips").whereEqualTo("userId",userId).whereEqualTo("tripStatus",2).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        dbFirestoreInstance.collection("trips").whereEqualTo("userId",userId).whereEqualTo("tripStatus",Trip.DONE).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
