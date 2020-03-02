@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
-import com.example.tripreminder.view.fragments.MainFragment;
 import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.view.fragments.TripBottomSheetDialog;
 import com.example.tripreminder.viewmodel.MainViewModel;
@@ -41,16 +40,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     private Context context;
     private List<Trip> tripList;
     private MainViewModelInterface viewModel;
-    Vector<String> allNotes;
-    MainFragment mainFragment;
+    private Vector<String> allNotes;
     boolean isAdded = false;
-    public static final String TRIP_ID_KEY = "tripID";
 
     public MainAdapter(Context context, List<Trip> tripList) {
         this.context = context;
         this.tripList = tripList;
         allNotes = new Vector<>();
-        mainFragment = new MainFragment();
     }
 
     @NonNull
