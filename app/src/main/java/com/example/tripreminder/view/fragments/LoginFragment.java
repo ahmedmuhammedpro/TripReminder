@@ -36,10 +36,10 @@ import com.google.android.gms.tasks.Task;
  */
 public class LoginFragment extends Fragment {
 
-    TextView newUserTextView;
     private final String SHARED_PREFERENCES_FILE_NAME="loggedInUserInfo",EMAIL_KEY="email",PASSWORD_KEY="password";
     private final String lOGGED_IN_KEY="loggedIn",USER_ID_KEY="UserId",USERNAME_KEY = "username";
     boolean loggedIn=false;
+    Button signUpButton;
     public static final String USER_ID_TAG="userID";
     private static final int RC_SIGN_IN = 1;
     Button loginButton;
@@ -64,8 +64,7 @@ public class LoginFragment extends Fragment {
     private void setup(){
 
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
-        newUserTextView = view.findViewById(R.id.newUserTextView);
-
+        signUpButton = view.findViewById(R.id.signUpButton);
         loginButton = view.findViewById(R.id.loginButton);
         emailEditText = view.findViewById(R.id.emailEditText);
         passwordEditText = view.findViewById(R.id.passwordEditText);
@@ -76,7 +75,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void setClickListners(){
-        newUserTextView.setOnClickListener(new View.OnClickListener() {
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction()
