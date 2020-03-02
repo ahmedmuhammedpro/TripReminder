@@ -39,6 +39,8 @@ public class PastTripsMapFragment extends Fragment implements OnMapReadyCallback
     Polyline currentPolyline;
 
 
+    View view ;
+
     public GoogleMap googleMap;
     int PERMISSION_ID = 44;
     public PastTripsMapFragment() {
@@ -56,48 +58,15 @@ public class PastTripsMapFragment extends Fragment implements OnMapReadyCallback
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_past_trips_map, container, false);
+        view = inflater.inflate(R.layout.fragment_past_trips_map, container, false);
 
+        setup();
+        return view;
     }
 
-    private void loadMap(){
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
-                LocationLocator.getInstance(getActivity()).getLastLocation();
+    private void setup(){
 
-            }
-            else {
-                Toast.makeText(getActivity(), "Turn on location", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-            }
-        }
-        else {
-            requestPermissions();
-        }
     }
-
-    private void requestPermissions() {
-        ActivityCompat.requestPermissions(
-                getActivity(),
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                PERMISSION_ID
-        );
-    }
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                LocationManager.NETWORK_PROVIDER
-        );
-    }
-    private boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-    }
-
 
     @SuppressLint("StaticFieldLeak")
     @Override

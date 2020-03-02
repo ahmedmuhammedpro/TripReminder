@@ -8,7 +8,7 @@ import com.example.tripreminder.model.repositories.UserRepositoryImp;
 
 public class RegisterViewModel extends ViewModel {
 
-    UserRepositoryImp userRepositoryImp = new UserRepositoryImp();
+    UserRepositoryImp userRepositoryImp = UserRepositoryImp.getInstance();
 
     public MutableLiveData<User> registerUser(User user){
         return userRepositoryImp.registerUser(user);

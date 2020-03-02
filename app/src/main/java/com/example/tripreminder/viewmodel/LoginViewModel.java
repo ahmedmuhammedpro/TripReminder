@@ -8,7 +8,7 @@ import com.example.tripreminder.model.repositories.UserRepositoryImp;
 
 public class LoginViewModel extends ViewModel {
 
-    UserRepositoryImp userRepositoryImp = new UserRepositoryImp();
+    UserRepositoryImp userRepositoryImp = UserRepositoryImp.getInstance();
 
     public MutableLiveData<User> login(User user){
 

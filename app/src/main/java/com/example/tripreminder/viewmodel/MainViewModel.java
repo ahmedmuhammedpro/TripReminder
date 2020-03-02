@@ -12,7 +12,7 @@ import java.util.Vector;
 
 public class MainViewModel extends ViewModel implements MainViewModelInterface {
 
-    TripRepositoryImp tripRepositoryImp = new TripRepositoryImp();
+    TripRepositoryImp tripRepositoryImp = TripRepositoryImp.getInstance();
 
     @Override
     public LiveData<List<Trip>> getAllTrips(String userId) {
@@ -39,6 +39,6 @@ public class MainViewModel extends ViewModel implements MainViewModelInterface {
     }
     @Override
     public LiveData<List<Trip>> getpastTrips(String userId){
-        return tripRepositoryImp.getpastTrips(userId);
+        return tripRepositoryImp.getPastTrips(userId);
     }
 }
