@@ -11,6 +11,7 @@ package com.example.tripreminder.view.adapters;
         import android.graphics.drawable.Drawable;
 
         import android.view.View;
+        import android.widget.TextView;
 
         import com.example.tripreminder.R;
 
@@ -28,6 +29,7 @@ abstract public class SwipeToEditCallBack extends ItemTouchHelper.Callback {
     private Drawable editDrawable;
     private int intrinsicWidth;
     private int intrinsicHeight;
+    private TextView edit;
 
 
     public SwipeToEditCallBack(Context context) {
@@ -37,6 +39,7 @@ abstract public class SwipeToEditCallBack extends ItemTouchHelper.Callback {
         mClearPaint = new Paint();
         mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.ADD));
         editDrawable = ContextCompat.getDrawable(mContext, R.drawable.ic_rename);
+        edit = new TextView(mContext);
         intrinsicWidth = editDrawable.getIntrinsicWidth();
         intrinsicHeight = editDrawable.getIntrinsicHeight();
 
@@ -75,14 +78,16 @@ abstract public class SwipeToEditCallBack extends ItemTouchHelper.Callback {
 
         int editIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
         int editIconMargin = (itemHeight - intrinsicHeight) / 2;
-        int editIconLeft = itemView.getRight() - editIconMargin - intrinsicWidth;
-        int editIconRight = itemView.getRight() - editIconMargin;
+        int editIconLeft = itemView.getLeft() - editIconMargin - intrinsicWidth;
+        int editIconRight = itemView.getLeft() - editIconMargin;
         int editIconBottom = editIconTop + intrinsicHeight;
 
 
         editDrawable.setBounds(editIconLeft, editIconTop, editIconRight, editIconBottom);
-        editDrawable.draw(c);
-
+       // editDrawable.draw(c);
+        editDrawable.setBounds(editIconLeft - 20, editIconTop, editIconRight, editIconBottom);
+        edit.setText("Edit");
+        edit.draw(c);
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
 
