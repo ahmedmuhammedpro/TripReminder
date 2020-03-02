@@ -119,6 +119,7 @@ public class MainFragment extends Fragment {
                     tripList = trips;
                     for (int i = 0; i < tripList.size(); i++) {
                         Trip currentTrip = tripList.get(i);
+                        Log.i("main2","trip type"+currentTrip.getTripType());
                         viewModel.getTripNotes(currentTrip.getTripId()).observe(MainFragment.this, new Observer<Vector<String>>() {
                             @Override
                             public void onChanged(Vector<String> strings) {
