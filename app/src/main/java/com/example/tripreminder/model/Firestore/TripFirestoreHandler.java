@@ -176,6 +176,11 @@ public class TripFirestoreHandler {
         tripValues.put(DATE_KEY,trip.getTripDate());
         tripValues.put(START_LOCATION,trip.getStartLocation());
         tripValues.put(END_LOCATION,trip.getEndLocation());
+        tripValues.put(TRIP_STATUS,trip.getTripStatus());
+        tripValues.put(TRIP_TYPE,trip.getTripType());
+        tripValues.put(USER_ID_KEY,trip.getUserID());
+
+
 
         dbFirestoreInstance.collection("trips").document(trip.getTripId()).set(tripValues).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

@@ -107,7 +107,7 @@
         style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="forget your password?"
+        android:text="@string/ForgotPasswordText"
         android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/loginButton"
