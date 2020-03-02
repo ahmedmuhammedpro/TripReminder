@@ -12,6 +12,15 @@
         android:theme="@style/AppThemeAddTrip"
         tools:layout_editor_absoluteY="1dp">
 
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_done"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/tripnameLayout"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tripnameLayout"
             android:layout_width="300dp"
@@ -153,16 +162,14 @@
             android:id="@+id/dateTxt"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
-            android:layout_marginLeft="56dp"
-            android:editable="@bool/enable_system_alarm_service_default"
+            android:editable="false"
             android:ems="10"
             android:hint="@string/dateFormat"
             android:inputType="date"
             android:textSize="16sp"
             app:endIconMode="clear_text"
             app:layout_constraintBottom_toTopOf="@+id/timeTxt"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <com.google.android.material.textfield.TextInputEditText
@@ -192,16 +199,20 @@
 
         <Button
             android:id="@+id/timeBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:background="@drawable/ic_timer_black_24dp"
             app:layout_constraintStart_toEndOf="@+id/timeTxt"
             app:layout_constraintTop_toTopOf="@+id/timeTxt" />
 
         <Button
             android:id="@+id/dateBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:background="@drawable/ic_event_24px"
             app:layout_constraintStart_toEndOf="@+id/dateTxt"
             app:layout_constraintTop_toTopOf="@+id/dateTxt" />
@@ -210,12 +221,80 @@
             android:id="@+id/nextBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/ic_navigate_next_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/chipGroupTripTypes"
-            app:layout_constraintTop_toBottomOf="@+id/chipGroupTripTypes"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/roundLayoutDate" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/roundLayoutDate"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/chipGroupTripTypes"
+            app:layout_constraintStart_toStartOf="@+id/chipGroupTripTypes"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroupTripTypes">
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setDateandTime"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/dateBtnRound"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/ic_event_24px"
+                app:layout_constraintStart_toEndOf="@+id/dateTxtRound"
+                app:layout_constraintTop_toTopOf="@+id/dateTxtRound" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dateTxtRound"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:ems="10"
+                android:hint="@string/dateFormat"
+                android:inputType="date"
+                android:textSize="16sp"
+                app:endIconMode="clear_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/timeTxtRound"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:editable="@bool/enable_system_alarm_service_default"
+                android:ems="10"
+                android:hint="@string/timeFormat"
+                android:inputType="time"
+                android:textSize="16sp"
+                app:endIconMode="clear_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dateTxtRound" />
+
+            <Button
+                android:id="@+id/timeBtnRound"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/ic_timer_black_24dp"
+                app:layout_constraintStart_toEndOf="@+id/timeTxtRound"
+                app:layout_constraintTop_toTopOf="@+id/timeTxtRound" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

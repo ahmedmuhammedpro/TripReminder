@@ -5,6 +5,9 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.util.Log;
+
+import com.example.tripreminder.R;
 
 public class AudioPlayer {
 
@@ -54,9 +57,11 @@ public class AudioPlayer {
             Uri defaultRingtoneUri = RingtoneManager
                     .getActualDefaultRingtoneUri(context,
                             RingtoneManager.TYPE_RINGTONE);
-            mediaPlayer = MediaPlayer.create(context, defaultRingtoneUri);
+            mediaPlayer = MediaPlayer.create(context, R.raw.a);
+            Log.i("ahmed","audio: "+mediaPlayer);
             mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(onCompletionListener);
+
         }
     }
 

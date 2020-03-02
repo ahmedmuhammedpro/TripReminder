@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
+
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.Worker;
@@ -32,6 +33,7 @@ public class TripWorker extends Worker {
     @Override
     public Result doWork() {
         Log.i("ahmed", "entered");
+
         // Getting bound data with work manager request
         Data data = getInputData();
 
@@ -64,7 +66,7 @@ public class TripWorker extends Worker {
         int tripType = data.getInt(Constants.TRIP_TYPE, 1);
 
         Trip trip = new Trip(tripId, tripStatus, tripName, startLocation,
-                             endLocation, notes, tripDate, tripType);
+                endLocation, notes, tripDate, tripType);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
