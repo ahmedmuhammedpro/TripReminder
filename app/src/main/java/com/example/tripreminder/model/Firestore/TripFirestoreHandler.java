@@ -114,8 +114,8 @@ public class TripFirestoreHandler {
                         Double latitude = (Double) location.get("latitude");
                         Double longitude = (Double) location.get("longitude");
                         String locationName = (String) location.get("locationName");
-                        int tripStatus = (int) location.get("tripStatus");
-                        int tripType = (int) location.get("tripType");
+                        int tripStatus = Integer.parseInt(String.valueOf(document.getData().get("tripStatus")));
+                        int tripType =  Integer.parseInt(String.valueOf(document.getData().get("tripType")));
                         trip.setTripType(tripType);
                         trip.setTripStatus(tripStatus);
                         trip.setStartLocation(new TripLocation(latitude,longitude,locationName ));
@@ -305,8 +305,8 @@ public class TripFirestoreHandler {
                         Double longitude = (Double) location.get("longitude");
                         String locationName = (String) location.get("locationName");
 
-                        int tripStatus = (int) location.get("tripStatus");
-                        int tripType = (int) location.get("tripType");
+                        int tripStatus = Integer.parseInt(String.valueOf(document.getData().get("tripStatus")));
+                        int tripType =  Integer.parseInt(String.valueOf(document.getData().get("tripType")));
                         trip.setTripType(tripType);
                         trip.setTripStatus(tripStatus);
 
