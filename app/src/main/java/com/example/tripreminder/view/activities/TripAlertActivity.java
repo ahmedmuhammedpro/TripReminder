@@ -57,7 +57,6 @@ public class TripAlertActivity extends AppCompatActivity {
         alertDialog.setTitle(alertDialogTitle);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,
                 getResources().getString(R.string.dialog_snooze_button), (dialog, which) -> {
-                    mainViewModel.updateTripStatus(trip.getTripId(), Trip.DONE);
                     tripNotification.sendNotification();
                     alertDialog.dismiss();
                     finish();
