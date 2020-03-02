@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.IdRes;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -55,12 +56,13 @@ public class AddTripFragment1 extends Fragment {
     public static final String DATE_FORMAT_1 = "dd-MMM-yyyy";
     private ChipGroup tripTypes;
     private Chip trip1,trip2;
-    private Button setDate, setTime ,nextBtn , saveBtn;
-    private TextView dateTxt, timeTxt;
+    private Button setDate, setTime ,nextBtn , saveBtn,setDateRound,setTimeRound;
+    private TextView dateTxt, timeTxt,dateTxtRound,timeTxtRound;
     private AutoCompleteTextView startPointTxt, endPointTxt;
     private TextInputEditText nameTxt;
     private int mYear, mMonth, mDay, mHour, mMinute,tripType;
     private  Trip trip , mainTrip;
+    ConstraintLayout roundTripeLayout ;
     String dateString;
     int countData=0;
     Bundle bundleMainFragment;
@@ -96,6 +98,7 @@ public class AddTripFragment1 extends Fragment {
         saveBtn = view.findViewById(R.id.saveBtn);
         startPointTxt = view.findViewById(R.id.startPointTxt);
         endPointTxt = view.findViewById(R.id.endPointTxt);
+        roundTripeLayout = view.findViewById(R.id.roundLayoutDate);
         nextBtn.setEnabled(false);
     }
     private void setupAdapters(){
@@ -186,9 +189,13 @@ public class AddTripFragment1 extends Fragment {
             public void onCheckedChanged(ChipGroup group, @IdRes int checkedId) {
                 // Handle the checked chip change.
                            if(trip1.isChecked())
+                               if(roundTripeLayout.getVisibility() == View.VISIBLE)
+                                   roundTripeLayout.setVisibility(View.GONE);
                               tripType = 1;
-                           if(trip2.isChecked())
+                           if(trip2.isChecked()) {
                                tripType = 2;
+                               roundTripeLayout.setVisibility(View.VISIBLE);
+                           }
 
                             trip.setTripType(tripType);
                             countData +=1;
@@ -220,6 +227,10 @@ public class AddTripFragment1 extends Fragment {
                     AddTripFragment2 ftwo = new AddTripFragment2();
                     FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
                     Bundle bundle = new Bundle();
+                    mainTrip.setTripName(nameTxt.getText().toString());
+                    mainTrip.setTripDate(dateString);
+                    mainTrip.getStartLocation().setLocationName(startPointTxt.getText().toString());
+                    mainTrip.getEndLocation().setLocationName(endPointTxt.getText().toString());
                     bundle.putSerializable(TRIP_Object, mainTrip);
                     ftwo.setArguments(bundle);
                     manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
@@ -230,7 +241,7 @@ public class AddTripFragment1 extends Fragment {
       saveBtn.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-            //
+            //TODO:update
           }
       });
     }

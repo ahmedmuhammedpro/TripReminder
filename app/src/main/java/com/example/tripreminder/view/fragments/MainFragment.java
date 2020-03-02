@@ -29,6 +29,8 @@ import com.example.tripreminder.view.adapters.SwipeToDeleteCallBack;
 import com.example.tripreminder.view.adapters.SwipeToEditCallBack;
 import com.example.tripreminder.viewmodel.MainViewModel;
 import com.example.tripreminder.viewmodel.MainViewModelInterface;
+import com.example.tripreminder.viewmodel.workmanager.WorkManagerViewModel;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -44,9 +46,12 @@ public class MainFragment extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayout noTripsLayout;
     private MainViewModelInterface viewModel;
-    MainAdapter adapter;
-    Vector<String> allNotes;
+    private WorkManagerViewModel workManagerViewModel;
+    private MainAdapter adapter;
+    private Vector<String> allNotes;
     private List<Trip> tripList;
+    private boolean isDeleteActionClicked;
+    private boolean isEditActionClicked;
 
     public MainFragment() {
     }
@@ -68,11 +73,12 @@ public class MainFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setVisibility(INVISIBLE);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        workManagerViewModel = new WorkManagerViewModel(getActivity());
         viewModel.getAllTrips(MainActivity.userId).observe(this, new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
-                adapter = new MainAdapter(getActivity(), trips);
                 if (trips != null && !trips.isEmpty()) {
+
                     tripList = trips;
                     for (int i = 0; i < tripList.size(); i++) {
                         Trip currentTrip = tripList.get(i);
@@ -83,6 +89,8 @@ public class MainFragment extends Fragment {
                             }
                         });
                     }
+
+                    adapter = new MainAdapter(getActivity(), tripList);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);
                     noTripsLayout.setVisibility(INVISIBLE);
@@ -110,14 +118,30 @@ public class MainFragment extends Fragment {
                 final Trip item = adapter.getData().get(position);
 
                 adapter.removeItem(position);
-
                 Snackbar snackbar = Snackbar
                         .make(getView(), "Item was removed from the list.", Snackbar.LENGTH_LONG);
                 snackbar.setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        isDeleteActionClicked = true;
                         adapter.restoreItem(item, position);
                         recyclerView.scrollToPosition(position);
+                    }
+                });
+                snackbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        super.onDismissed(transientBottomBar, event);
+                        if (!isDeleteActionClicked) {
+                            viewModel.deleteTrip(item.getTripId());
+                            workManagerViewModel.deleteRequest(item.getTripId());
+                            isDeleteActionClicked = false;
+                        }
+                    }
+
+                    @Override
+                    public void onShown(Snackbar transientBottomBar) {
+                        super.onShown(transientBottomBar);
                     }
                 });
 
@@ -130,8 +154,9 @@ public class MainFragment extends Fragment {
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchhelper.attachToRecyclerView(recyclerView);
     }
+
     private void enableSwipeToEdit() {
-        SwipeToEditCallBack swipeToDeleteCallback = new SwipeToEditCallBack(getContext()) {
+        SwipeToEditCallBack swipeToEditCallBack = new SwipeToEditCallBack(getContext()) {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
@@ -143,6 +168,7 @@ public class MainFragment extends Fragment {
                 snackbar.setAction("YES", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        isEditActionClicked = true;
                         AddTripFragment1 fone = new AddTripFragment1();
                         FragmentManager manager = MainFragment.super.getActivity().getSupportFragmentManager();
                         Bundle bundle = new Bundle();
@@ -153,13 +179,29 @@ public class MainFragment extends Fragment {
                     }
                 });
 
+                snackbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        super.onDismissed(transientBottomBar, event);
+                        if (!isEditActionClicked) {
+                            isEditActionClicked = false;
+                            //clearView(recyclerView, viewHolder);
+                        }
+                    }
+
+                    @Override
+                    public void onShown(Snackbar transientBottomBar) {
+                        super.onShown(transientBottomBar);
+                    }
+                });
+
                 snackbar.setActionTextColor(Color.YELLOW);
                 snackbar.show();
 
             }
         };
 
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToEditCallBack);
         itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 

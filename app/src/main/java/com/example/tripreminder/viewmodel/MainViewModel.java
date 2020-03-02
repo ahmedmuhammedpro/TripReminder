@@ -26,8 +26,11 @@ public class MainViewModel extends ViewModel implements MainViewModelInterface {
 
     @Override
     public MutableLiveData<Trip> updateTrip(Trip trip) {
-
         return tripRepositoryImp.updateTrip(trip);
+    }
+
+    public MutableLiveData<Trip> updateTripStatus(String tripId, int status) {
+        return tripRepositoryImp.updateTripStatus(tripId, status);
     }
 
     @Override

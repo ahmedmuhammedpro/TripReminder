@@ -35,7 +35,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/noteTxtLayout"
             android:layout_width="240dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
 
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
@@ -56,8 +56,8 @@
 
         <Button
             android:id="@+id/addNoteBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:background="@drawable/ic_note_add_black_24dp"

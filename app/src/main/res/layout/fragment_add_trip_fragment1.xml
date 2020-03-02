@@ -24,7 +24,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tripnameLayout"
             android:layout_width="300dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
@@ -46,6 +46,7 @@
                 android:id="@+id/tripNameTxt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@android:color/white"
                 android:textColor="@color/colorPrimaryDark" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,7 +65,7 @@
             android:id="@+id/textInputLayout2"
 
             android:layout_width="300dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:baselineAlignedChildIndex="5"
             android:hint="@string/startPoint"
             app:boxBackgroundColor="#D9D9D9"
@@ -81,6 +82,7 @@
                 android:id="@+id/startPointTxt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@android:color/white"
                 android:inputType="textAutoComplete"
                 android:paddingLeft="@dimen/padding_8dp"
                 android:paddingRight="@dimen/padding_8dp"
@@ -91,7 +93,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout3"
             android:layout_width="300dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:layout_marginTop="16dp"
             android:hint="@string/endPoint"
             app:boxBackgroundColor="#D9D9D9"
@@ -108,6 +110,7 @@
                 android:id="@+id/endPointTxt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@android:color/white"
                 android:inputType="textAutoComplete"
                 android:paddingLeft="@dimen/padding_8dp"
                 android:paddingRight="@dimen/padding_8dp"
