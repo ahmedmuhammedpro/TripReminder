@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class AddTripViewModel extends ViewModel {
-    TripRepositoryImp tripRepositoryImp = new TripRepositoryImp();
+    TripRepositoryImp tripRepositoryImp = TripRepositoryImp.getInstance();
 
     public AddTripViewModel() {
 

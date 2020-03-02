@@ -1,14 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.PastTripsDataFragment">
+    tools:context=".view.fragments.MainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/upcoming_trips_recycler_view_pastTrips"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="past Fragment" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/recycler_view_margin_16dp"/>
+
+    <LinearLayout
+        android:id="@+id/no_trips_layout_pastTrips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/no_trips_margin_32dp"
+        android:layout_marginEnd="@dimen/no_trips_margin_32dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/no_trips_margin_image_width"
+            android:layout_height="@dimen/no_trips_margin_image_height"
+            android:layout_marginBottom="@dimen/padding_16dp"
+            app:srcCompat="@drawable/ic_content_paste" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/no_trips_string"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 </FrameLayout>

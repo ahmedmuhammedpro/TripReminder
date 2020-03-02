@@ -28,11 +28,12 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     private Fragment selectedFragment;
     public static String userId="";
     Polyline currentPolyline;
+    public static final String USER_ID_TAG="userID";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        userId = getIntent().getStringExtra(LoginActivity.USER_ID_TAG);
+        userId = getIntent().getStringExtra(USER_ID_TAG);
         setupBottomBar();
     }
     private void setupBottomBar (){

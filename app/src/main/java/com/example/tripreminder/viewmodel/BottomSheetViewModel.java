@@ -8,7 +8,7 @@ import com.example.tripreminder.model.repositories.TripRepositoryImp;
 
 public class BottomSheetViewModel extends ViewModel {
 
-    TripRepositoryImp tripRepositoryImp = new TripRepositoryImp();
+    TripRepositoryImp tripRepositoryImp = TripRepositoryImp.getInstance();
 
     public MutableLiveData<Trip> deleteTrip(String tripID){
         return tripRepositoryImp.deleteTrip(tripID);

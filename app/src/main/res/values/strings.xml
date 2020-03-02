@@ -26,7 +26,7 @@
     <string name="note">Note</string>
     <string name="addTrip">Add Trip</string>
     <string name="cancel">Cancel</string>
-    <string name="Email">Email</string>
+    <string name="Email">example@domain.com</string>
     <string name="Password">Password</string>
     <string name="LoginButtonText">Login</string>
     <string name="PastTripsTab">Past Trips</string>
@@ -36,4 +36,6 @@
     <string name="Name">Name</string>
     <string name="RegisterButtonText">Register</string>
     <string name="ConfirmPasswordHint">Confirm Password</string>
+    <string name="login">Login</string>
+    <string name="ForgotPasswordText">forgot your password?</string>
 </resources>

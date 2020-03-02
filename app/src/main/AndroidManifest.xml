@@ -33,7 +33,6 @@
             android:name=".view.activities.TripAlertActivity"
             android:excludeFromRecents="true"
             android:theme="@style/TripAlertDialog" />
-        <activity android:name=".view.activities.LoginActivity" />
         <activity android:name=".view.activities.AddTripActivity" />
         <activity android:name=".view.activities.MainActivity"></activity>
         <service
