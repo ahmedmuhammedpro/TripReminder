@@ -25,6 +25,7 @@ public class WorkManagerViewModel {
     }
 
     public void addTripToWorkManager(Trip trip) {
+        Log.i("ahmed", "added date => " + trip.getTripId());
         long milliseconds = getDifferenceMilliseconds(trip.getTripDate());
 
         OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(TripWorker.class)
@@ -44,6 +45,11 @@ public class WorkManagerViewModel {
                 .build();
 
         workManager.enqueueUniqueWork(trip.getTripId(), ExistingWorkPolicy.REPLACE, request);
+    }
+
+    public void deleteRequest(String tripId) {
+        Log.i("ahmed", "new date => " + tripId);
+        workManager.cancelUniqueWork(tripId);
     }
 
     private long getDifferenceMilliseconds(String tripDate) {

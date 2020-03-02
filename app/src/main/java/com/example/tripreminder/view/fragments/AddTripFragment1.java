@@ -227,6 +227,10 @@ public class AddTripFragment1 extends Fragment {
                     AddTripFragment2 ftwo = new AddTripFragment2();
                     FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
                     Bundle bundle = new Bundle();
+                    mainTrip.setTripName(nameTxt.getText().toString());
+                    mainTrip.setTripDate(dateString);
+                    mainTrip.getStartLocation().setLocationName(startPointTxt.getText().toString());
+                    mainTrip.getEndLocation().setLocationName(endPointTxt.getText().toString());
                     bundle.putSerializable(TRIP_Object, mainTrip);
                     ftwo.setArguments(bundle);
                     manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();

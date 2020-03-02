@@ -80,6 +80,7 @@ public class AddTripFragment2 extends Fragment {
         addTripBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                WorkManagerViewModel workManagerViewModel = new WorkManagerViewModel(getActivity());
                 Vector<String> notes = addChipsIntoVector(allNotes);
                 trip.setNotes(notes);
               if(addTripBtn.getText() != SAVE_CHANGES) {
@@ -87,7 +88,6 @@ public class AddTripFragment2 extends Fragment {
                       @Override
                       public void onChanged(Trip trip) {
                           Toast.makeText(getActivity(), "Trip details:" + trip.getTripDate() + trip.getTripName(), Toast.LENGTH_SHORT).show();
-                          WorkManagerViewModel workManagerViewModel = new WorkManagerViewModel(getActivity());
                           workManagerViewModel.addTripToWorkManager(trip);
                           MainFragment fmain = new MainFragment();
                           FragmentManager manager = AddTripFragment2.super.getActivity().getSupportFragmentManager();
@@ -97,6 +97,12 @@ public class AddTripFragment2 extends Fragment {
                   });
               }else{
                   //TODO: update trip
+                  addTripViewModel.updateTrip(trip).observe(AddTripFragment2.this, new Observer<Trip>() {
+                      @Override
+                      public void onChanged(Trip trip) {
+                          workManagerViewModel.editRequest(trip);
+                      }
+                  });
               }
             }
         });

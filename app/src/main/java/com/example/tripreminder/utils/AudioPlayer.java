@@ -58,7 +58,6 @@ public class AudioPlayer {
                     .getActualDefaultRingtoneUri(context,
                             RingtoneManager.TYPE_RINGTONE);
             mediaPlayer = MediaPlayer.create(context, R.raw.a);
-            Log.i("ahmed","audio: "+mediaPlayer);
             mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(onCompletionListener);
 

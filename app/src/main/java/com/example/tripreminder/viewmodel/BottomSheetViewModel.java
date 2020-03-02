@@ -13,4 +13,8 @@ public class BottomSheetViewModel extends ViewModel {
     public MutableLiveData<Trip> deleteTrip(String tripID){
         return tripRepositoryImp.deleteTrip(tripID);
     }
+
+    public MutableLiveData<Trip> updateTripStatus(String tripId, int status) {
+        return tripRepositoryImp.updateTripStatus(tripId, status);
+    }
 }

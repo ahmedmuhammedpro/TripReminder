@@ -17,4 +17,7 @@ public class AddTripViewModel extends ViewModel {
         return tripRepositoryImp.addTrip(trip);
     }
 
+    public MutableLiveData<Trip> updateTrip(Trip trip) {
+        return tripRepositoryImp.updateTrip(trip);
+    }
 }

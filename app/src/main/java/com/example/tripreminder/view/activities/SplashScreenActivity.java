@@ -26,7 +26,7 @@ public class SplashScreenActivity extends AppCompatActivity implements Runnable{
     public static final String USER_ID_TAG="userID";
     private static final int RC_SIGN_IN = 1;
     LoginViewModel loginViewModel;
-    String email="",password="",userID="";
+    String email="",username="",userID="";
     Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class SplashScreenActivity extends AppCompatActivity implements Runnable{
                     Toast.makeText(SplashScreenActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                     intent.putExtra(USER_ID_TAG, userID);
+                    intent.putExtra(USERNAME_KEY,username);
                     startActivity(intent);
                     //login(email, password);
                 }
@@ -84,8 +85,8 @@ public class SplashScreenActivity extends AppCompatActivity implements Runnable{
         loggedIn = sharedPreferences.getBoolean(lOGGED_IN_KEY,false);
         if(loggedIn) {
             email = sharedPreferences.getString(EMAIL_KEY, "empty");
-            password = sharedPreferences.getString(PASSWORD_KEY, "empty");
             userID = sharedPreferences.getString(USER_ID_TAG, "empty");
+            username = sharedPreferences.getString(USERNAME_KEY,"empty");
             //login(email,password);
         /*Toast.makeText(this, "Login Successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, MainActivity.class);

@@ -29,7 +29,10 @@ public class TripRepositoryImp {
     public MutableLiveData<Vector<String>> getTripNotes(String tripId) {
         return  tripFirestoreHandler.getTripNotes(tripId);
     }
-    public MutableLiveData<Trip> updateTripStatus(String tripId,int tripStatus){
+    public MutableLiveData<Trip> updateTripStatus(String tripId, int tripStatus) {
         return tripFirestoreHandler.updateTripStatus(tripId,tripStatus);
+    }
+    public LiveData<List<Trip>> getpastTrips(String userId){
+        return tripFirestoreHandler.getpastTrips(userId);
     }
 }

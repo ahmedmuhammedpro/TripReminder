@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,25 +18,21 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
-import com.example.tripreminder.view.fragments.MainFragment;
 import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.view.fragments.TripBottomSheetDialog;
 import com.example.tripreminder.viewmodel.MainViewModel;
+
 import com.example.tripreminder.viewmodel.MainViewModelInterface;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Vector;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder> {
@@ -45,15 +40,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     private Context context;
     private List<Trip> tripList;
     private MainViewModelInterface viewModel;
-    Vector<String> allNotes;
-    MainFragment mainFragment ;
-    boolean isAdded =false;
-    public static final String TRIP_ID_KEY="tripID";
-    public MainAdapter(Context context,  List<Trip> tripList) {
+    private Vector<String> allNotes;
+    boolean isAdded = false;
+
+    public MainAdapter(Context context, List<Trip> tripList) {
         this.context = context;
         this.tripList = tripList;
         allNotes = new Vector<>();
-        mainFragment = new MainFragment();
     }
 
     @NonNull
@@ -69,6 +62,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             bottomSheetDialog.setArguments(bundle);
             bottomSheetDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), TripBottomSheetDialog.TAG);
         });
+
+        mainViewHolder.startTripButton.setOnClickListener(v -> {
+            Trip trip = tripList.get(mainViewHolder.getAdapterPosition());
+            trip.setTripStatus(Trip.DONE);
+            MainViewModel mainViewModel = new MainViewModel();
+            mainViewModel.updateTripStatus(trip.getTripId(), trip.getTripStatus());
+        });
         return mainViewHolder;
     }
 
@@ -79,28 +79,30 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         holder.tripTimeTV.setText(getTime(tripList.get(position).getTripDate()));
         holder.tripNameTV.setText(tripList.get(position).getTripName());
         holder.tripNotesBtn.setOnClickListener(v -> {
-            if(holder.notesLayout.getVisibility() == View.GONE){
-                TransitionManager.beginDelayedTransition(holder.cardTrip,new AutoTransition());
+            if (holder.notesLayout.getVisibility() == View.GONE) {
+                TransitionManager.beginDelayedTransition(holder.cardTrip, new AutoTransition());
                 holder.notesLayout.setVisibility(View.VISIBLE);
                 holder.tripNotesBtn.setBackgroundResource(R.drawable.ic_arrow_upward_black_24dp);
                 allNotes = tripList.get(position).getNotes();
-               if(!isAdded) {
-                   if (allNotes!= null && allNotes.size() != 0) {
-                       for (String txt : allNotes) {
-                           Chip chip = addNoteChip(txt);
-                           holder.notesGroup.addView(chip);
-                           isAdded = true;
-                       }
-                   }
-               }
-            }else{
-                TransitionManager.beginDelayedTransition(holder.cardTrip,new AutoTransition());
+
+                if (!isAdded) {
+                    if (allNotes != null && allNotes.size() != 0) {
+                        for (String txt : allNotes) {
+                            Chip chip = addNoteChip(txt);
+                            holder.notesGroup.addView(chip);
+                            isAdded = true;
+                        }
+                    }
+                }
+            } else {
+                TransitionManager.beginDelayedTransition(holder.cardTrip, new AutoTransition());
+
                 holder.notesLayout.setVisibility(View.GONE);
                 holder.tripNotesBtn.setBackgroundResource(R.drawable.ic_arrow_downward_black_24dp);
             }
         });
-        holder.tripStartLocationTV.setText( tripList.get(position).getStartLocation().getLocationName());
-        holder.tripEndLocationTV.setText( tripList.get(position).getEndLocation().getLocationName());
+        holder.tripStartLocationTV.setText(tripList.get(position).getStartLocation().getLocationName());
+        holder.tripEndLocationTV.setText(tripList.get(position).getEndLocation().getLocationName());
 
     }
 
@@ -122,6 +124,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         ChipGroup notesGroup;
         ConstraintLayout notesLayout;
         CardView cardTrip;
+
         public MainViewHolder(@NonNull View itemView) {
             super(itemView);
             tripDateTV = itemView.findViewById(R.id.trip_date);
@@ -138,10 +141,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         }
     }
 
-    private Chip addNoteChip( String text){
+    private Chip addNoteChip(String text) {
         Chip chip = (Chip) LayoutInflater.from(context).inflate(R.layout.note_item, null, false);
         chip.setText(text);
-        chip.getCloseIcon().setVisible(false,false);
+        chip.getCloseIcon().setVisible(false, false);
         chip.setTextIsSelectable(false);
         return chip;
     }
@@ -153,7 +156,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     }
 
     public void restoreItem(Trip trip, int position) {
-        tripList.add(position,trip);
+        tripList.add(position, trip);
         notifyItemInserted(position);
     }
 
@@ -161,7 +164,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         return tripList;
     }
 
-    private String  getDate(String dateString){
+    private String getDate(String dateString) {
         String[] strings = dateString.split("-");
         int day = Integer.parseInt(strings[0]);
         int month = Integer.parseInt(strings[1]);
@@ -171,11 +174,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         return DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
 
     }
-    private String  getTime(String dateString){
+
+    private String getTime(String dateString) {
         String[] strings = dateString.split("-");
         int hour = Integer.parseInt(strings[3]);
         int minute = Integer.parseInt(strings[4]);
-        return hour+":"+minute;
+        return hour + ":" + minute;
 
     }
 }
