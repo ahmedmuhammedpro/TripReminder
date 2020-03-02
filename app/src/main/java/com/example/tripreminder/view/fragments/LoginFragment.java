@@ -4,6 +4,7 @@ package com.example.tripreminder.view.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.User;
+import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.viewmodel.LoginViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -36,8 +38,6 @@ import com.google.android.gms.tasks.Task;
  */
 public class LoginFragment extends Fragment {
 
-    private final String SHARED_PREFERENCES_FILE_NAME="loggedInUserInfo",EMAIL_KEY="email",PASSWORD_KEY="password";
-    private final String lOGGED_IN_KEY="loggedIn",USER_ID_KEY="UserId",USERNAME_KEY = "username";
     boolean loggedIn=false;
     Button signUpButton;
     public static final String USER_ID_TAG="userID";
@@ -134,6 +134,10 @@ public class LoginFragment extends Fragment {
         if(account!=null) {
             writeInSharedPreferences(user);
             Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.putExtra(Constants.EMAIL_KEY, user.getEmail());
+            intent.putExtra(Constants.USERNAME_KEY, user.getUsername());
+            intent.putExtra(Constants.IMAGE_URL,account.getPhotoUrl().toString());
+
             intent.putExtra(USER_ID_TAG, user.getUserId());
             startActivity(intent);
         }
@@ -170,14 +174,14 @@ public class LoginFragment extends Fragment {
     }
 
     private void writeInSharedPreferences(User loggedInUser) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(EMAIL_KEY,loggedInUser.getEmail());
-        editor.putString(USERNAME_KEY,loggedInUser.getUsername());
+        editor.putString(Constants.EMAIL_KEY,loggedInUser.getEmail());
+        editor.putString(Constants.USERNAME_KEY,loggedInUser.getUsername());
         //editor.putString(PASSWORD_KEY,loggedInUser.getPassword());
         editor.putString(USER_ID_TAG,loggedInUser.getUserId());
-        editor.putBoolean(lOGGED_IN_KEY,true);
+        editor.putBoolean(Constants.lOGGED_IN_KEY,true);
         editor.commit();
     }
 

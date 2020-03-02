@@ -13,11 +13,13 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.map_directions.TaskLoadedCallback;
+import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.view.fragments.AddTripFragment1;
 import com.example.tripreminder.view.fragments.FeedbackFragment;
 import com.example.tripreminder.view.fragments.MainFragment;
 import com.example.tripreminder.view.fragments.PastTripsFragment;
 import com.example.tripreminder.view.fragments.PastTripsMapFragment;
+import com.example.tripreminder.view.fragments.ProfileFragment;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                     case 1: selectedFragment = new PastTripsFragment();break;
                     case 2: selectedFragment = new MainFragment();break;
                     case 3: selectedFragment = new AddTripFragment1();break;
+                    case 4: selectedFragment = new ProfileFragment();break;
                     case 5: selectedFragment = new FeedbackFragment(); break;
                 }
                 if(item.getId()>previousFragmentNumber) {
@@ -106,10 +109,10 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
 
     public void signOut(){
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SplashScreenActivity.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SplashScreenActivity.lOGGED_IN_KEY,false);
+        editor.putBoolean(Constants.lOGGED_IN_KEY,false);
         editor.commit();
         Intent intent = new Intent(this,AuthenticationActivity.class);
         startActivity(intent);
