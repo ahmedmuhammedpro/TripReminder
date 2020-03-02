@@ -7,6 +7,21 @@
     android:background="@drawable/ic_gredient_background"
     tools:context=".view.fragments.ProfileFragment">
 
+    <Button
+        android:id="@+id/signOutButton"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="84dp"
+        android:background="@drawable/custom_button_dark_rounded"
+        android:text="@string/SignOutButton"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailTextViewProfile" />
+
     <TextView
         android:id="@+id/emailTextViewProfile"
         style="@android:style/Widget.Holo.TextView"
@@ -25,10 +40,10 @@
         android:id="@+id/profileImageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="136dp"
-        android:layout_marginLeft="136dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="132dp"
         android:background="@drawable/button_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_person_outline_24px" />

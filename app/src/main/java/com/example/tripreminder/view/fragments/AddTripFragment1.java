@@ -95,6 +95,8 @@ public class AddTripFragment1 extends Fragment {
         setTime = view.findViewById(R.id.timeBtn);
         dateTxt = view.findViewById(R.id.dateTxt);
         timeTxt = view.findViewById(R.id.timeTxt);
+        dateTxt.setKeyListener(null);
+        timeTxt.setKeyListener(null);
         saveBtn = view.findViewById(R.id.saveBtn);
         startPointTxt = view.findViewById(R.id.startPointTxt);
         endPointTxt = view.findViewById(R.id.endPointTxt);

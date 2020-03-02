@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/ic_gredient_background"
     tools:context=".view.fragments.RegisterFragment">
 
 
@@ -20,57 +21,127 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirmPasswordEditTextRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/confirmPasswordLayout" />
 
-    <AutoCompleteTextView
-        android:id="@+id/confirmPasswordEditTextRegister"
-        android:layout_width="411dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/confirmPasswordLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
         android:hint="@string/ConfirmPasswordHint"
-        android:inputType="textPassword"
-        android:paddingLeft="@dimen/padding_8dp"
-        android:paddingRight="@dimen/padding_8dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="16sp"
+        app:boxBackgroundMode="filled"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:endIconMode="clear_text"
+        app:endIconTintMode="src_in"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditTextRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordLayout">
 
-    <AutoCompleteTextView
-        android:id="@+id/passwordEditTextRegister"
-        android:layout_width="411dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        <AutoCompleteTextView
+            android:id="@+id/confirmPasswordEditTextRegister"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:inputType="textPassword"
+            android:paddingLeft="@dimen/padding_8dp"
+            android:paddingRight="@dimen/padding_8dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
         android:hint="@string/Password"
-        android:inputType="textPassword"
-        android:paddingLeft="@dimen/padding_8dp"
-        android:paddingRight="@dimen/padding_8dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="16sp"
+        app:boxBackgroundMode="filled"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:endIconMode="clear_text"
+        app:endIconTintMode="src_in"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditTextRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/nameLayout">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/nameEditTextRegister"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        <AutoCompleteTextView
+            android:id="@+id/passwordEditTextRegister"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:inputType="textPassword"
+            android:paddingLeft="@dimen/padding_8dp"
+            android:paddingRight="@dimen/padding_8dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/nameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
         android:hint="@string/Name"
-        android:textColor="@color/colorPrimaryDark"
+        app:boxBackgroundMode="filled"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:endIconMode="clear_text"
+        app:endIconTintMode="src_in"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailEditTextRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/emailLayout">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/emailEditTextRegister"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
+        <AutoCompleteTextView
+            android:id="@+id/nameEditTextRegister"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:inputType="text"
+            android:paddingLeft="@dimen/padding_8dp"
+            android:paddingRight="@dimen/padding_8dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="140dp"
         android:hint="@string/Email"
-        android:textColor="@color/colorPrimaryDark"
+        app:boxBackgroundMode="filled"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:endIconMode="clear_text"
+        app:endIconTintMode="src_in"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <AutoCompleteTextView
+            android:id="@+id/emailEditTextRegister"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:inputType="text"
+            android:paddingLeft="@dimen/padding_8dp"
+            android:paddingRight="@dimen/padding_8dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -104,15 +104,4 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
         }
     }
 
-    public void signOut(){
-
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(Constants.lOGGED_IN_KEY,false);
-        editor.commit();
-        Intent intent = new Intent(this,AuthenticationActivity.class);
-        startActivity(intent);
-    }
-
 }

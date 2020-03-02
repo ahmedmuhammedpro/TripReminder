@@ -95,8 +95,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                 holder.notesLayout.setVisibility(View.VISIBLE);
                 holder.tripNotesBtn.setBackgroundResource(R.drawable.ic_arrow_upward_black_24dp);
                 allNotes = tripList.get(position).getNotes();
+
                 Log.i("adapter2","trip type"+tripList.get(position).getTripType());
-                if (!isAdded) {
+                if (holder.notesGroup.getChildCount() == 0) {
                     if (allNotes != null && allNotes.size() != 0) {
                         for (String txt : allNotes) {
                             Chip chip = addNoteChip(txt);
