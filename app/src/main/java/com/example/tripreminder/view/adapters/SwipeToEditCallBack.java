@@ -75,14 +75,15 @@ abstract public class SwipeToEditCallBack extends ItemTouchHelper.Callback {
         mBackground.setBounds(itemView.getLeft() , itemView.getTop(), itemView.getLeft() + (int) dX, itemView.getBottom());
         mBackground.draw(c);
 
-        int editIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
-        int editIconMargin = (itemHeight - intrinsicHeight) / 2;
-        int editIconLeft = itemView.getLeft()- editIconMargin ;
-        int editIconRight = itemView.getRight() - editIconMargin - intrinsicWidth;
-        int editIconBottom = editIconTop + intrinsicHeight;
-
-
-        editDrawable.setBounds(editIconLeft, editIconTop, editIconRight, editIconBottom);
+        int deleteIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+        int deleteIconMargin = (itemHeight - intrinsicHeight) / 2;
+       // int deleteIconLeft = itemView.getLeft() - deleteIconMargin ;
+       // int deleteIconRight = itemView.getLeft() - deleteIconMargin -intrinsicWidth;
+        int deleteIconBottom = deleteIconTop + intrinsicHeight;
+        int deleteIconLeft = itemView.getRight() - deleteIconMargin - intrinsicWidth;
+        int deleteIconRight = itemView.getRight() - deleteIconMargin;
+        
+        editDrawable.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom);
         editDrawable.draw(c);
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
