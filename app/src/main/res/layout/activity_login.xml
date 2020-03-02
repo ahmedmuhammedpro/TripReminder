@@ -9,8 +9,8 @@
 
     <FrameLayout
         android:id="@+id/frameLayout4"
-        android:layout_width="435dp"
-        android:layout_height="541dp"
+        android:layout_width="421dp"
+        android:layout_height="507dp"
         android:background="@drawable/ic_gredient_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -93,7 +93,7 @@
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/custom_button_dark_rounded"
         android:text="@string/LoginButtonText"
         android:textAllCaps="false"
@@ -102,34 +102,36 @@
         app:layout_constraintStart_toStartOf="@+id/textInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/googleSignInButton"
+    <Button
+        android:id="@+id/forgetPasswordBtn"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-
-        android:layout_marginTop="12dp"
-        android:text="Text"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        android:text="forget your password?"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/loginButton"
+        app:layout_constraintStart_toStartOf="@+id/loginButton"
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
         android:text="or connect with"
         app:layout_constraintEnd_toStartOf="@+id/view2"
         app:layout_constraintTop_toBottomOf="@+id/frameLayout4" />
 
-    <View
-        android:layout_width="70dp"
-        android:layout_height="2dp"
-        android:background="@color/quantum_grey300"
-        app:layout_constraintEnd_toStartOf="@+id/textView8"
-        app:layout_constraintTop_toTopOf="@+id/view2" />
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Don't have account"
+        app:layout_constraintEnd_toStartOf="@+id/suginupBtn"
+        app:layout_constraintTop_toBottomOf="@+id/googleSignInButton" />
 
     <View
         android:id="@+id/view2"
@@ -137,33 +139,46 @@
         android:layout_height="2dp"
         android:layout_marginEnd="88dp"
         android:layout_marginRight="88dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/quantum_grey300"
         app:layout_constraintBottom_toTopOf="@+id/googleSignInButton"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:text="Don't have account"
-        app:layout_constraintEnd_toStartOf="@+id/suginupBtn"
-        app:layout_constraintTop_toBottomOf="@+id/googleSignInButton" />
-
     <Button
         android:id="@+id/suginupBtn"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="88dp"
-        android:layout_marginRight="88dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="104dp"
+        android:layout_marginRight="104dp"
+        android:layout_marginBottom="84dp"
         android:background="@android:color/white"
         android:text="Sign up"
         android:textColor="@color/colorPrimaryDark"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/googleSignInButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+
+        android:layout_marginTop="8dp"
+        android:text="Text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+    <View
+        android:layout_width="70dp"
+        android:layout_height="2dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:background="@color/quantum_grey300"
+        app:layout_constraintEnd_toStartOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="@+id/view2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
