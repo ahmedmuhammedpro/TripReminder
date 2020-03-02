@@ -93,6 +93,7 @@ public class TripAlertActivity extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
                 getResources().getString(R.string.dialog_cancel_button), (dialog, which) -> {
                     tripNotification.cancelNotification();
+                    mainViewModel.updateTripStatus(trip.getTripId(), Trip.CANCELED);
                     alertDialog.dismiss();
                     finish();
                 });

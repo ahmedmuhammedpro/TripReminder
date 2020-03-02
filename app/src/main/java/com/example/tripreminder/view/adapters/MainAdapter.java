@@ -76,11 +76,15 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
         int status = tripList.get(position).getTripStatus();
+
         if (status == Trip.UPCOMING) {
             holder.tripStatusTV.setText("UPCOMING");
         } else if (status == Trip.DONE) {
             holder.tripStatusTV.setText("DONE");
+        } else if (status == Trip.CANCELED) {
+            holder.tripStatusTV.setText("CANCELED");
         }
+
         holder.tripDateTV.setText(getDate(tripList.get(position).getTripDate()));
         holder.tripTimeTV.setText(getTime(tripList.get(position).getTripDate()));
         holder.tripNameTV.setText(tripList.get(position).getTripName());
