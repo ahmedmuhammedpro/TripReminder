@@ -1,26 +1,22 @@
 package com.example.tripreminder.view.fragments;
 
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.tripreminder.R;
+import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.map_directions.FetchURL;
-import com.example.tripreminder.utils.LocationLocator;
+import com.example.tripreminder.view.activities.MainActivity;
+import com.example.tripreminder.viewmodel.PastTripsViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,6 +26,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -37,7 +35,7 @@ public class PastTripsMapFragment extends Fragment implements OnMapReadyCallback
 
     MarkerOptions place1,place2;
     Polyline currentPolyline;
-
+    private PastTripsViewModel pastTripsViewModel;
 
     View view ;
 
@@ -59,7 +57,7 @@ public class PastTripsMapFragment extends Fragment implements OnMapReadyCallback
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_past_trips_map, container, false);
-
+        pastTripsViewModel = ViewModelProviders.of(this).get(PastTripsViewModel.class);
         setup();
         return view;
     }
@@ -73,37 +71,35 @@ public class PastTripsMapFragment extends Fragment implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
 
         this.googleMap=googleMap;
-        //longitude and latitude of egypt
-       // googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(26.8205528 , 30.8024979), 6));
 
 
-        //LatLng fromPosition = new LatLng(26.6205528 , 30.6024979); // enter user location lat and long
-        //LatLng toPosition = new LatLng(26.9205528, 30.9024979);// fixed location
 
-        LatLng fromPosition = new LatLng(30.063550, 31.027708);
-        LatLng toPosition = new LatLng(30.071296, 31.020731);
+        pastTripsViewModel.getPastTrips(MainActivity.userId).observe(this, new Observer<List<Trip>>() {
+            @Override
+            public void onChanged(List<Trip> trips) {
+
+                for(int i=0;i<trips.size();i++){
+                    Trip trip = trips.get(i);
+                    LatLng fromPosition = new LatLng(trip.getStartLocation().getLatitude(), trip.getStartLocation().getLongitude());
+                    LatLng toPosition = new LatLng(trip.getEndLocation().getLatitude(), trip.getEndLocation().getLongitude());
+
+                    place1 = new MarkerOptions().position(fromPosition).title(trip.getStartLocation().getLocationName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    place2 = new MarkerOptions().position(toPosition).title( trip.getEndLocation().getLocationName());
+                    googleMap.addMarker(place1);
+                    googleMap.addMarker(place2);
+
+                    String url = getUrl(fromPosition,toPosition,"driving");
+                    new FetchURL(getContext()).execute(url,"driving");
 
 
-        LatLng fromPosition2 = new LatLng(30.060737, 31.031110);
-        LatLng toPosition2 = new LatLng(30.069327, 31.030263);
+                }
 
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(30.063550, 31.027708), 6));
-        place1 = new MarkerOptions().position(fromPosition).title("location 1");
-        place2 = new MarkerOptions().position(toPosition).title("location 2").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-        googleMap.addMarker(place1);
-        googleMap.addMarker(place2);
 
-        place1 = new MarkerOptions().position(fromPosition2).title("location 1");
-        place2 = new MarkerOptions().position(toPosition2).title("location 2").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(30.063550, 31.027708), 8));
 
-        googleMap.addMarker(place1);
-        googleMap.addMarker(place2);
 
-        String url = getUrl(fromPosition,toPosition,"driving");
-        new FetchURL(getContext()).execute(url,"driving");
-
-        String url2 = getUrl(fromPosition2,toPosition2,"driving");
-        new FetchURL(getContext()).execute(url2,"driving");
+            }
+        });
     }
 
 
