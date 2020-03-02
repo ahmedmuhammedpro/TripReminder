@@ -235,6 +235,7 @@ public class AddTripFragment1 extends Fragment {
                         FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(TRIP_Object, trip);
+                        bundle.putString("tripRound",dateStringRound);
                         ftwo.setArguments(bundle);
                         manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
                     }
@@ -275,7 +276,7 @@ public class AddTripFragment1 extends Fragment {
                                                   int monthOfYear, int dayOfMonth) {
                                 c.set(year, monthOfYear, dayOfMonth);
                                 String date = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
-                                dateTxt.setText(date);
+                                dateTxtRound.setText(date);
                                 monthOfYear += 1;
                                 if(mainTrip == null) {
                                     dateStringRound = "" + dayOfMonth + "-" + monthOfYear + "-" + year;
@@ -301,7 +302,7 @@ public class AddTripFragment1 extends Fragment {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
-                                timeTxt.setText(hourOfDay + ":" + minute);
+                                timeTxtRound.setText(hourOfDay + ":" + minute);
                                 if(mainTrip == null) {
                                     dateStringRound += "-" + hourOfDay + "-" + minute;
                                 }

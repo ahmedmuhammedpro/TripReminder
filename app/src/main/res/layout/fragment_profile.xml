@@ -4,7 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".view.fragments.ProfileFragment">
+
+    <FrameLayout
+        android:id="@+id/frameLayout3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_gredient_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/emailTextViewProfile"
@@ -32,11 +43,10 @@
         android:id="@+id/profileImageView"
         android:layout_width="98dp"
         android:layout_height="100dp"
-        android:layout_marginTop="136dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/frameLayout3"
+        app:layout_constraintTop_toTopOf="@+id/frameLayout3"
         app:srcCompat="@drawable/ic_person_outline_24px" />
 
     <TextView
@@ -64,4 +74,5 @@
         app:layout_constraintTop_toTopOf="@+id/nameTextViewLabel"
         app:layout_constraintVertical_bias="0.0"
         tools:text="preview" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
