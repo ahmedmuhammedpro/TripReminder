@@ -162,7 +162,7 @@ public class MainFragment extends Fragment {
 
                 final int position = viewHolder.getAdapterPosition();
                 final Trip item = adapter.getData().get(position);
-
+             Log.i("main","type:"+item.getTripType());
                 Snackbar snackbar = Snackbar
                         .make(getView(), "Are you sure you want to Edit it? ", Snackbar.LENGTH_LONG);
                 snackbar.setAction("YES", new View.OnClickListener() {

@@ -10,6 +10,7 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:theme="@style/AppThemeAddTrip"
         tools:context=".view.fragments.AddTripFragment2">
 
@@ -35,8 +36,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/noteTxtLayout"
             android:layout_width="240dp"
-            android:layout_height="50dp"
-
+            android:layout_height="70dp"
+            app:boxBackgroundColor="@color/white"
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
@@ -82,15 +83,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.492"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/noteTxtLayout"/>
+            app:layout_constraintTop_toBottomOf="@+id/noteTxtLayout" />
 
         <Button
             android:id="@+id/cancelTripBtn"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
             android:text="@string/cancel"
             android:textColor="@color/colorPrimaryDark"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@+id/addTripBtn"
             app:layout_constraintStart_toStartOf="@+id/addTripBtn"
             app:layout_constraintTop_toBottomOf="@+id/addTripBtn" />

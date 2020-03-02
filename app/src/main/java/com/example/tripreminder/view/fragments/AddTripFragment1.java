@@ -148,11 +148,16 @@ public class AddTripFragment1 extends Fragment {
                                 String date = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
                                 dateTxt.setText(date);
                                 monthOfYear += 1;
-                                dateString = "" +dayOfMonth + "-" + monthOfYear + "-" + year ;
-                                countData +=1;
-                                if ( countData>=5 && !nameTxt.getText().toString().isEmpty()) {
-                                    nextBtn.setEnabled(true);
-                                }
+                               if(mainTrip == null) {
+                                   dateString = "" + dayOfMonth + "-" + monthOfYear + "-" + year;
+                                   countData += 1;
+                                   if (countData >= 5 && !nameTxt.getText().toString().isEmpty()) {
+                                       nextBtn.setEnabled(true);
+                                   }
+                               }else{
+                                   String[] time = dateString.split("-");
+                                   dateString = dayOfMonth+"-"+monthOfYear+"-"+year+"-"+time[3]+"-"+time[4];
+                               }
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -172,12 +177,17 @@ public class AddTripFragment1 extends Fragment {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
-                                dateString += "-" + hourOfDay+ "-" + minute;
-                                timeTxt.setText(hourOfDay + ":" + minute);
-                                countData +=1;
-                                if ( countData>=5 && !nameTxt.getText().toString().isEmpty()) {
-                                    nextBtn.setEnabled(true);
-                                }
+                                   timeTxt.setText(hourOfDay + ":" + minute);
+                                if(mainTrip == null) {
+                                   dateString += "-" + hourOfDay + "-" + minute;
+                                   countData += 1;
+                                   if (countData >= 5 && !nameTxt.getText().toString().isEmpty()) {
+                                       nextBtn.setEnabled(true);
+                                   }
+                               }else{
+                                   String[] date = dateString.split("-");
+                                   dateString = date[0]+"-"+date[1]+"-"+date[2]+"-"+hourOfDay+"-"+minute;
+                               }
                             }
                         }, mHour, mMinute, true);
                 timePickerDialog.show();
@@ -188,10 +198,11 @@ public class AddTripFragment1 extends Fragment {
             @Override
             public void onCheckedChanged(ChipGroup group, @IdRes int checkedId) {
                 // Handle the checked chip change.
-                           if(trip1.isChecked())
-                               if(roundTripeLayout.getVisibility() == View.VISIBLE)
+                           if(trip1.isChecked()) {
+                               if (roundTripeLayout.getVisibility() == View.VISIBLE)
                                    roundTripeLayout.setVisibility(View.GONE);
-                              tripType = 1;
+                               tripType = 1;
+                           }
                            if(trip2.isChecked()) {
                                tripType = 2;
                                roundTripeLayout.setVisibility(View.VISIBLE);
@@ -209,7 +220,6 @@ public class AddTripFragment1 extends Fragment {
             public void onClick(View view) {
                 if (mainTrip == null) {
                     if (nextBtn.isEnabled()) {
-
                         trip.setTripStatus(Trip.UPCOMING);
                         trip.setTripName(nameTxt.getText().toString());
                         trip.setUserID(MainActivity.userId);
@@ -229,6 +239,7 @@ public class AddTripFragment1 extends Fragment {
                     Bundle bundle = new Bundle();
                     mainTrip.setTripName(nameTxt.getText().toString());
                     mainTrip.setTripDate(dateString);
+                    mainTrip.setTripType(tripType);
                     mainTrip.getStartLocation().setLocationName(startPointTxt.getText().toString());
                     mainTrip.getEndLocation().setLocationName(endPointTxt.getText().toString());
                     bundle.putSerializable(TRIP_Object, mainTrip);
@@ -238,12 +249,6 @@ public class AddTripFragment1 extends Fragment {
             }
         });
 
-      saveBtn.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            //TODO:update
-          }
-      });
     }
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
@@ -255,17 +260,17 @@ public class AddTripFragment1 extends Fragment {
       if (bundleMainFragment != null) {
           mainTrip = (Trip) bundleMainFragment.getSerializable(MainFragment.TRIP_Object_FROM_MAIN);
           if (trip != null) {
-              saveBtn.setVisibility(View.VISIBLE);
               nameTxt.setText(mainTrip.getTripName());
               startPointTxt.setText(mainTrip.getStartLocation().getLocationName());
               endPointTxt.setText(mainTrip.getEndLocation().getLocationName());
               dateTxt.setText(getDate(mainTrip.getTripDate()));
               timeTxt.setText(getTime(mainTrip.getTripDate()));
+              dateString = mainTrip.getTripDate();
               int type = mainTrip.getTripType() ;
               Log.i("type","type int:"+type);
               if(type == 1){
                   trip1.setChecked(true);
-              }else{
+              }else if(type == 2){
                   trip2.setChecked(true);
               }
               nextBtn.setEnabled(true);

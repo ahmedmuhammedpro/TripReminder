@@ -35,11 +35,10 @@ abstract public class SwipeToEditCallBack extends ItemTouchHelper.Callback {
     public SwipeToEditCallBack(Context context) {
         mContext = context;
         mBackground = new ColorDrawable();
-        backgroundColor = Color.parseColor("#c0cfff");
+        backgroundColor = Color.parseColor("#ffffff");
         mClearPaint = new Paint();
         mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.ADD));
         editDrawable = ContextCompat.getDrawable(mContext, R.drawable.ic_rename);
-        edit = new TextView(mContext);
         intrinsicWidth = editDrawable.getIntrinsicWidth();
         intrinsicHeight = editDrawable.getIntrinsicHeight();
 
@@ -78,16 +77,14 @@ abstract public class SwipeToEditCallBack extends ItemTouchHelper.Callback {
 
         int editIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
         int editIconMargin = (itemHeight - intrinsicHeight) / 2;
-        int editIconLeft = itemView.getLeft() - editIconMargin - intrinsicWidth;
-        int editIconRight = itemView.getLeft() - editIconMargin;
+        int editIconLeft = itemView.getLeft()- editIconMargin ;
+        int editIconRight = itemView.getRight() - editIconMargin - intrinsicWidth;
         int editIconBottom = editIconTop + intrinsicHeight;
 
 
         editDrawable.setBounds(editIconLeft, editIconTop, editIconRight, editIconBottom);
-       // editDrawable.draw(c);
-        editDrawable.setBounds(editIconLeft - 20, editIconTop, editIconRight, editIconBottom);
-        edit.setText("Edit");
-        edit.draw(c);
+        editDrawable.draw(c);
+
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
 
