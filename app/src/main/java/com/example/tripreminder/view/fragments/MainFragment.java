@@ -126,16 +126,8 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_main, container, false);
-        recyclerView = v.findViewById(R.id.upcoming_trips_recycler_view);
-        noTripsLayout = v.findViewById(R.id.no_trips_layout);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setVisibility(INVISIBLE);
-        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        workManagerViewModel = new WorkManagerViewModel(getActivity());
+    public void onResume() {
+        super.onResume();
         viewModel.getAllTrips(MainActivity.userId).observe(this, new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
@@ -166,6 +158,20 @@ public class MainFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_main, container, false);
+        recyclerView = v.findViewById(R.id.upcoming_trips_recycler_view);
+        noTripsLayout = v.findViewById(R.id.no_trips_layout);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setVisibility(INVISIBLE);
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        workManagerViewModel = new WorkManagerViewModel(getActivity());
+
 
         return v;
     }
@@ -286,8 +292,8 @@ public class MainFragment extends Fragment {
 
             //Check if the permission is granted or not.
             if ( grantResults.length >0 &&grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
-                getActivity().finishActivity(CODE_DRAW_OVER_OTHER_APP_PERMISSION);
                 initializeFloatingBubble(notes);
+                getActivity().finishActivity(CODE_DRAW_OVER_OTHER_APP_PERMISSION);
 
             } else { //Permission is not available
                 Toast.makeText(getActivity().getApplicationContext(), "Draw over other app permission not available. Closing the application", Toast.LENGTH_SHORT).show();

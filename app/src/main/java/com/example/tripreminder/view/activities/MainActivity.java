@@ -221,8 +221,6 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
             else{
                 ((MainFragment)getSupportFragmentManager().getFragments().get(0) ).initializeFloatingBubble(new String[]{});
             }
-
-
         }
     }
 

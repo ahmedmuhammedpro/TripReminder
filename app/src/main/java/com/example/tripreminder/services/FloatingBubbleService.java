@@ -168,7 +168,6 @@ public class FloatingBubbleService extends Service {
 @Override
 public void onCreate() {
     super.onCreate();
-    Toast.makeText(getApplicationContext(), "test", Toast.LENGTH_SHORT).show();
 
     }
 @Override

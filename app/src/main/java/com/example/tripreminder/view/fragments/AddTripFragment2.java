@@ -102,7 +102,6 @@ public class AddTripFragment2 extends Fragment {
                   addTripViewModel.addTrip(trip).observe(AddTripFragment2.this, new Observer<Trip>() {
                       @Override
                       public void onChanged(Trip trip) {
-                          Toast.makeText(getActivity(), "Trip details:" + trip.getTripDate() + trip.getTripName(), Toast.LENGTH_SHORT).show();
                           workManagerViewModel.addTripToWorkManager(trip);
                           mInterface.isClicked();
                           /*MainFragment fmain = new MainFragment();

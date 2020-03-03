@@ -147,9 +147,10 @@ public class TripAlertActivity extends AppCompatActivity implements LocationComm
     }
 
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CODE_DRAW_OVER_OTHER_APP_PERMISSION) {
 
             //Check if the permission is granted or not.
@@ -181,11 +182,11 @@ public class TripAlertActivity extends AppCompatActivity implements LocationComm
 
     private void doStartButtonAction(){
 
+        initializeFloatingBubble();
         Intent mapIntent = new Intent(Intent.ACTION_VIEW);
         mapIntent.setData(Uri.parse(uriString));
-
         startActivity(mapIntent);
         //start bubble service
-        initializeFloatingBubble();
+
     }
 }
