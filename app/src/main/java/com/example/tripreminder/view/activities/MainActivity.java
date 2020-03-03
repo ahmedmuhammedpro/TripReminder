@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -16,6 +17,7 @@ import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.map_directions.TaskLoadedCallback;
 import com.example.tripreminder.utils.Constants;
+import com.example.tripreminder.utils.LocationCommunicator;
 import com.example.tripreminder.view.fragments.AddTripFragment1;
 import com.example.tripreminder.view.fragments.FeedbackFragment;
 import com.example.tripreminder.view.fragments.MainFragment;
@@ -27,7 +29,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements TaskLoadedCallback {
+public class MainActivity extends AppCompatActivity implements TaskLoadedCallback, LocationCommunicator {
 
     Trip currentTripForEdit;
     boolean isClicked;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     private Fragment selectedFragment;
     public static String userId = "";
     public static final String USER_ID_TAG = "userID";
+    public Trip trip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +188,16 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
             ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
 
         }
+    }
+
+    @Override
+    public void onLocationReceivedAction(double longitude, double latitude, String locationInfo) {
+
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW);
+        mapIntent.setData(Uri.parse("http://maps.google.com/maps?" +
+                "saddr=" + latitude + "," + longitude +
+                "&daddr=" + trip.getEndLocation().getLatitude() + "," + trip.getEndLocation().getLongitude()));
+        startActivity(mapIntent);
     }
 
     public interface SaveAndTripInterface {
