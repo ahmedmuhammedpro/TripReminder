@@ -68,7 +68,8 @@ public class AddTripFragment1 extends Fragment {
     private int mYear, mMonth, mDay, mHour, mMinute,tripType;
     private  Trip trip , mainTrip;
     ConstraintLayout roundTripeLayout ;
-    String dateString,dateStringRound;
+    String dateString,dateStringRound,timeAlone,dateAlone,timeAloneRound,dateAloneRound;
+    boolean isWrongTime = false;
     int countData=0;
     Bundle bundleMainFragment;
     public AddTripFragment1() {
@@ -168,7 +169,7 @@ public class AddTripFragment1 extends Fragment {
                                 setTime.setEnabled(true);
                                 monthOfYear += 1;
                                if(mainTrip == null) {
-                                   dateString = "" + dayOfMonth + "-" + monthOfYear + "-" + year;
+                                   dateAlone = "" + dayOfMonth + "-" + monthOfYear + "-" + year;
                                    countData += 1;
                                    if (countData >= 5 && !nameTxt.getText().toString().isEmpty()) {
                                        nextBtn.setEnabled(true);
@@ -183,10 +184,13 @@ public class AddTripFragment1 extends Fragment {
                 datePickerDialog.show();
             }
         });
+
         setTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Get Current Time
+
+                final Calendar chosenTime = Calendar.getInstance();
                 final Calendar c = Calendar.getInstance();
                 c.setTime(getCurrentTime());
                 mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -197,20 +201,30 @@ public class AddTripFragment1 extends Fragment {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
-                                   timeTxt.setText(hourOfDay + ":" + minute);
-                                if(mainTrip == null) {
-                                   dateString += "-" + hourOfDay + "-" + minute;
-                                   countData += 1;
-                                   if (countData >= 5 && !nameTxt.getText().toString().isEmpty()) {
-                                       nextBtn.setEnabled(true);
-                                   }
-                               }else{
-                                   String[] date = dateString.split("-");
-                                   dateString = date[0]+"-"+date[1]+"-"+date[2]+"-"+hourOfDay+"-"+minute;
-                               }
+                                chosenTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                chosenTime.set(Calendar.MINUTE, minute);
+                                if(c.getTimeInMillis() < chosenTime.getTimeInMillis()){
+                                    timeTxt.setText(hourOfDay + ":" + minute);
+                                    if(mainTrip == null) {
+                                        timeAlone = "-" + hourOfDay + "-" + minute;
+                                        countData += 1;
+                                        if (countData >= 5 && !nameTxt.getText().toString().isEmpty()) {
+                                            nextBtn.setEnabled(true);
+                                        }
+                                    }else{
+                                        String[] date = dateString.split("-");
+                                        dateString = date[0]+"-"+date[1]+"-"+date[2]+"-"+hourOfDay+"-"+minute;
+                                    }
+                                }else{
+                                    isWrongTime = true;
+                                    Toast.makeText(getContext(), "pick up time before now!", Toast.LENGTH_LONG).show();
+
+                                }
+
                             }
                         }, mHour, mMinute, true);
                 timePickerDialog.show();
+
             }
         });
 
@@ -240,6 +254,7 @@ public class AddTripFragment1 extends Fragment {
             public void onClick(View view) {
                 if (mainTrip == null) {
                     if (nextBtn.isEnabled()) {
+                        dateString = dateAlone + timeAlone;
                         trip.setTripStatus(Trip.UPCOMING);
                         trip.setTripName(nameTxt.getText().toString());
                         trip.setUserID(MainActivity.userId);
@@ -251,6 +266,8 @@ public class AddTripFragment1 extends Fragment {
                         FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(TRIP_Object, trip);
+                        if(dateAloneRound != null && timeAloneRound != null)
+                            dateStringRound = dateAloneRound+timeAloneRound;
                         bundle.putString("tripRound",dateStringRound);
                         ftwo.setArguments(bundle);
                         manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").addToBackStack(null).commit();
@@ -296,7 +313,7 @@ public class AddTripFragment1 extends Fragment {
                                 dateTxtRound.setText(date);
                                 monthOfYear += 1;
                                 if(mainTrip == null) {
-                                    dateStringRound = "" + dayOfMonth + "-" + monthOfYear + "-" + year;
+                                    dateAloneRound = "" + dayOfMonth + "-" + monthOfYear + "-" + year;
                                 }
                             }
                         }, mYear, mMonth, mDay);
@@ -309,19 +326,25 @@ public class AddTripFragment1 extends Fragment {
             @Override
             public void onClick(View view) {
                 // Get Current Time
+                final Calendar chosenTime = Calendar.getInstance();
                 final Calendar c = Calendar.getInstance();
                 c.setTime(getCurrentTime());
                 mHour = c.get(Calendar.HOUR_OF_DAY);
                 mMinute = c.get(Calendar.MINUTE);
+
                 // Launch Time Picker Dialog
                 TimePickerDialog timePickerDialog = new TimePickerDialog(AddTripFragment1.super.getContext(),
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
-                                timeTxtRound.setText(hourOfDay + ":" + minute);
-                                if(mainTrip == null) {
-                                    dateStringRound += "-" + hourOfDay + "-" + minute;
+                                chosenTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                chosenTime.set(Calendar.MINUTE, minute);
+                                if (c.getTimeInMillis() < chosenTime.getTimeInMillis()) {
+                                    timeTxtRound.setText(hourOfDay + ":" + minute);
+                                    if (mainTrip == null) {
+                                        timeAloneRound = "-" + hourOfDay + "-" + minute;
+                                    }
                                 }
                             }
                         }, mHour, mMinute, true);
@@ -335,12 +358,6 @@ public class AddTripFragment1 extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_trip_fragment1, container, false);
         setupView(view);
-        //return to fragment
-        if(savedInstanceState != null)
-        {
-            Trip myTrip = (Trip) savedInstanceState.getSerializable("tripFragment");
-            setUIWithTripData(myTrip);
-        }
 
         bundleMainFragment = getArguments();
       if (bundleMainFragment != null) {
@@ -413,16 +430,6 @@ private void setUIWithTripData (Trip myTrip){
         trip2.setChecked(true);
     }
 }
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-
-      if(mainTrip == null) {
-          outState.putSerializable("tripFragment", trip);
-      }else{
-          outState.putSerializable("tripFragment", mainTrip);
-      }
-        super.onSaveInstanceState(outState);
-    }
 
 
 }

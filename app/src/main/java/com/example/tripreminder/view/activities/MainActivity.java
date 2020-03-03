@@ -1,5 +1,6 @@
 package com.example.tripreminder.view.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -7,10 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.example.tripreminder.OfflineFragment;
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.map_directions.TaskLoadedCallback;
@@ -28,7 +33,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements TaskLoadedCallback {
 
-    boolean isClicked;
+    boolean isClicked,isAddFragment;
     int previousFragmentNumber = 2;
     private Fragment selectedFragment;
     public static String userId = "";
@@ -37,16 +42,18 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if(savedInstanceState != null){
-//            selectedFragment = getSupportFragmentManager().getFragment(savedInstanceState, "AddTripFragment");
-//
-//        }
 
         setContentView(R.layout.activity_main);
         userId = getIntent().getStringExtra(USER_ID_TAG);
         setupBottomBar();
     }
-
+    //for internet connection
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
     private void setupBottomBar() {
         MeowBottomNavigation bottomNavigation = findViewById(R.id.bottomNavigation);
 
@@ -76,8 +83,15 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                         ((MainFragment) selectedFragment).setmInterface(mInterface);
                         break;
                     case 3:
-                        selectedFragment = new AddTripFragment1();
-                        ((AddTripFragment1) selectedFragment).setmInterface(mInterface);
+                        if (!isNetworkAvailable()) {
+                            Toast.makeText(getApplicationContext(), "internet is offline!!", Toast.LENGTH_LONG).show();
+                            selectedFragment = new OfflineFragment();
+
+                        }else {
+                            selectedFragment = new AddTripFragment1();
+                            ((AddTripFragment1) selectedFragment).setmInterface(mInterface);
+                        }
+
                         break;
                     case 4:
                         selectedFragment = new ProfileFragment();
