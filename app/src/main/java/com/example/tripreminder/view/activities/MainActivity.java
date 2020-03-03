@@ -9,7 +9,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
@@ -31,6 +33,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements TaskLoadedCallback, LocationCommunicator {
 
+    private boolean isBackPressedTwice;
     Trip currentTripForEdit;
     boolean isClicked;
     boolean isEditClicked = true;
@@ -198,6 +201,26 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                 "saddr=" + latitude + "," + longitude +
                 "&daddr=" + trip.getEndLocation().getLatitude() + "," + trip.getEndLocation().getLongitude()));
         startActivity(mapIntent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isBackPressedTwice) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
+        isBackPressedTwice = true;
+        Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isBackPressedTwice = false;
+            }
+        }, 30000);
     }
 
     public interface SaveAndTripInterface {
