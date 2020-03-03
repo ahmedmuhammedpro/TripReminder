@@ -4,8 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_gredient_background"
+    android:background="@color/white"
+    android:theme="@style/AppThemeNoActionBar"
     tools:context=".view.fragments.ProfileFragment">
+
+    <FrameLayout
+        android:id="@+id/frameLayout3"
+        android:layout_width="400dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/button_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/signOutButton"
@@ -17,9 +32,8 @@
         android:text="@string/SignOutButton"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.648"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/frameLayout3"
+        app:layout_constraintStart_toStartOf="@+id/frameLayout3"
         app:layout_constraintTop_toBottomOf="@+id/emailTextViewProfile" />
 
     <TextView
@@ -27,21 +41,21 @@
         style="@android:style/Widget.Holo.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView10"
         app:layout_constraintStart_toEndOf="@+id/textView10"
         app:layout_constraintTop_toTopOf="@+id/textView10"
-        tools:text="preview" />
+        tools:text="Email Address" />
 
     <ImageView
         android:id="@+id/profileImageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/button_background"
+        android:layout_marginTop="200dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,20 +69,19 @@
         android:layout_marginTop="16dp"
         android:textColor="@color/white"
         android:textSize="24sp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@+id/profileImageView"
         app:layout_constraintStart_toStartOf="@+id/profileImageView"
         app:layout_constraintTop_toBottomOf="@+id/profileImageView"
-        tools:text="preview" />
+        tools:text="User Name" />
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
         android:layout_marginTop="48dp"
         android:background="@android:drawable/ic_dialog_email"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/signOutButton"
         app:layout_constraintTop_toTopOf="@+id/nameTextViewProfile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

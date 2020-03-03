@@ -283,7 +283,7 @@ public class AddTripFragment1 extends Fragment {
                 c.setTime(date);
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH+1);
 
                 // Launch Date Picker Dialog
                 DatePickerDialog datePickerDialog = new DatePickerDialog(AddTripFragment1.super.getContext(),
@@ -300,7 +300,7 @@ public class AddTripFragment1 extends Fragment {
                                 }
                             }
                         }, mYear, mMonth, mDay);
-                datePickerDialog.getDatePicker().setMinDate(date.getTime());
+                datePickerDialog.getDatePicker().setMinDate(date.getTime()+1);
                 datePickerDialog.show();
 
             }
