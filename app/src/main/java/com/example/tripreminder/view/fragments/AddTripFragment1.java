@@ -71,6 +71,8 @@ public class AddTripFragment1 extends Fragment {
     String dateString,dateStringRound,timeAlone,dateAlone,timeAloneRound,dateAloneRound;
     boolean isWrongTime = false;
     int countData=0;
+    Calendar chosenTime = Calendar.getInstance();
+    Calendar chosenTimeRound =Calendar.getInstance();
     Bundle bundleMainFragment;
     public AddTripFragment1() {
         // Required empty public constructor
@@ -117,7 +119,6 @@ public class AddTripFragment1 extends Fragment {
         dateTxtRound = view.findViewById(R.id.dateTxtRound);
         dateTxtRound.setKeyListener(null);
         timeTxtRound.setKeyListener(null);
-        setTime.setEnabled(false);
         nextBtn.setEnabled(false);
     }
     private void setupAdapters(){
@@ -164,6 +165,7 @@ public class AddTripFragment1 extends Fragment {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 c.set(year, monthOfYear, dayOfMonth);
+                                chosenTime.set(year,monthOfYear,dayOfMonth);
                                 String date = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
                                 dateTxt.setText(date);
                                 setTime.setEnabled(true);
@@ -190,42 +192,47 @@ public class AddTripFragment1 extends Fragment {
             public void onClick(View view) {
                 // Get Current Time
 
-                final Calendar chosenTime = Calendar.getInstance();
-                final Calendar c = Calendar.getInstance();
-                c.setTime(getCurrentTime());
-                mHour = c.get(Calendar.HOUR_OF_DAY);
-                mMinute = c.get(Calendar.MINUTE);
-                // Launch Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AddTripFragment1.super.getContext(),
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay,
-                                                  int minute) {
-                                chosenTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                chosenTime.set(Calendar.MINUTE, minute);
-                                if(c.getTimeInMillis() < chosenTime.getTimeInMillis()){
-                                    timeTxt.setText(hourOfDay + ":" + minute);
-                                    if(mainTrip == null) {
-                                        timeAlone = "-" + hourOfDay + "-" + minute;
-                                        countData += 1;
-                                        if (countData >= 5 && !nameTxt.getText().toString().isEmpty()) {
-                                            nextBtn.setEnabled(true);
+                if (dateTxt.getText().length() == 0) {
+                    Toast.makeText(getContext(), "you must set Date First", Toast.LENGTH_SHORT).show();
+                    setDate.performClick();
+                } else {
+                    final Calendar c = Calendar.getInstance();
+                    c.setTime(getCurrentTime());
+                    mHour = c.get(Calendar.HOUR_OF_DAY);
+                    mMinute = c.get(Calendar.MINUTE);
+                    // Launch Time Picker Dialog
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(AddTripFragment1.super.getContext(),
+                            new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker view, int hourOfDay,
+                                                      int minute) {
+                                    chosenTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                    chosenTime.set(Calendar.MINUTE, minute);
+                                    if (c.getTimeInMillis() < chosenTime.getTimeInMillis()) {
+                                        timeTxt.setText(hourOfDay + ":" + minute);
+                                        if (mainTrip == null) {
+                                            timeAlone = "-" + hourOfDay + "-" + minute;
+                                            countData += 1;
+                                            if (countData >= 5 && !nameTxt.getText().toString().isEmpty()) {
+                                                nextBtn.setEnabled(true);
+                                            }
+                                        } else {
+                                            String[] date = dateString.split("-");
+                                            dateString = date[0] + "-" + date[1] + "-" + date[2] + "-" + hourOfDay + "-" + minute;
                                         }
-                                    }else{
-                                        String[] date = dateString.split("-");
-                                        dateString = date[0]+"-"+date[1]+"-"+date[2]+"-"+hourOfDay+"-"+minute;
+                                    } else {
+                                        isWrongTime = true;
+                                        Toast.makeText(getContext(), "pick up time after now!", Toast.LENGTH_LONG).show();
+
                                     }
-                                }else{
-                                    isWrongTime = true;
-                                    Toast.makeText(getContext(), "pick up time before now!", Toast.LENGTH_LONG).show();
 
                                 }
+                            }, mHour, mMinute, true);
+                    timePickerDialog.show();
 
-                            }
-                        }, mHour, mMinute, true);
-                timePickerDialog.show();
-
+                }
             }
+
         });
 
         tripTypes.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
@@ -296,59 +303,63 @@ public class AddTripFragment1 extends Fragment {
             public void onClick(View view) {
                 // Get Current Date
                 final Calendar c = Calendar.getInstance();
-                Date date = getDate(dateString);
-                c.setTime(date);
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH+1);
-
-                // Launch Date Picker Dialog
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddTripFragment1.super.getContext(),
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                c.set(year, monthOfYear, dayOfMonth);
-                                String date = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
-                                dateTxtRound.setText(date);
-                                monthOfYear += 1;
-                                if(mainTrip == null) {
-                                    dateAloneRound = "" + dayOfMonth + "-" + monthOfYear + "-" + year;
+                if (dateAlone != null && timeAlone != null) {
+                    Date date = getDate(dateAlone+timeAlone);
+                    c.setTime(date);
+                    mYear = c.get(Calendar.YEAR);
+                    mMonth = c.get(Calendar.MONTH);
+                    mDay = c.get(Calendar.DAY_OF_MONTH );
+                    // Launch Date Picker Dialog
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(AddTripFragment1.super.getContext(),
+                            new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker view, int year,
+                                                      int monthOfYear, int dayOfMonth) {
+                                    c.set(year, monthOfYear, dayOfMonth);
+                                    chosenTimeRound.set(year, monthOfYear, dayOfMonth);
+                                    String date = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+                                    dateTxtRound.setText(date);
+                                    monthOfYear += 1;
+                                    if (mainTrip == null) {
+                                        dateAloneRound = "" + dayOfMonth + "-" + monthOfYear + "-" + year;
+                                    }
                                 }
-                            }
-                        }, mYear, mMonth, mDay);
-                datePickerDialog.getDatePicker().setMinDate(date.getTime()+1);
-                datePickerDialog.show();
+                            }, mYear, mMonth, mDay);
+                    datePickerDialog.getDatePicker().setMinDate(date.getTime() );
+                    datePickerDialog.show();
 
+                }else{
+                    Toast.makeText(getContext(), "you must set one way date first !", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         setTimeRound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get Current Time
-                final Calendar chosenTime = Calendar.getInstance();
-                final Calendar c = Calendar.getInstance();
-                c.setTime(getCurrentTime());
-                mHour = c.get(Calendar.HOUR_OF_DAY);
-                mMinute = c.get(Calendar.MINUTE);
-
-                // Launch Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AddTripFragment1.super.getContext(),
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay,
-                                                  int minute) {
-                                chosenTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                chosenTime.set(Calendar.MINUTE, minute);
-                                if (c.getTimeInMillis() < chosenTime.getTimeInMillis()) {
-                                    timeTxtRound.setText(hourOfDay + ":" + minute);
-                                    if (mainTrip == null) {
-                                        timeAloneRound = "-" + hourOfDay + "-" + minute;
+                if (dateTxtRound.getText().length() == 0) {
+                    Toast.makeText(getContext(), "you must set Date First", Toast.LENGTH_SHORT).show();
+                    setDateRound.performClick();
+                } else {
+                    // Launch Time Picker Dialog
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(AddTripFragment1.super.getContext(),
+                            new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker view, int hourOfDay,
+                                                      int minute) {
+                                    chosenTimeRound.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                                     chosenTimeRound.set(Calendar.MINUTE,minute);
+                                    if (chosenTime.getTimeInMillis() < chosenTimeRound.getTimeInMillis()) {
+                                        timeTxtRound.setText(hourOfDay + ":" + minute);
+                                        if (mainTrip == null) {
+                                            timeAloneRound = "-" + hourOfDay + "-" + minute;
+                                        }
+                                    }else{
+                                        Toast.makeText(getContext(), "you must set time after one way trip time!", Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                            }
-                        }, mHour, mMinute, true);
-                timePickerDialog.show();
+                            }, chosenTime.get(Calendar.HOUR_OF_DAY),chosenTime.get(Calendar.MINUTE), true);
+                    timePickerDialog.show();
+                }
             }
         });
     }
@@ -402,7 +413,7 @@ public class AddTripFragment1 extends Fragment {
   private Date  getDate(String dateString){
       String[] strings = dateString.split("-");
       int day = Integer.parseInt(strings[0]);
-      int month = Integer.parseInt(strings[1]);
+      int month = Integer.parseInt(strings[1])-1;
       int year = Integer.parseInt(strings[2]);
       Calendar c = Calendar.getInstance();
       c.set(year, month, day);
