@@ -78,13 +78,17 @@ public class TripAlertActivity extends AppCompatActivity {
                                 Uri.parse("package:" + this.getPackageName()));
                         startActivityForResult(permissionIntent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
                     } else {
-                        String s = "http://maps.google.com/dir/" +
+                        /*String s = "http://maps.google.com/dir/" +
                                 "&sadd=" + trip.getStartLocation().getLatitude() + "," +
                                 trip.getStartLocation().getLongitude() +
                                 "&daddr=" + trip.getEndLocation().getLatitude() + "," +
                                 trip.getEndLocation().getLongitude();
 
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(s));
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(s));*/
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW);
+                        mapIntent.setData(Uri.parse("http://maps.google.com/maps?" +
+                                "saddr=" + trip.getStartLocation().getLatitude() + "," + trip.getStartLocation().getLongitude() +
+                                "&daddr=" + trip.getEndLocation().getLatitude() + "," + trip.getEndLocation().getLongitude()));
                         startActivity(mapIntent);
                         //start bubble service
                         initializeFloatingBubble();
