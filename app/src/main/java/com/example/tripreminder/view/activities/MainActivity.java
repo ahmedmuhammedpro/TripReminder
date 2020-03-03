@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements TaskLoadedCallback, LocationCommunicator {
 
+    private boolean isBackPressedTwice;
     Trip currentTripForEdit;
     boolean isClicked;
     boolean isEditClicked = true;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     public static String userId = "";
     public static final String USER_ID_TAG = "userID";
     public Trip trip;
+    private String[] notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
         bottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.ic_event_24px));
         bottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.ic_add_location_24px));
         bottomNavigation.add(new MeowBottomNavigation.Model(4, R.drawable.ic_person_outline_24px));
-        bottomNavigation.add(new MeowBottomNavigation.Model(5, R.drawable.ic_help_outline_24px));
         bottomNavigation.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
@@ -112,9 +114,7 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                     case 4:
                         selectedFragment = new ProfileFragment();
                         break;
-                    case 5:
-                        selectedFragment = new FeedbackFragment();
-                        break;
+
                 }
                 if (item.getId() > previousFragmentNumber) {
                     getSupportFragmentManager().beginTransaction()
@@ -212,6 +212,38 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                 "saddr=" + latitude + "," + longitude +
                 "&daddr=" + trip.getEndLocation().getLatitude() + "," + trip.getEndLocation().getLongitude()));
         startActivity(mapIntent);
+        if (getSupportFragmentManager().getFragments().get(0) instanceof  MainFragment){
+            if(trip.getNotes()!=null) {
+                notes = new String[trip.getNotes().size()];
+                trip.getNotes().toArray(notes);
+                ((MainFragment)getSupportFragmentManager().getFragments().get(0) ).initializeFloatingBubble(notes);
+            }
+            else{
+                ((MainFragment)getSupportFragmentManager().getFragments().get(0) ).initializeFloatingBubble(new String[]{});
+            }
+
+
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isBackPressedTwice) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
+        isBackPressedTwice = true;
+        Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isBackPressedTwice = false;
+            }
+        }, 30000);
     }
 
     public interface SaveAndTripInterface {

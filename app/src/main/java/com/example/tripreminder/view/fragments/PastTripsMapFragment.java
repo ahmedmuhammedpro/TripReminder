@@ -2,6 +2,7 @@ package com.example.tripreminder.view.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,9 +59,11 @@ public class PastTripsMapFragment extends Fragment implements OnMapReadyCallback
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_past_trips_map, container, false);
         pastTripsViewModel = ViewModelProviders.of(this).get(PastTripsViewModel.class);
+
         setup();
         return view;
     }
+
 
     private void setup(){
 

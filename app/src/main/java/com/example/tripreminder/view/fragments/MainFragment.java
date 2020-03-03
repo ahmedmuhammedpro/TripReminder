@@ -268,7 +268,7 @@ public class MainFragment extends Fragment {
         itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 
-    private void initializeFloatingBubble(String[] notes) {
+    public void initializeFloatingBubble(String[] notes) {
         Log.i("bubble","start service ");
         Intent intentBubble = new Intent(getActivity(), FloatingBubbleService.class);
         intentBubble.putExtra(Constants.TRIP_NOTES_KEY, notes);
