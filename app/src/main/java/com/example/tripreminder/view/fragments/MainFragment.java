@@ -30,6 +30,8 @@ import com.example.tripreminder.R;
 import com.example.tripreminder.model.Firestore.TripFirestoreHandler;
 import com.example.tripreminder.services.FloatingBubbleService;
 import com.example.tripreminder.utils.Constants;
+import com.example.tripreminder.utils.LocationLocator;
+import com.example.tripreminder.utils.LocationPermissions;
 import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.view.adapters.MainAdapter;
 import com.example.tripreminder.model.Entities.Trip;
@@ -63,7 +65,7 @@ public class MainFragment extends Fragment {
     private boolean isEditActionClicked;
     private String[] notes;
 
-    private MainActivity.SaveAndTripInterface mInterface;
+    private MainActivity.EditInterface mInterface;
 
     private RecyclerItemInterface itemInterface = (view, position) -> {
         Trip trip = tripList.get(position);
@@ -81,15 +83,30 @@ public class MainFragment extends Fragment {
                     Uri.parse("package:" + getActivity().getPackageName()));
             startActivityForResult(permissionIntent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
         } else {
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW);
-            mapIntent.setData(Uri.parse("http://maps.google.com/maps?" +
-                    "saddr=" + trip.getStartLocation().getLatitude() + "," + trip.getStartLocation().getLongitude() +
-                    "&daddr=" + trip.getEndLocation().getLatitude() + "," + trip.getEndLocation().getLongitude()));
-            startActivity(mapIntent);
+
+            if (LocationPermissions.getInstance(getActivity()).checkPermissions()) {
+                if (LocationPermissions.getInstance(getActivity()).isLocationEnabled()) {
+
+                    LocationLocator.getInstance(getActivity()).getLastLocation();
+                }
+                else {
+                    Toast.makeText(getActivity(), "Please Turn on location", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            }
+            else {
+                LocationPermissions.getInstance(getActivity()).requestPermissions();
+            }
+
+
+            ((MainActivity)getActivity()).trip = trip;
             //start bubble service
-            notes = new String[trip.getNotes().size()];
-            trip.getNotes().toArray(notes);
-            initializeFloatingBubble(notes);
+            if(trip.getNotes()!=null) {
+                notes = new String[trip.getNotes().size()];
+                trip.getNotes().toArray(notes);
+                initializeFloatingBubble(notes);
+            }
         }
 
     };
@@ -97,7 +114,7 @@ public class MainFragment extends Fragment {
     public MainFragment() {
     }
 
-    public void setmInterface(MainActivity.SaveAndTripInterface mInterface) {
+    public void setmInterface(MainActivity.EditInterface mInterface) {
         this.mInterface = mInterface;
     }
 
@@ -182,6 +199,7 @@ public class MainFragment extends Fragment {
                             viewModel.deleteTrip(item.getTripId());
                             workManagerViewModel.deleteRequest(item.getTripId());
                             isDeleteActionClicked = false;
+
                         }
                     }
 
@@ -216,14 +234,7 @@ public class MainFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         isEditActionClicked = true;
-                        AddTripFragment1 fone = new AddTripFragment1();
-                        fone.setmInterface(mInterface);
-                        FragmentManager manager = MainFragment.super.getActivity().getSupportFragmentManager();
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(TRIP_Object_FROM_MAIN, item);
-                        fone.setArguments(bundle);
-                        manager.beginTransaction()
-                                .replace(R.id.container, fone).commit();
+                        mInterface.isClick(item);
                     }
                 });
 

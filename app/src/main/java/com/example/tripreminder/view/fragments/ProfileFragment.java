@@ -29,7 +29,8 @@ public class ProfileFragment extends Fragment {
     ImageView profileImageView;
     TextView emailTextView,nameTextView;
     Button signOutButton;
-
+    String email="",username="",imageUrl="";
+    boolean loggedIn=false;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -41,10 +42,7 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        String email = getActivity().getIntent().getStringExtra(Constants.EMAIL_KEY);
-        String username = getActivity().getIntent().getStringExtra(Constants.USERNAME_KEY);
-
-        String imageURL = getActivity().getIntent().getStringExtra(Constants.IMAGE_URL);
+        readFromSharedPreferences();
 
         emailTextView = view.findViewById(R.id.emailTextViewProfile);
         nameTextView = view.findViewById(R.id.nameTextViewProfile);
@@ -54,9 +52,9 @@ public class ProfileFragment extends Fragment {
         nameTextView.setText(username);
         profileImageView = view.findViewById(R.id.profileImageView);
 
-        if(profileImageView!=null) {
+        if(imageUrl!=null &&!imageUrl.equals("") && !imageUrl.equals("empty")) {
             Picasso.get()
-                    .load(imageURL)
+                    .load(imageUrl)
                     .into(profileImageView);
         }
 
@@ -81,6 +79,16 @@ public class ProfileFragment extends Fragment {
         editor.commit();
         Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
         startActivity(intent);
+    }
+
+    private void readFromSharedPreferences(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        loggedIn = sharedPreferences.getBoolean(Constants.lOGGED_IN_KEY,false);
+        if(loggedIn) {
+            email = sharedPreferences.getString(Constants.EMAIL_KEY, "empty");
+            imageUrl = sharedPreferences.getString(Constants.IMAGE_URL, "empty");
+            username = sharedPreferences.getString(Constants.USERNAME_KEY,"empty");
+        }
     }
 
 }

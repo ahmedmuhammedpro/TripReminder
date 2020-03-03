@@ -11,14 +11,15 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activities.AuthenticationActivity"></activity>
-        <activity android:name=".view.activities.SplashScreenActivity">
+        <activity android:name=".view.activities.AuthenticationActivity"  android:screenOrientation="portrait"></activity>
+        <activity android:name=".view.activities.SplashScreenActivity"  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,9 +34,10 @@
         <activity
             android:name=".view.activities.TripAlertActivity"
             android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
             android:theme="@style/TripAlertDialog" />
-        <activity android:name=".view.activities.AddTripActivity" />
-        <activity android:name=".view.activities.MainActivity"></activity>
+        <activity android:name=".view.activities.AddTripActivity"  android:screenOrientation="portrait"/>
+        <activity android:name=".view.activities.MainActivity" android:screenOrientation="portrait"></activity>
         <service
             android:name=".services.FloatingBubbleService"
             android:enabled="true"
