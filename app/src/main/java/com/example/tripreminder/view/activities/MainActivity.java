@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     public static String userId = "";
     public static final String USER_ID_TAG = "userID";
     public Trip trip;
+    private String[] notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
         bottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.ic_event_24px));
         bottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.ic_add_location_24px));
         bottomNavigation.add(new MeowBottomNavigation.Model(4, R.drawable.ic_person_outline_24px));
-        bottomNavigation.add(new MeowBottomNavigation.Model(5, R.drawable.ic_help_outline_24px));
         bottomNavigation.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
@@ -114,9 +114,7 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                     case 4:
                         selectedFragment = new ProfileFragment();
                         break;
-                    case 5:
-                        selectedFragment = new FeedbackFragment();
-                        break;
+
                 }
                 if (item.getId() > previousFragmentNumber) {
                     getSupportFragmentManager().beginTransaction()
@@ -214,6 +212,18 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                 "saddr=" + latitude + "," + longitude +
                 "&daddr=" + trip.getEndLocation().getLatitude() + "," + trip.getEndLocation().getLongitude()));
         startActivity(mapIntent);
+        if (getSupportFragmentManager().getFragments().get(0) instanceof  MainFragment){
+            if(trip.getNotes()!=null) {
+                notes = new String[trip.getNotes().size()];
+                trip.getNotes().toArray(notes);
+                ((MainFragment)getSupportFragmentManager().getFragments().get(0) ).initializeFloatingBubble(notes);
+            }
+            else{
+                ((MainFragment)getSupportFragmentManager().getFragments().get(0) ).initializeFloatingBubble(new String[]{});
+            }
+
+
+        }
     }
 
     @Override
