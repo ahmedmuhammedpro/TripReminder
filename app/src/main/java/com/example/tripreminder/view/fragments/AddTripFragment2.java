@@ -63,6 +63,7 @@ public class AddTripFragment2 extends Fragment {
         addNoteBtn = v.findViewById(R.id.addNoteBtn);
         prevBtn = v.findViewById(R.id.prevBtn);
         noteLayout = v.findViewById(R.id.noteTxtLayout);
+        prevBtn.setVisibility(View.GONE);
         addNoteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,14 +132,7 @@ public class AddTripFragment2 extends Fragment {
                         .replace(R.id.container, fmain).commit();
             }
         });
-        prevBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddTripFragment1 fone = new AddTripFragment1();
-                FragmentManager manager = AddTripFragment2.super.getActivity().getSupportFragmentManager();
-                manager.beginTransaction().replace(R.id.container, fone, "addTripFragment1").commit();
-            }
-        });
+
     }
 
     private Vector<String> addChipsIntoVector(ChipGroup allNotes) {

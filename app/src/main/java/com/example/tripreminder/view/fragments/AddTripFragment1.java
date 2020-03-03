@@ -114,6 +114,8 @@ public class AddTripFragment1 extends Fragment {
         setTimeRound = view.findViewById(R.id.timeBtnRound);
         timeTxtRound = view.findViewById(R.id.timeTxtRound);
         dateTxtRound = view.findViewById(R.id.dateTxtRound);
+        dateTxtRound.setKeyListener(null);
+        timeTxtRound.setKeyListener(null);
         setTime.setEnabled(false);
         nextBtn.setEnabled(false);
     }
@@ -251,7 +253,7 @@ public class AddTripFragment1 extends Fragment {
                         bundle.putSerializable(TRIP_Object, trip);
                         bundle.putString("tripRound",dateStringRound);
                         ftwo.setArguments(bundle);
-                        manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
+                        manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").addToBackStack(null).commit();
                     }
                 }else{
                     AddTripFragment2 ftwo = new AddTripFragment2();
@@ -262,13 +264,13 @@ public class AddTripFragment1 extends Fragment {
                     mainTrip.setTripStatus(Trip.UPCOMING);
                     mainTrip.setTripName(nameTxt.getText().toString());
                     mainTrip.setTripDate(dateString);
-                    //mainTrip.setTripType(tripType);
+                    mainTrip.setTripType(mainTrip.getTripType());
                     mainTrip.getStartLocation().setLocationName(startPointTxt.getText().toString());
                     mainTrip.getEndLocation().setLocationName(endPointTxt.getText().toString());
                     bundle.putSerializable(TRIP_Object, mainTrip);
                     bundle.putString("tripRound",dateStringRound);
                     ftwo.setArguments(bundle);
-                    manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
+                    manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").addToBackStack(null).commit();
                 }
             }
         });
@@ -334,7 +336,11 @@ public class AddTripFragment1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_trip_fragment1, container, false);
         setupView(view);
         //return to fragment
-
+        if(savedInstanceState != null)
+        {
+            Trip myTrip = (Trip) savedInstanceState.getSerializable("tripFragment");
+            setUIWithTripData(myTrip);
+        }
 
         bundleMainFragment = getArguments();
       if (bundleMainFragment != null) {
@@ -344,10 +350,8 @@ public class AddTripFragment1 extends Fragment {
               tripTypes.setEnabled(false);
               tripTypes.setActivated(false);
               tripTypes.setOnKeyListener(null);
-//                  trip1.setEnabled(false);
-//                  trip2.setEnabled(false);
-//                  trip2.setEnabled(false);
-//                  trip1.setEnabled(false);
+              trip1.setKeyListener(null);
+              trip2.setKeyListener(null);
               nextBtn.setEnabled(true);
           }
       }
@@ -420,13 +424,5 @@ private void setUIWithTripData (Trip myTrip){
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        if(savedInstanceState != null)
-        {
-            Trip myTrip = (Trip) savedInstanceState.getSerializable("tripFragment");
-            setUIWithTripData(myTrip);
-        }
-        super.onActivityCreated(savedInstanceState);
-    }
+
 }

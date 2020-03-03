@@ -199,6 +199,7 @@ public class MainFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
                 final int position = viewHolder.getAdapterPosition();
+
                 final Trip item = adapter.getData().get(position);
              Log.i("main","type:"+item.getTripType());
                 Snackbar snackbar = Snackbar
@@ -223,13 +224,17 @@ public class MainFragment extends Fragment {
                         super.onDismissed(transientBottomBar, event);
                         if (!isEditActionClicked) {
                             isEditActionClicked = false;
-                            //clearView(recyclerView, viewHolder);
+
+
                         }
                     }
 
                     @Override
                     public void onShown(Snackbar transientBottomBar) {
                         super.onShown(transientBottomBar);
+                        adapter.removeItem(position);
+                        adapter.restoreItem(item, position);
+                        recyclerView.scrollToPosition(position);
                     }
                 });
 
