@@ -77,7 +77,7 @@ public class FloatingBubbleService extends Service {
               box.setText(note);
               box.setPadding(5,5,5,5);
               //box.setBackground(getDrawable( R.drawable.custom_rounded_view_light));
-              box.setTextSize(14);
+              box.setTextSize(18);
               expandedView.addView(box);
           }
       }else{
@@ -96,15 +96,6 @@ public class FloatingBubbleService extends Service {
             }
         });
 
-        // set the image click
-        ImageView floatingHeadImage = (ImageView) floatingBubbleView.findViewById(R.id.floating_head_image);
-        floatingHeadImage.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                collapsedView.setVisibility(View.GONE);
-                expandedView.setVisibility(View.VISIBLE);
-            }
-        });
         //expand view
         //Set the close button
         ImageView closeButtonExpand = (ImageView) floatingBubbleView.findViewById(R.id.close_button_expand);
@@ -124,6 +115,12 @@ public class FloatingBubbleService extends Service {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 stopSelf();
+            }
+        });
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
         layout.setOnTouchListener(new View.OnTouchListener() {

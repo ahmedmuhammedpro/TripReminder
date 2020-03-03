@@ -35,7 +35,7 @@ abstract public class SwipeToEditCallBack extends ItemTouchHelper.Callback {
     public SwipeToEditCallBack(Context context) {
         mContext = context;
         mBackground = new ColorDrawable();
-        backgroundColor = Color.parseColor("#ffffff");
+        backgroundColor = Color.parseColor("#95031AF0");
         mClearPaint = new Paint();
         mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.ADD));
         editDrawable = ContextCompat.getDrawable(mContext, R.drawable.ic_rename);

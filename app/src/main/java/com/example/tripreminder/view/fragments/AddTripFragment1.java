@@ -6,6 +6,8 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -112,6 +114,9 @@ public class AddTripFragment1 extends Fragment {
         setTimeRound = view.findViewById(R.id.timeBtnRound);
         timeTxtRound = view.findViewById(R.id.timeTxtRound);
         dateTxtRound = view.findViewById(R.id.dateTxtRound);
+        dateTxtRound.setKeyListener(null);
+        timeTxtRound.setKeyListener(null);
+        setTime.setEnabled(false);
         nextBtn.setEnabled(false);
     }
     private void setupAdapters(){
@@ -160,6 +165,7 @@ public class AddTripFragment1 extends Fragment {
                                 c.set(year, monthOfYear, dayOfMonth);
                                 String date = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
                                 dateTxt.setText(date);
+                                setTime.setEnabled(true);
                                 monthOfYear += 1;
                                if(mainTrip == null) {
                                    dateString = "" + dayOfMonth + "-" + monthOfYear + "-" + year;
@@ -247,7 +253,7 @@ public class AddTripFragment1 extends Fragment {
                         bundle.putSerializable(TRIP_Object, trip);
                         bundle.putString("tripRound",dateStringRound);
                         ftwo.setArguments(bundle);
-                        manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
+                        manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").addToBackStack(null).commit();
                     }
                 }else{
                     AddTripFragment2 ftwo = new AddTripFragment2();
@@ -258,13 +264,13 @@ public class AddTripFragment1 extends Fragment {
                     mainTrip.setTripStatus(Trip.UPCOMING);
                     mainTrip.setTripName(nameTxt.getText().toString());
                     mainTrip.setTripDate(dateString);
-                    //mainTrip.setTripType(tripType);
+                    mainTrip.setTripType(mainTrip.getTripType());
                     mainTrip.getStartLocation().setLocationName(startPointTxt.getText().toString());
                     mainTrip.getEndLocation().setLocationName(endPointTxt.getText().toString());
                     bundle.putSerializable(TRIP_Object, mainTrip);
                     bundle.putString("tripRound",dateStringRound);
                     ftwo.setArguments(bundle);
-                    manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").commit();
+                    manager.beginTransaction().replace(R.id.container, ftwo, "addTripFragment2").addToBackStack(null).commit();
                 }
             }
         });
@@ -277,7 +283,7 @@ public class AddTripFragment1 extends Fragment {
                 c.setTime(date);
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH+1);
 
                 // Launch Date Picker Dialog
                 DatePickerDialog datePickerDialog = new DatePickerDialog(AddTripFragment1.super.getContext(),
@@ -294,7 +300,7 @@ public class AddTripFragment1 extends Fragment {
                                 }
                             }
                         }, mYear, mMonth, mDay);
-                datePickerDialog.getDatePicker().setMinDate(date.getTime());
+                datePickerDialog.getDatePicker().setMinDate(date.getTime()+1);
                 datePickerDialog.show();
 
             }
@@ -329,25 +335,23 @@ public class AddTripFragment1 extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_trip_fragment1, container, false);
         setupView(view);
+        //return to fragment
+        if(savedInstanceState != null)
+        {
+            Trip myTrip = (Trip) savedInstanceState.getSerializable("tripFragment");
+            setUIWithTripData(myTrip);
+        }
+
         bundleMainFragment = getArguments();
       if (bundleMainFragment != null) {
           mainTrip = (Trip) bundleMainFragment.getSerializable(MainFragment.TRIP_Object_FROM_MAIN);
-          if (trip != null) {
-              nameTxt.setText(mainTrip.getTripName());
-              startPointTxt.setText(mainTrip.getStartLocation().getLocationName());
-              endPointTxt.setText(mainTrip.getEndLocation().getLocationName());
-              dateTxt.setText(DateFormat.getDateInstance(DateFormat.FULL).format(getDate(mainTrip.getTripDate())));
-              timeTxt.setText(getTime(mainTrip.getTripDate()));
-              dateString = mainTrip.getTripDate();
-             // tripTypes.setEnabled(false);
+          if (mainTrip != null) {
+             setUIWithTripData(mainTrip);
+              tripTypes.setEnabled(false);
               tripTypes.setActivated(false);
-              int type = mainTrip.getTripType() ;
-              Log.i("type","type int:"+type);
-              if(type == 1){
-                  trip1.setChecked(true);
-              }else if(type == 2){
-                  trip2.setChecked(true);
-              }
+              tripTypes.setOnKeyListener(null);
+              trip1.setKeyListener(null);
+              trip2.setKeyListener(null);
               nextBtn.setEnabled(true);
           }
       }
@@ -395,5 +399,30 @@ public class AddTripFragment1 extends Fragment {
         return hour+":"+minute;
 
     }
+private void setUIWithTripData (Trip myTrip){
+    nameTxt.setText(myTrip.getTripName());
+    startPointTxt.setText(myTrip.getStartLocation().getLocationName());
+    endPointTxt.setText(myTrip.getEndLocation().getLocationName());
+    dateTxt.setText(DateFormat.getDateInstance(DateFormat.FULL).format(getDate(myTrip.getTripDate())));
+    timeTxt.setText(getTime(myTrip.getTripDate()));
+    dateString = myTrip.getTripDate();
+    int type = myTrip.getTripType() ;
+    if(type == 1){
+        trip1.setChecked(true);
+    }else if(type == 2){
+        trip2.setChecked(true);
+    }
+}
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+
+      if(mainTrip == null) {
+          outState.putSerializable("tripFragment", trip);
+      }else{
+          outState.putSerializable("tripFragment", mainTrip);
+      }
+        super.onSaveInstanceState(outState);
+    }
+
 
 }

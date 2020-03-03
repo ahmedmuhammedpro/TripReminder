@@ -32,10 +32,10 @@ abstract public class SwipeToDeleteCallBack extends ItemTouchHelper.Callback {
     public SwipeToDeleteCallBack(Context context) {
         mContext = context;
         mBackground = new ColorDrawable();
-        backgroundColor = Color.parseColor("#b80f0a");
+        backgroundColor = Color.parseColor("#f05545");
         mClearPaint = new Paint();
         mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        deleteDrawable = ContextCompat.getDrawable(mContext, R.drawable.quantum_ic_clear_grey600_24);
+        deleteDrawable = ContextCompat.getDrawable(mContext, R.drawable.ic_delete_forever_black_24dp);
         intrinsicWidth = deleteDrawable.getIntrinsicWidth();
         intrinsicHeight = deleteDrawable.getIntrinsicHeight();
 

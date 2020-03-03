@@ -40,6 +40,11 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        if(savedInstanceState != null){
+//            selectedFragment = getSupportFragmentManager().getFragment(savedInstanceState, "AddTripFragment");
+//
+//        }
+
         setContentView(R.layout.activity_main);
         userId = getIntent().getStringExtra(USER_ID_TAG);
         setupBottomBar();
