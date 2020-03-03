@@ -37,6 +37,7 @@ import java.util.Vector;
  */
 public class AddTripFragment2 extends Fragment {
 
+    MainActivity.SaveAndTripInterface mInterface;
     ChipGroup allNotes;
     Button addNoteBtn, cancelTripBtn, prevBtn;
     TextInputEditText noteTxt;
@@ -47,6 +48,10 @@ public class AddTripFragment2 extends Fragment {
     String SAVE_CHANGES = "save changes";
     public AddTripFragment2() {
         // Required empty public constructor
+    }
+
+    public void setmInterface(MainActivity.SaveAndTripInterface mInterface) {
+        this.mInterface = mInterface;
     }
 
     private void setup(View v) {
@@ -98,10 +103,11 @@ public class AddTripFragment2 extends Fragment {
                       public void onChanged(Trip trip) {
                           Toast.makeText(getActivity(), "Trip details:" + trip.getTripDate() + trip.getTripName(), Toast.LENGTH_SHORT).show();
                           workManagerViewModel.addTripToWorkManager(trip);
-                          MainFragment fmain = new MainFragment();
-                          FragmentManager manager = AddTripFragment2.super.getActivity().getSupportFragmentManager();
+                          mInterface.isClicked();
+                          /*MainFragment fmain = new MainFragment();
+                          FragmentManager manager = getActivity().getSupportFragmentManager();
                           manager.beginTransaction()
-                                  .replace(R.id.container, fmain).commit();
+                                  .replace(R.id.container, fmain).commit();*/
                       }
                   });
               }else{
@@ -110,6 +116,7 @@ public class AddTripFragment2 extends Fragment {
                       public void onChanged(Trip trip) {
                           trip.setUserID(MainActivity.userId);
                           workManagerViewModel.editRequest(trip);
+                          mInterface.isClicked();
                       }
                   });
               }
