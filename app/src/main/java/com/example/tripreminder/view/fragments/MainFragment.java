@@ -62,8 +62,12 @@ public class MainFragment extends Fragment {
     private boolean isDeleteActionClicked;
     private boolean isEditActionClicked;
     private String[] notes;
+
+    private MainActivity.SaveAndTripInterface mInterface;
+
     private RecyclerItemInterface itemInterface = (view, position) -> {
         Trip trip = tripList.get(position);
+        trip.setUserID(MainActivity.userId);
         trip.setTripDate(getCurrentDate());
         trip.setTripStatus(Trip.DONE);
         viewModel.updateTrip(trip);
@@ -91,6 +95,10 @@ public class MainFragment extends Fragment {
     };
 
     public MainFragment() {
+    }
+
+    public void setmInterface(MainActivity.SaveAndTripInterface mInterface) {
+        this.mInterface = mInterface;
     }
 
     @Override
@@ -209,6 +217,7 @@ public class MainFragment extends Fragment {
                     public void onClick(View view) {
                         isEditActionClicked = true;
                         AddTripFragment1 fone = new AddTripFragment1();
+                        fone.setmInterface(mInterface);
                         FragmentManager manager = MainFragment.super.getActivity().getSupportFragmentManager();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(TRIP_Object_FROM_MAIN, item);

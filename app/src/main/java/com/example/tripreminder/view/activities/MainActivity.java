@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                         break;
                     case 2:
                         selectedFragment = new MainFragment();
+                        ((MainFragment) selectedFragment).setmInterface(mInterface);
                         break;
                     case 3:
                         selectedFragment = new AddTripFragment1();

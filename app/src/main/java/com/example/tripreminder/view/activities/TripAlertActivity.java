@@ -39,6 +39,7 @@ public class TripAlertActivity extends AppCompatActivity {
         intent = getIntent();
 
         Trip trip = (Trip) intent.getExtras().getSerializable(Constants.TRIP_OB_KEY);
+        trip.setUserID(MainActivity.userId);
         if (trip.getNotes() != null) {
             String[] notesArray = new String[trip.getNotes().size()];
             notes =  trip.getNotes().toArray(notesArray);
@@ -66,7 +67,6 @@ public class TripAlertActivity extends AppCompatActivity {
                 getResources().getString(R.string.dialog_start_button), (dialog, which) -> {
 
                     // Update trip to be done
-                    trip.setUserID(MainActivity.userId);
                     mainViewModel.updateTripStatus(trip.getTripId(), Trip.DONE);
                     tripNotification.cancelNotification();
 
@@ -96,7 +96,6 @@ public class TripAlertActivity extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
                 getResources().getString(R.string.dialog_cancel_button), (dialog, which) -> {
                     tripNotification.cancelNotification();
-                    trip.setUserID(MainActivity.userId);
                     mainViewModel.updateTripStatus(trip.getTripId(), Trip.CANCELED);
                     alertDialog.dismiss();
                     finish();
