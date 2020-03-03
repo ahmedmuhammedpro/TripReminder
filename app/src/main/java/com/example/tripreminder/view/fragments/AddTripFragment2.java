@@ -169,7 +169,8 @@ public class AddTripFragment2 extends Fragment {
         return view;
     }
 
-  private void editSetup (){
+
+    private void editSetup (){
       Bundle bundle = getArguments();
       trip = (Trip) bundle.getSerializable(AddTripFragment1.TRIP_Object);
       String round = bundle.getString("tripRound");
