@@ -21,4 +21,6 @@ public interface MainViewModelInterface {
     MutableLiveData<Vector<String>> getTripNotes(String tripId);
 
     LiveData<List<Trip>> getpastTrips(String userId);
+
+    void setBottomNavigationSelectedIcon();
 }

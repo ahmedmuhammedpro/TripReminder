@@ -41,7 +41,6 @@
             android:paddingStart="@dimen/padding_16dp"
             android:paddingEnd="@dimen/padding_16dp"
             android:paddingBottom="@dimen/padding_8dp"
-            android:text="  upcoming"
             android:textColor="@color/quantum_grey500"
             android:textSize="12sp"
             android:textStyle="normal"

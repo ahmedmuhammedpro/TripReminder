@@ -79,11 +79,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         int status = tripList.get(position).getTripStatus();
 
         if (status == Trip.UPCOMING) {
-            holder.tripStatusTV.setText("UPCOMING");
+            holder.tripStatusTV.setText("  upcoming");
         } else if (status == Trip.DONE) {
-            holder.tripStatusTV.setText("DONE");
+            holder.tripStatusTV.setText("  done");
+            holder.startTripButton.setVisibility(View.INVISIBLE);
         } else if (status == Trip.CANCELED) {
-            holder.tripStatusTV.setText("CANCELED");
+            holder.tripStatusTV.setText("  canceled");
+            holder.startTripButton.setVisibility(View.INVISIBLE);
         }
 
         holder.tripDateTV.setText(getDate(tripList.get(position).getTripDate()));
@@ -95,8 +97,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                 holder.notesLayout.setVisibility(View.VISIBLE);
                 holder.tripNotesBtn.setBackgroundResource(R.drawable.ic_arrow_upward_black_24dp);
                 allNotes = tripList.get(position).getNotes();
+
                 Log.i("adapter2","trip type"+tripList.get(position).getTripType());
-                if (!isAdded) {
+                if (holder.notesGroup.getChildCount() == 0) {
                     if (allNotes != null && allNotes.size() != 0) {
                         for (String txt : allNotes) {
                             Chip chip = addNoteChip(txt);

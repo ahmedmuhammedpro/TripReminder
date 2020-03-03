@@ -61,8 +61,18 @@ public class WorkManagerViewModel {
 
         GregorianCalendar c1 = new GregorianCalendar(year, month, day, hour, minute, seconds);
         GregorianCalendar c2 = new GregorianCalendar();
+        Log.i("ahmed", "date " + tripDate);
+        Log.i("ahmed", "d1 " + c1.getTime().toString());
+        Log.i("ahmed", "d2 " + c2.getTime().toString());
+        Log.i("ahmed", "diff " + (c1.getTimeInMillis() - c2.getTimeInMillis()));
 
-        return c1.getTimeInMillis() - c2.getTimeInMillis();
+        long milliseconds = c1.getTimeInMillis() - c2.getTimeInMillis();
+
+        if (milliseconds < 10000) {
+            milliseconds = 20000;
+        }
+
+        return milliseconds;
     }
 
     private Data.Builder getDataBuilder(Trip trip) {

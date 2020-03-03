@@ -56,6 +56,9 @@ public class AddTripFragment1 extends Fragment {
     public static final String TRIP_Object = "trip";
     public static final String TIME_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_1 = "dd-MMM-yyyy";
+
+    private MainActivity.SaveAndTripInterface mInterface;
+
     private ChipGroup tripTypes;
     private Chip trip1,trip2;
     private Button setDate, setTime ,nextBtn , saveBtn,setDateRound,setTimeRound;
@@ -70,6 +73,10 @@ public class AddTripFragment1 extends Fragment {
     Bundle bundleMainFragment;
     public AddTripFragment1() {
         // Required empty public constructor
+    }
+
+    public void setmInterface(MainActivity.SaveAndTripInterface mInterface) {
+        this.mInterface = mInterface;
     }
 
     public static Date getCurrentDate() {
@@ -97,6 +104,8 @@ public class AddTripFragment1 extends Fragment {
         setTime = view.findViewById(R.id.timeBtn);
         dateTxt = view.findViewById(R.id.dateTxt);
         timeTxt = view.findViewById(R.id.timeTxt);
+        dateTxt.setKeyListener(null);
+        timeTxt.setKeyListener(null);
         saveBtn = view.findViewById(R.id.saveBtn);
         startPointTxt = view.findViewById(R.id.startPointTxt);
         endPointTxt = view.findViewById(R.id.endPointTxt);
@@ -236,6 +245,7 @@ public class AddTripFragment1 extends Fragment {
                         trip.getStartLocation().setLocationName(startPointTxt.getText().toString());
                         trip.getEndLocation().setLocationName(endPointTxt.getText().toString());
                         AddTripFragment2 ftwo = new AddTripFragment2();
+                        ftwo.setmInterface(mInterface);
                         FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(TRIP_Object, trip);
@@ -245,6 +255,7 @@ public class AddTripFragment1 extends Fragment {
                     }
                 }else{
                     AddTripFragment2 ftwo = new AddTripFragment2();
+                    ftwo.setmInterface(mInterface);
                     FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
                     Bundle bundle = new Bundle();
                     mainTrip.setUserID(MainActivity.userId);

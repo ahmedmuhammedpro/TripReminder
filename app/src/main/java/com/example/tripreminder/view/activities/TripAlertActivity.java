@@ -57,7 +57,6 @@ public class TripAlertActivity extends AppCompatActivity {
         alertDialog.setTitle(alertDialogTitle);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,
                 getResources().getString(R.string.dialog_snooze_button), (dialog, which) -> {
-                    mainViewModel.updateTripStatus(trip.getTripId(), Trip.DONE);
                     tripNotification.sendNotification();
                     alertDialog.dismiss();
                     finish();
@@ -67,6 +66,7 @@ public class TripAlertActivity extends AppCompatActivity {
                 getResources().getString(R.string.dialog_start_button), (dialog, which) -> {
 
                     // Update trip to be done
+                    trip.setUserID(MainActivity.userId);
                     mainViewModel.updateTripStatus(trip.getTripId(), Trip.DONE);
                     tripNotification.cancelNotification();
 
@@ -78,10 +78,13 @@ public class TripAlertActivity extends AppCompatActivity {
                                 Uri.parse("package:" + this.getPackageName()));
                         startActivityForResult(permissionIntent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
                     } else {
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW);
-                        mapIntent.setData(Uri.parse("http://maps.google.com/maps?" +
-                                "saddr=" + trip.getStartLocation().getLatitude() + "," + trip.getStartLocation().getLongitude() +
-                                "&daddr=" + trip.getEndLocation().getLatitude() + "," + trip.getEndLocation().getLongitude()));
+                        String s = "http://maps.google.com/dir/" +
+                                "&sadd=" + trip.getStartLocation().getLatitude() + "," +
+                                trip.getStartLocation().getLongitude() +
+                                "&daddr=" + trip.getEndLocation().getLatitude() + "," +
+                                trip.getEndLocation().getLongitude();
+
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(s));
                         startActivity(mapIntent);
                         //start bubble service
                         initializeFloatingBubble();
@@ -93,6 +96,7 @@ public class TripAlertActivity extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
                 getResources().getString(R.string.dialog_cancel_button), (dialog, which) -> {
                     tripNotification.cancelNotification();
+                    trip.setUserID(MainActivity.userId);
                     mainViewModel.updateTripStatus(trip.getTripId(), Trip.CANCELED);
                     alertDialog.dismiss();
                     finish();

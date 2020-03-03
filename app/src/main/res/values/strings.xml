@@ -39,4 +39,5 @@
     <string name="login">Login</string>
     <string name="ForgotPasswordText">forgot your password?</string>
     <string name="EmailTextViewValue">Email</string>
+    <string name="SignOutButton">Sign out</string>
 </resources>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
@@ -23,14 +24,16 @@ import com.example.tripreminder.view.fragments.ProfileFragment;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity implements TaskLoadedCallback {
 
-    int testMapCounter =1;
-    int previousFragmentNumber=2;
+    boolean isClicked;
+    int previousFragmentNumber = 2;
     private Fragment selectedFragment;
-    public static String userId="";
-    Polyline currentPolyline;
-    public static final String USER_ID_TAG="userID";
+    public static String userId = "";
+    public static final String USER_ID_TAG = "userID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +46,18 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
         userId = getIntent().getStringExtra(USER_ID_TAG);
         setupBottomBar();
     }
-    private void setupBottomBar (){
+
+    private void setupBottomBar() {
         MeowBottomNavigation bottomNavigation = findViewById(R.id.bottomNavigation);
+
+        SaveAndTripInterface mInterface = new SaveAndTripInterface() {
+            @Override
+            public void isClicked() {
+                isClicked = true;
+                bottomNavigation.show(2, true);
+            }
+        };
+
         bottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.ic_history_24px));
         bottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.ic_event_24px));
         bottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.ic_add_location_24px));
@@ -55,21 +68,33 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
             public void onClickItem(MeowBottomNavigation.Model item) {
                 // your codes
                 switch (item.getId()) {
-                    case 1: selectedFragment = new PastTripsFragment();break;
-                    case 2: selectedFragment = new MainFragment();break;
-                    case 3: selectedFragment = new AddTripFragment1();break;
-                    case 4: selectedFragment = new ProfileFragment();break;
-                    case 5: selectedFragment = new FeedbackFragment(); break;
+                    case 1:
+                        selectedFragment = new PastTripsFragment();
+                        break;
+                    case 2:
+                        selectedFragment = new MainFragment();
+                        break;
+                    case 3:
+                        selectedFragment = new AddTripFragment1();
+                        ((AddTripFragment1) selectedFragment).setmInterface(mInterface);
+                        break;
+                    case 4:
+                        selectedFragment = new ProfileFragment();
+                        break;
+                    case 5:
+                        selectedFragment = new FeedbackFragment();
+                        break;
                 }
-                if(item.getId()>previousFragmentNumber) {
+                if (item.getId() > previousFragmentNumber) {
                     getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(R.anim.fragment_enter_right_to_left,R.anim.fragment_exit_to_left)
+                            .setCustomAnimations(R.anim.fragment_enter_right_to_left, R.anim.fragment_exit_to_left)
                             .replace(R.id.container, selectedFragment).commit();
-                }else if (item.getId()<previousFragmentNumber) {
+                } else if (item.getId() < previousFragmentNumber) {
                     getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(R.anim.fragment_enter_left_to_right,R.anim.fragment_exit_to_right)
+                            .setCustomAnimations(R.anim.fragment_enter_left_to_right, R.anim.fragment_exit_to_right)
                             .replace(R.id.container, selectedFragment).commit();
                 }
+
                 previousFragmentNumber = item.getId();
             }
         });
@@ -77,6 +102,23 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
             @Override
             public void onShowItem(MeowBottomNavigation.Model item) {
                 // your codes
+                if (isClicked) {
+                    Log.i("ahmed", "i am in onShowItem()");
+                    selectedFragment = new MainFragment();
+
+                    if (item.getId() > previousFragmentNumber) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.fragment_enter_right_to_left, R.anim.fragment_exit_to_left)
+                                .replace(R.id.container, selectedFragment).commit();
+                    } else if (item.getId() < previousFragmentNumber) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.fragment_enter_left_to_right, R.anim.fragment_exit_to_right)
+                                .replace(R.id.container, selectedFragment).commit();
+                    }
+
+                    previousFragmentNumber = item.getId();
+                    isClicked = false;
+                }
             }
         });
 
@@ -88,39 +130,28 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
         });
 
 
-
-        //bottomNavigation.show(2, true);
+        bottomNavigation.show(2, true);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container,new MainFragment() ).commit();
+                .replace(R.id.container, new MainFragment()).commit();
         bottomNavigation.show(2, true);
     }
 
     //for googleMap line drawing
     @Override
     public void onTaskDone(Object... values) {
-        //if (currentPolyline != null)
-          //  currentPolyline.remove();
 
-        if(getSupportFragmentManager().getFragments().get(1)instanceof PastTripsMapFragment) {
-            if(testMapCounter ==1) {
-                ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(Color.BLUE);
-                testMapCounter++;
-            }
-            else{
-                ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(Color.RED);
-            }
+        Random rnd = new Random();
+
+
+        if (getSupportFragmentManager().getFragments().get(1) instanceof PastTripsMapFragment) {
+
+            ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
+
         }
     }
 
-    public void signOut(){
-
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(Constants.lOGGED_IN_KEY,false);
-        editor.commit();
-        Intent intent = new Intent(this,AuthenticationActivity.class);
-        startActivity(intent);
+    public interface SaveAndTripInterface {
+        void isClicked();
     }
     @Override
     protected void onSaveInstanceState(Bundle outState) {

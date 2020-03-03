@@ -38,8 +38,14 @@ public class MainViewModel extends ViewModel implements MainViewModelInterface {
     public MutableLiveData<Vector<String>> getTripNotes(String tripId){
         return tripRepositoryImp.getTripNotes(tripId);
     }
+
     @Override
     public LiveData<List<Trip>> getpastTrips(String userId){
         return tripRepositoryImp.getPastTrips(userId);
+    }
+
+    @Override
+    public void setBottomNavigationSelectedIcon() {
+
     }
 }
