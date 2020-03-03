@@ -34,6 +34,11 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null){
+            selectedFragment = getSupportFragmentManager().getFragment(savedInstanceState, "AddTripFragment");
+
+        }
+
         setContentView(R.layout.activity_main);
         userId = getIntent().getStringExtra(USER_ID_TAG);
         setupBottomBar();
@@ -116,6 +121,13 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
         editor.commit();
         Intent intent = new Intent(this,AuthenticationActivity.class);
         startActivity(intent);
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save the fragment's instance
+        getSupportFragmentManager().putFragment(outState, "AddTripFragment", selectedFragment);
     }
 
 }
