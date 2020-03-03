@@ -98,6 +98,7 @@ public class TripAlertActivity extends AppCompatActivity implements LocationComm
                         else {
                             LocationPermissions.getInstance(this).requestPermissions();
                         }
+
                     }
                     alertDialog.dismiss();
                     finish();

@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.R;
+import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.map_directions.TaskLoadedCallback;
 import com.example.tripreminder.utils.Constants;
@@ -28,7 +29,9 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements TaskLoadedCallback {
 
+    Trip currentTripForEdit;
     boolean isClicked;
+    boolean isEditClicked = true;
     int previousFragmentNumber = 2;
     private Fragment selectedFragment;
     public static String userId = "";
@@ -58,6 +61,15 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
             }
         };
 
+        EditInterface editInterface = new EditInterface() {
+            @Override
+            public void isClick(Trip t) {
+                currentTripForEdit = t;
+                isEditClicked = true;
+                bottomNavigation.show(3, true);
+            }
+        };
+
         bottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.ic_history_24px));
         bottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.ic_event_24px));
         bottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.ic_add_location_24px));
@@ -73,7 +85,8 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                         break;
                     case 2:
                         selectedFragment = new MainFragment();
-                        ((MainFragment) selectedFragment).setmInterface(mInterface);
+                        ((MainFragment) selectedFragment).setmInterface(editInterface);
+                        Log.i("ahmed", editInterface + "");
                         break;
                     case 3:
                         selectedFragment = new AddTripFragment1();
@@ -103,10 +116,10 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
             @Override
             public void onShowItem(MeowBottomNavigation.Model item) {
                 // your codes
-                if (isClicked) {
+                if (isClicked && item.getId() == 2) {
                     Log.i("ahmed", "i am in onShowItem()");
                     selectedFragment = new MainFragment();
-
+                    ((MainFragment) selectedFragment).setmInterface(editInterface);
                     if (item.getId() > previousFragmentNumber) {
                         getSupportFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.anim.fragment_enter_right_to_left, R.anim.fragment_exit_to_left)
@@ -119,7 +132,30 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
 
                     previousFragmentNumber = item.getId();
                     isClicked = false;
+                } else if (isEditClicked && item.getId() == 3) {
+                    Log.i("ahmed", "edit frag");
+                    selectedFragment = new AddTripFragment1();
+                    ((AddTripFragment1) selectedFragment).setmInterface(mInterface);
+                    if (currentTripForEdit != null) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(MainFragment.TRIP_Object_FROM_MAIN, currentTripForEdit);
+                        selectedFragment.setArguments(bundle);
+                    }
+                    if (item.getId() > previousFragmentNumber) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.fragment_enter_right_to_left, R.anim.fragment_exit_to_left)
+                                .replace(R.id.container, selectedFragment).commit();
+                    } else if (item.getId() < previousFragmentNumber) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.fragment_enter_left_to_right, R.anim.fragment_exit_to_right)
+                                .replace(R.id.container, selectedFragment).commit();
+                    }
+
+                    previousFragmentNumber = item.getId();
+                    isEditClicked = false;
                 }
+
+
             }
         });
 
@@ -130,11 +166,11 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
             }
         });
 
-
         bottomNavigation.show(2, true);
+        MainFragment mainFragment = new MainFragment();
+        mainFragment.setmInterface(editInterface);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, new MainFragment()).commit();
-        bottomNavigation.show(2, true);
     }
 
     //for googleMap line drawing
@@ -153,6 +189,10 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
 
     public interface SaveAndTripInterface {
         void isClicked();
+    }
+
+    public interface EditInterface {
+        void isClick(Trip t);
     }
 
 }
