@@ -20,4 +20,8 @@ public class LoginViewModel extends ViewModel {
     }
 
     public MutableLiveData<User>  resetPassword(String email){return userRepositoryImp.resetPassword(email);}
+
+    public MutableLiveData<User> getUserData(String userId){
+        return userRepositoryImp.getUserData(userId);
+    }
 }

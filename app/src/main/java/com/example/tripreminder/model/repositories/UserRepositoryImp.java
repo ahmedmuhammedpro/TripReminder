@@ -38,5 +38,8 @@ UserFirestoreHandler userFirestoreHandler = UserFirestoreHandler.getInstance();
 
     public MutableLiveData<User>  resetPassword(String email){return userFirestoreHandler.resetPassword(email);}
 
+    public MutableLiveData<User> getUserData(String userId){
+        return userFirestoreHandler.getUserData(userId);
+    }
 
 }

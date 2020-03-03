@@ -10,11 +10,12 @@
         android:id="@+id/upcoming_trips_recycler_view_pastTrips"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/recycler_view_margin_16dp"
+        android:layout_marginBottom="@dimen/padding_48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/recycler_view_margin_16dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/no_trips_layout_pastTrips"

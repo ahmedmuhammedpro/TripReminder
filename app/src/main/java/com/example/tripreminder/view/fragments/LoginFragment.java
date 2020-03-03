@@ -46,6 +46,7 @@ public class LoginFragment extends Fragment {
     SignInButton googleSignInButton;
     EditText emailEditText,passwordEditText;
     LoginViewModel loginViewModel;
+    Button forgotPasswordButton;
     View view;
     public LoginFragment() {
         // Required empty public constructor
@@ -70,6 +71,7 @@ public class LoginFragment extends Fragment {
         passwordEditText = view.findViewById(R.id.passwordEditText);
         googleSignInButton = view.findViewById(R.id.googleSignInButton);
 
+        forgotPasswordButton = view.findViewById(R.id.forgetPasswordBtn);
         setClickListners();
 
     }
@@ -103,6 +105,19 @@ public class LoginFragment extends Fragment {
                 googleSignIn();
             }
         });
+
+        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = emailEditText.getText().toString().trim();
+                if(email.equals("")){
+                    Toast.makeText(getActivity(), "Please enter email first", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    resetPassword(email);
+                }
+            }
+        });
     }
     private void googleSignIn(){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -132,12 +147,11 @@ public class LoginFragment extends Fragment {
     private void updateUI(GoogleSignInAccount account,User user) {
 
         if(account!=null) {
-            writeInSharedPreferences(user);
+            writeInSharedPreferences(user,account.getPhotoUrl().toString());
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.putExtra(Constants.EMAIL_KEY, user.getEmail());
             intent.putExtra(Constants.USERNAME_KEY, user.getUsername());
             intent.putExtra(Constants.IMAGE_URL,account.getPhotoUrl().toString());
-
             intent.putExtra(USER_ID_TAG, user.getUserId());
             startActivity(intent);
         }
@@ -157,14 +171,13 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getActivity(), "Login failed", Toast.LENGTH_SHORT).show();
                     }else {
                         if(!loggedIn) {
-                            writeInSharedPreferences(loggedInUser);
+                            getUserData(loggedInUser.getUserId());
                         }
                         Toast.makeText(getActivity(), "Login Successfully", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.putExtra(USER_ID_TAG, loggedInUser.getUserId());
                         startActivity(intent);
                     }
-
                 }
             });
         }
@@ -173,13 +186,22 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void writeInSharedPreferences(User loggedInUser) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+    private void getUserData(String userId) {
+        loginViewModel.getUserData(userId).observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                if(!user.getUserId().equals("-1"))
+                    writeInSharedPreferences(user,"empty");
+            }
+        });
+    }
 
+    private void writeInSharedPreferences(User loggedInUser,String imageUrl) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(Constants.IMAGE_URL,imageUrl);
         editor.putString(Constants.EMAIL_KEY,loggedInUser.getEmail());
         editor.putString(Constants.USERNAME_KEY,loggedInUser.getUsername());
-        //editor.putString(PASSWORD_KEY,loggedInUser.getPassword());
         editor.putString(USER_ID_TAG,loggedInUser.getUserId());
         editor.putBoolean(Constants.lOGGED_IN_KEY,true);
         editor.commit();

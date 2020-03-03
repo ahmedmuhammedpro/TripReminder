@@ -3,6 +3,7 @@ package com.example.tripreminder.view.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,15 +20,20 @@ import com.example.tripreminder.services.FloatingBubbleService;
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.utils.AudioPlayer;
 import com.example.tripreminder.utils.Constants;
+import com.example.tripreminder.utils.LocationCommunicator;
+import com.example.tripreminder.utils.LocationLocator;
+import com.example.tripreminder.utils.LocationPermissions;
 import com.example.tripreminder.utils.TripNotification;
 import com.example.tripreminder.viewmodel.MainViewModel;
 
-public class TripAlertActivity extends AppCompatActivity {
+public class TripAlertActivity extends AppCompatActivity implements LocationCommunicator {
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
     private AudioPlayer audioPlayer;
     private MainViewModel mainViewModel;
     Intent intent;
     String[] notes = null;
+    String uriString="";
+    Trip trip;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +44,7 @@ public class TripAlertActivity extends AppCompatActivity {
         // Get intent and it's extras
         intent = getIntent();
 
-        Trip trip = (Trip) intent.getExtras().getSerializable(Constants.TRIP_OB_KEY);
+        trip = (Trip) intent.getExtras().getSerializable(Constants.TRIP_OB_KEY);
         trip.setUserID(MainActivity.userId);
         if (trip.getNotes() != null) {
             String[] notesArray = new String[trip.getNotes().size()];
@@ -78,16 +84,20 @@ public class TripAlertActivity extends AppCompatActivity {
                                 Uri.parse("package:" + this.getPackageName()));
                         startActivityForResult(permissionIntent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
                     } else {
-                        String s = "http://maps.google.com/dir/" +
-                                "&sadd=" + trip.getStartLocation().getLatitude() + "," +
-                                trip.getStartLocation().getLongitude() +
-                                "&daddr=" + trip.getEndLocation().getLatitude() + "," +
-                                trip.getEndLocation().getLongitude();
+                        if (LocationPermissions.getInstance(this).checkPermissions()) {
+                            if (LocationPermissions.getInstance(this).isLocationEnabled()) {
 
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(s));
-                        startActivity(mapIntent);
-                        //start bubble service
-                        initializeFloatingBubble();
+                                LocationLocator.getInstance(this).getLastLocation();
+                            }
+                            else {
+                                Toast.makeText(this, "Please Turn on location", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(intent);
+                            }
+                        }
+                        else {
+                            LocationPermissions.getInstance(this).requestPermissions();
+                        }
                     }
                     alertDialog.dismiss();
                     finish();
@@ -151,5 +161,30 @@ public class TripAlertActivity extends AppCompatActivity {
                 // getActivity().finish();
             }
         }
+        if((Integer.parseInt(Manifest.permission.ACCESS_COARSE_LOCATION )== PackageManager.PERMISSION_GRANTED )){
+            if (LocationPermissions.getInstance(this).isLocationEnabled()) {
+
+                LocationLocator.getInstance(this).getLastLocation();
+            }
+        }
+    }
+
+    @Override
+    public void onLocationReceivedAction(double longitude, double latitude, String locationInfo) {
+        uriString = "http://maps.google.com/maps?" +
+                "saddr=" + latitude + "," + longitude +
+                "&daddr=" + trip.getEndLocation().getLatitude() + "," + trip.getEndLocation().getLongitude();
+
+        doStartButtonAction();
+    }
+
+    private void doStartButtonAction(){
+
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW);
+        mapIntent.setData(Uri.parse(uriString));
+
+        startActivity(mapIntent);
+        //start bubble service
+        initializeFloatingBubble();
     }
 }

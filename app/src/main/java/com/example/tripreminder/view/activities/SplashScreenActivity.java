@@ -25,7 +25,7 @@ public class SplashScreenActivity extends AppCompatActivity implements Runnable{
 
     private static final int RC_SIGN_IN = 1;
     LoginViewModel loginViewModel;
-    String email="",username="",userID="";
+    String email="",username="",userID="",imageUrl="";
     Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class SplashScreenActivity extends AppCompatActivity implements Runnable{
                     Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                     intent.putExtra(Constants.USER_ID_TAG, userID);
                     intent.putExtra(Constants.USERNAME_KEY,username);
+                    intent.putExtra(Constants.IMAGE_URL,imageUrl);
                     intent.putExtra(Constants.EMAIL_KEY,email);
                     startActivity(intent);
 
@@ -73,54 +74,14 @@ public class SplashScreenActivity extends AppCompatActivity implements Runnable{
         }
     }
     private void readFromSharedPreferences(){
-
-        /*SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-        loggedIn = sharedPreferences.getBoolean(lOGGED_IN_KEY,false);
-        if(loggedIn) {
-            email = sharedPreferences.getString(EMAIL_KEY, "empty");
-            password = sharedPreferences.getString(PASSWORD_KEY, "empty");
-        }*/
-
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         loggedIn = sharedPreferences.getBoolean(Constants.lOGGED_IN_KEY,false);
         if(loggedIn) {
             email = sharedPreferences.getString(Constants.EMAIL_KEY, "empty");
             userID = sharedPreferences.getString(Constants.USER_ID_TAG, "empty");
+            imageUrl = sharedPreferences.getString(Constants.IMAGE_URL, "empty");
             username = sharedPreferences.getString(Constants.USERNAME_KEY,"empty");
-            //login(email,password);
-        /*Toast.makeText(this, "Login Successfully", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(USER_ID_TAG, userID);
-        startActivity(intent);*/
         }
         handler.sendMessage(new Message());
     }
-
-
-   /* private void login(String email,String password){
-
-
-        if(!email.trim().equals("") && !password.trim().equals("")) {
-            User user = new User();
-            user.setEmail(email);
-            user.setPassword(password);
-
-            loginViewModel.login(user).observe(this, loggedInUser -> {
-
-                if (loggedInUser != null) {
-                    if(loggedInUser.getUserId().equals("-1")){
-                        Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
-
-                    }else {
-
-                        Toast.makeText(this, "Login Successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(this, MainActivity.class);
-                        intent.putExtra(USER_ID_TAG, loggedInUser.getUserId());
-                        startActivity(intent);
-                    }
-
-                }
-            });
-        }
-    }*/
 }

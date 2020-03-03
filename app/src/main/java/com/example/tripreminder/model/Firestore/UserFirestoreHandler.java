@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -25,7 +26,6 @@ public class UserFirestoreHandler {
     FirebaseAuth auth= FirebaseAuth.getInstance();;
     private final String USERNAME_KEY="username",PASSWORD_KEY="password",EMAIL_KEY="email";
     private final String TAG="fireBase";
-    MutableLiveData<List<User>> userLiveDataList = new MutableLiveData<>();
     private FirebaseFirestore dbFirestoreInstance = FirebaseFirestore.getInstance();
 
     private static UserFirestoreHandler userFirestoreHandler =null;
@@ -66,6 +66,7 @@ public class UserFirestoreHandler {
             if(authTask.isSuccessful()){
                 FirebaseUser firebaseUser = auth.getCurrentUser();
                 if(firebaseUser!=null){
+                    firebaseUser.getDisplayName();
                     user.setUserId(firebaseUser.getUid());
 
                 }
@@ -141,5 +142,32 @@ public class UserFirestoreHandler {
             }
         });
         return forgotPasswordEmailSent;
+    }
+
+    public MutableLiveData<User> getUserData(String userId){
+        MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+        User user = new User();
+        dbFirestoreInstance.collection("users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    user.setUsername(String.valueOf(task.getResult().get(USERNAME_KEY)));
+                    user.setUserId(userId);
+                    user.setEmail(String.valueOf(task.getResult().get(EMAIL_KEY)));
+                    userMutableLiveData.postValue(user);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+                user.setUserId("-1");
+                //get error message in username
+                user.setUsername(e.getMessage());
+                userMutableLiveData.postValue(user);
+            }
+        });
+
+        return userMutableLiveData;
     }
 }
