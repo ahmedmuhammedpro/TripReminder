@@ -146,6 +146,7 @@ public class LoginFragment extends Fragment {
 
         if(account!=null) {
             writeInSharedPreferences(user,account.getPhotoUrl().toString());
+            SharedPreferencesHandler.getInstance().readFromSharedPreferences(getActivity());
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.putExtra(Constants.EMAIL_KEY, user.getEmail());
             intent.putExtra(Constants.USERNAME_KEY, user.getUsername());
@@ -171,10 +172,13 @@ public class LoginFragment extends Fragment {
                         if(!loggedIn) {
                             getUserData(loggedInUser.getUserId());
                         }
-                        Toast.makeText(getActivity(), "Login Successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        intent.putExtra(USER_ID_TAG, loggedInUser.getUserId());
-                        startActivity(intent);
+                       else {
+                            SharedPreferencesHandler.getInstance().readFromSharedPreferences(getActivity());
+                            Toast.makeText(getActivity(), "Login Successfully", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            intent.putExtra(USER_ID_TAG, loggedInUser.getUserId());
+                            startActivity(intent);
+                        }
                     }
                 }
             });
@@ -188,8 +192,14 @@ public class LoginFragment extends Fragment {
         loginViewModel.getUserData(userId).observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                if(!user.getUserId().equals("-1"))
-                    writeInSharedPreferences(user,"empty");
+                if(!user.getUserId().equals("-1")) {
+                    writeInSharedPreferences(user, "empty");
+                    SharedPreferencesHandler.getInstance().readFromSharedPreferences(getActivity());
+                    Toast.makeText(getActivity(), "Login Successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.putExtra(USER_ID_TAG, user.getUserId());
+                    startActivity(intent);
+                }
             }
         });
     }

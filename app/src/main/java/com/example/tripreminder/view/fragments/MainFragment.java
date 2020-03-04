@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -122,11 +123,13 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new MainViewModel();
         allNotes = new Vector<>();
+        //readFromSharedPreferences();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
         MutableLiveData<HashMap<String, Object>> userInfoLiveData = SharedPreferencesHandler.getInstance().getUserInfoLiveData();
 
         viewModel.getAllTrips(String.valueOf(userInfoLiveData.getValue().get(Constants.USER_ID_TAG))).observe(this, new Observer<List<Trip>>() {
@@ -145,14 +148,12 @@ public class MainFragment extends Fragment {
                             }
                         });
                     }
-
                     adapter = new MainAdapter(getActivity(), tripList, itemInterface);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(VISIBLE);
                     noTripsLayout.setVisibility(INVISIBLE);
                     enableSwipeToDeleteAndUndo();
                     enableSwipeToEdit();
-
                 } else {
                     recyclerView.setVisibility(INVISIBLE);
                     noTripsLayout.setVisibility(VISIBLE);
@@ -172,8 +173,6 @@ public class MainFragment extends Fragment {
         recyclerView.setVisibility(INVISIBLE);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         workManagerViewModel = new WorkManagerViewModel(getActivity());
-
-
         return v;
     }
 
@@ -206,7 +205,6 @@ public class MainFragment extends Fragment {
                             viewModel.deleteTrip(item.getTripId());
                             workManagerViewModel.deleteRequest(item.getTripId());
                             isDeleteActionClicked = false;
-
                         }
                     }
 
@@ -251,8 +249,6 @@ public class MainFragment extends Fragment {
                         super.onDismissed(transientBottomBar, event);
                         if (!isEditActionClicked) {
                             isEditActionClicked = false;
-
-
                         }
                     }
 
@@ -311,5 +307,9 @@ public class MainFragment extends Fragment {
                 g.get(GregorianCalendar.YEAR) + "-" +
                 g.get(GregorianCalendar.HOUR_OF_DAY) + "-" +
                 g.get(GregorianCalendar.MINUTE);
+    }
+
+    private void readFromSharedPreferences(){
+        SharedPreferencesHandler.getInstance().readFromSharedPreferences(getActivity());
     }
 }
