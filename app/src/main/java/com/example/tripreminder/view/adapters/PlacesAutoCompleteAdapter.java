@@ -1,12 +1,12 @@
 package com.example.tripreminder.view.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.example.tripreminder.model.PlaceApi;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

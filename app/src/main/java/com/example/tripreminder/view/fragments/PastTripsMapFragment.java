@@ -2,7 +2,6 @@ package com.example.tripreminder.view.fragments;
 
 
 import android.annotation.SuppressLint;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +9,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.map_directions.FetchURL;
-import com.example.tripreminder.view.activities.MainActivity;
+import com.example.tripreminder.utils.Constants;
+import com.example.tripreminder.utils.SharedPreferencesHandler;
 import com.example.tripreminder.viewmodel.PastTripsViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -76,24 +78,26 @@ public class PastTripsMapFragment extends Fragment implements OnMapReadyCallback
         this.googleMap=googleMap;
 
 
+        MutableLiveData<HashMap<String, Object>> userInfoLiveData = SharedPreferencesHandler.getInstance().getUserInfoLiveData();
 
-        pastTripsViewModel.getPastTrips(MainActivity.userId).observe(this, new Observer<List<Trip>>() {
+        pastTripsViewModel.getPastTrips(String.valueOf(userInfoLiveData.getValue().get(Constants.USER_ID_TAG))).observe(this, new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
 
                 for(int i=0;i<trips.size();i++){
                     Trip trip = trips.get(i);
-                    LatLng fromPosition = new LatLng(trip.getStartLocation().getLatitude(), trip.getStartLocation().getLongitude());
-                    LatLng toPosition = new LatLng(trip.getEndLocation().getLatitude(), trip.getEndLocation().getLongitude());
+                    if(trip.getTripStatus() == trip.DONE) {
+                        LatLng fromPosition = new LatLng(trip.getStartLocation().getLatitude(), trip.getStartLocation().getLongitude());
+                        LatLng toPosition = new LatLng(trip.getEndLocation().getLatitude(), trip.getEndLocation().getLongitude());
 
-                    place1 = new MarkerOptions().position(fromPosition).title(trip.getStartLocation().getLocationName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    place2 = new MarkerOptions().position(toPosition).title( trip.getEndLocation().getLocationName());
-                    googleMap.addMarker(place1);
-                    googleMap.addMarker(place2);
+                        place1 = new MarkerOptions().position(fromPosition).title(trip.getStartLocation().getLocationName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                        place2 = new MarkerOptions().position(toPosition).title(trip.getEndLocation().getLocationName());
+                        googleMap.addMarker(place1);
+                        googleMap.addMarker(place2);
 
-                    String url = getUrl(fromPosition,toPosition,"driving");
-                    new FetchURL(getContext()).execute(url,"driving");
-
+                        String url = getUrl(fromPosition, toPosition, "driving");
+                        new FetchURL(getContext()).execute(url, "driving");
+                    }
 
                 }
 

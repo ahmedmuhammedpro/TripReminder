@@ -4,14 +4,6 @@ package com.example.tripreminder.view.fragments;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +15,11 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.annotation.IdRes;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
@@ -47,7 +44,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -264,7 +260,6 @@ public class AddTripFragment1 extends Fragment {
                         dateString = dateAlone + timeAlone;
                         trip.setTripStatus(Trip.UPCOMING);
                         trip.setTripName(nameTxt.getText().toString());
-                        trip.setUserID(MainActivity.userId);
                         trip.setTripDate(dateString);
                         trip.getStartLocation().setLocationName(startPointTxt.getText().toString());
                         trip.getEndLocation().setLocationName(endPointTxt.getText().toString());
@@ -284,7 +279,6 @@ public class AddTripFragment1 extends Fragment {
                     ftwo.setmInterface(mInterface);
                     FragmentManager manager = AddTripFragment1.super.getActivity().getSupportFragmentManager();
                     Bundle bundle = new Bundle();
-                    mainTrip.setUserID(MainActivity.userId);
                     mainTrip.setTripStatus(Trip.UPCOMING);
                     mainTrip.setTripName(nameTxt.getText().toString());
                     mainTrip.setTripDate(dateString);

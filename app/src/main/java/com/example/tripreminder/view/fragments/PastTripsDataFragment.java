@@ -2,25 +2,26 @@ package com.example.tripreminder.view.fragments;
 
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
-import com.example.tripreminder.view.activities.MainActivity;
+import com.example.tripreminder.utils.Constants;
+import com.example.tripreminder.utils.SharedPreferencesHandler;
 import com.example.tripreminder.view.adapters.MainAdapter;
-import com.example.tripreminder.viewmodel.MainViewModel;
 import com.example.tripreminder.viewmodel.PastTripsViewModel;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -60,7 +61,10 @@ public class PastTripsDataFragment extends Fragment {
         recyclerView.setVisibility(INVISIBLE);
         pastTripsViewModel = ViewModelProviders.of(this).get(PastTripsViewModel.class);
 
-        pastTripsViewModel.getPastTrips(MainActivity.userId).observe(this, new Observer<List<Trip>>() {
+        MutableLiveData<HashMap<String, Object>> userInfoLiveData = SharedPreferencesHandler.getInstance().getUserInfoLiveData();
+
+
+        pastTripsViewModel.getPastTrips(String.valueOf(userInfoLiveData.getValue().get(Constants.USER_ID_TAG))).observe(this, new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
 

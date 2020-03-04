@@ -1,7 +1,6 @@
 package com.example.tripreminder.model.Entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Vector;
 
 public class Trip implements Serializable {

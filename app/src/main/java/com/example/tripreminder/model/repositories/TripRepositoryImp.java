@@ -1,15 +1,11 @@
 package com.example.tripreminder.model.repositories;
 
-import android.app.Activity;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.Firestore.TripFirestoreHandler;
-import com.example.tripreminder.utils.LocationPermissions;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Vector;
 

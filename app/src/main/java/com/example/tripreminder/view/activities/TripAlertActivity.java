@@ -1,8 +1,5 @@
 package com.example.tripreminder.view.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -13,11 +10,13 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tripreminder.R;
-import com.example.tripreminder.services.FloatingBubbleService;
 import com.example.tripreminder.model.Entities.Trip;
+import com.example.tripreminder.services.FloatingBubbleService;
 import com.example.tripreminder.utils.AudioPlayer;
 import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.utils.LocationCommunicator;
@@ -45,7 +44,8 @@ public class TripAlertActivity extends AppCompatActivity implements LocationComm
         intent = getIntent();
 
         trip = (Trip) intent.getExtras().getSerializable(Constants.TRIP_OB_KEY);
-        trip.setUserID(MainActivity.userId);
+
+
         if (trip.getNotes() != null) {
             String[] notesArray = new String[trip.getNotes().size()];
             notes =  trip.getNotes().toArray(notesArray);

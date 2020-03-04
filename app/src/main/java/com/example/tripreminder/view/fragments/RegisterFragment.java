@@ -2,11 +2,6 @@ package com.example.tripreminder.view.fragments;
 
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.User;
-import com.example.tripreminder.view.activities.AuthenticationActivity;
 import com.example.tripreminder.viewmodel.RegisterViewModel;
 
 /**

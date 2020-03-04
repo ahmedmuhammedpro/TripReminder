@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.tripreminder.R;
 import com.example.tripreminder.services.FloatingBubbleService;
-import com.example.tripreminder.view.activities.MainActivity;
 
 import static android.app.Activity.RESULT_OK;
 

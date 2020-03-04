@@ -7,17 +7,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,15 +15,25 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.tripreminder.R;
-import com.example.tripreminder.model.Firestore.TripFirestoreHandler;
+import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.services.FloatingBubbleService;
 import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.utils.LocationLocator;
 import com.example.tripreminder.utils.LocationPermissions;
+import com.example.tripreminder.utils.SharedPreferencesHandler;
 import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.view.adapters.MainAdapter;
-import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.view.adapters.SwipeToDeleteCallBack;
 import com.example.tripreminder.view.adapters.SwipeToEditCallBack;
 import com.example.tripreminder.viewmodel.MainViewModel;
@@ -44,11 +43,12 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import static android.view.View.VISIBLE;
 import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 
 public class MainFragment extends Fragment {
     public static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
@@ -69,7 +69,6 @@ public class MainFragment extends Fragment {
 
     private RecyclerItemInterface itemInterface = (view, position) -> {
         Trip trip = tripList.get(position);
-        trip.setUserID(MainActivity.userId);
         trip.setTripDate(getCurrentDate());
         trip.setTripStatus(Trip.DONE);
         viewModel.updateTrip(trip);
@@ -128,7 +127,9 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.getAllTrips(MainActivity.userId).observe(this, new Observer<List<Trip>>() {
+        MutableLiveData<HashMap<String, Object>> userInfoLiveData = SharedPreferencesHandler.getInstance().getUserInfoLiveData();
+
+        viewModel.getAllTrips(String.valueOf(userInfoLiveData.getValue().get(Constants.USER_ID_TAG))).observe(this, new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
                 if (trips != null && !trips.isEmpty()) {

@@ -5,13 +5,16 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.*;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.utils.Constants;

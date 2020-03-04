@@ -1,16 +1,15 @@
 package com.example.tripreminder.model.Firestore;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.Entities.TripLocation;
-import com.example.tripreminder.model.repositories.TripRepositoryImp;
+import com.example.tripreminder.utils.Constants;
+import com.example.tripreminder.utils.SharedPreferencesHandler;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -20,16 +19,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 public class TripFirestoreHandler {
@@ -37,6 +31,8 @@ public class TripFirestoreHandler {
     private final String TRIP_NAME_KEY="tripName",USER_ID_KEY="userId",DATE_KEY="tripDate",START_LOCATION="startLocation";
     private final String END_LOCATION = "endLocation",TRIP_STATUS="tripStatus",TRIP_TYPE="tripType";
     private FirebaseFirestore dbFirestoreInstance = FirebaseFirestore.getInstance();
+
+    MutableLiveData<HashMap<String, Object>> userInfoLiveData = SharedPreferencesHandler.getInstance().getUserInfoLiveData();
 
 
     private static TripFirestoreHandler tripFirestoreHandler =null;
@@ -53,7 +49,7 @@ public class TripFirestoreHandler {
 
         HashMap<String,Object> tripValues = new HashMap<>();
         tripValues.put(TRIP_NAME_KEY,trip.getTripName());
-        tripValues.put(USER_ID_KEY,trip.getUserID());
+        tripValues.put(USER_ID_KEY,String.valueOf(userInfoLiveData.getValue().get(Constants.USER_ID_TAG)));
         tripValues.put(DATE_KEY,trip.getTripDate());
         tripValues.put(START_LOCATION,trip.getStartLocation());
         tripValues.put(END_LOCATION,trip.getEndLocation());
@@ -104,31 +100,10 @@ public class TripFirestoreHandler {
                 if(task.isComplete()){
                     QuerySnapshot querySnapshot = task.getResult();;
                     for (QueryDocumentSnapshot document : querySnapshot) {
-                        String tripId = document.getId();
-                        String tripName = String.valueOf(document.getData().get("tripName"));
-                        Trip trip = new Trip();
-                        trip.setTripName(tripName);
-                        trip.setTripId(tripId);
-                        trip.setTripDate((String)document.getData().get("tripDate"));
-                        HashMap location = (HashMap) document.getData().get("startLocation");
-                        Double latitude = (Double) location.get("latitude");
-                        Double longitude = (Double) location.get("longitude");
-                        String locationName = (String) location.get("locationName");
-                        int tripStatus = Integer.parseInt(String.valueOf(document.getData().get("tripStatus")));
-                        int tripType =  Integer.parseInt(String.valueOf(document.getData().get("tripType")));
-                        trip.setTripType(tripType);
-                        trip.setTripStatus(tripStatus);
-                        trip.setStartLocation(new TripLocation(latitude,longitude,locationName ));
 
-                        HashMap endLocation= (HashMap) document.getData().get("endLocation");
-                        Double endLatitude = (Double) endLocation.get("latitude");
-                        Double endLongitude = (Double) endLocation.get("longitude");
-                        String endLocationName = (String) endLocation.get("locationName");
+                       Trip trip = prepareTripObjectData(document);
+                       tripsList.add(trip);
 
-                        trip.setEndLocation(new TripLocation(endLatitude,endLongitude,endLocationName ));
-
-
-                        tripsList.add(trip);
                     }
                     tripsListLiveData.postValue(tripsList);
                 }
@@ -182,7 +157,7 @@ public class TripFirestoreHandler {
         tripValues.put(END_LOCATION,trip.getEndLocation());
         tripValues.put(TRIP_STATUS,trip.getTripStatus());
         tripValues.put(TRIP_TYPE,trip.getTripType());
-        tripValues.put(USER_ID_KEY,trip.getUserID());
+        tripValues.put(USER_ID_KEY,String.valueOf(userInfoLiveData.getValue().get(Constants.USER_ID_TAG)));
 
 
 
@@ -294,31 +269,8 @@ public class TripFirestoreHandler {
                 if(task.isComplete()){
                     QuerySnapshot querySnapshot = task.getResult();;
                     for (QueryDocumentSnapshot document : querySnapshot) {
-                        String tripId = document.getId();
-                        String tripName = String.valueOf(document.getData().get("tripName"));
-                        Trip trip = new Trip();
-                        trip.setTripName(tripName);
-                        trip.setTripId(tripId);
-                        trip.setTripDate((String)document.getData().get("tripDate"));
-                        HashMap location = (HashMap) document.getData().get("startLocation");
-                        Double latitude = (Double) location.get("latitude");
-                        Double longitude = (Double) location.get("longitude");
-                        String locationName = (String) location.get("locationName");
 
-                        int tripStatus = Integer.parseInt(String.valueOf(document.getData().get("tripStatus")));
-                        int tripType =  Integer.parseInt(String.valueOf(document.getData().get("tripType")));
-                        trip.setTripType(tripType);
-                        trip.setTripStatus(tripStatus);
-
-                        trip.setStartLocation(new TripLocation(latitude,longitude,locationName ));
-
-                        HashMap endLocation= (HashMap) document.getData().get("endLocation");
-                        Double endLatitude = (Double) endLocation.get("latitude");
-                        Double endLongitude = (Double) endLocation.get("longitude");
-                        String endLocationName = (String) endLocation.get("locationName");
-
-                        trip.setEndLocation(new TripLocation(endLatitude,endLongitude,endLocationName ));
-
+                        Trip trip = prepareTripObjectData(document);
 
                         tripsList.add(trip);
                     }
@@ -332,6 +284,38 @@ public class TripFirestoreHandler {
             }
         });
         return tripsListLiveData;
+    }
+
+    private Trip prepareTripObjectData(QueryDocumentSnapshot document){
+
+        String tripId = document.getId();
+        String tripName = String.valueOf(document.getData().get("tripName"));
+        Trip trip = new Trip();
+        trip.setTripName(tripName);
+        trip.setTripId(tripId);
+        trip.setTripDate((String)document.getData().get("tripDate"));
+
+        HashMap location = (HashMap) document.getData().get("startLocation");
+        Double latitude = (Double) location.get("latitude");
+        Double longitude = (Double) location.get("longitude");
+        String locationName = (String) location.get("locationName");
+
+        int tripStatus = Integer.parseInt(String.valueOf(document.getData().get("tripStatus")));
+        int tripType =  Integer.parseInt(String.valueOf(document.getData().get("tripType")));
+        trip.setTripType(tripType);
+        trip.setTripStatus(tripStatus);
+
+        trip.setStartLocation(new TripLocation(latitude,longitude,locationName ));
+
+        HashMap endLocation= (HashMap) document.getData().get("endLocation");
+        Double endLatitude = (Double) endLocation.get("latitude");
+        Double endLongitude = (Double) endLocation.get("longitude");
+        String endLocationName = (String) endLocation.get("locationName");
+
+        trip.setEndLocation(new TripLocation(endLatitude,endLongitude,endLocationName ));
+
+        return trip;
+
     }
 
 

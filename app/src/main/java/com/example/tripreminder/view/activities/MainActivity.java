@@ -1,12 +1,7 @@
 package com.example.tripreminder.view.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -16,21 +11,20 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.tripreminder.OfflineFragment;
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
-import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.map_directions.TaskLoadedCallback;
-import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.utils.LocationCommunicator;
 import com.example.tripreminder.view.fragments.AddTripFragment1;
-import com.example.tripreminder.view.fragments.FeedbackFragment;
 import com.example.tripreminder.view.fragments.MainFragment;
 import com.example.tripreminder.view.fragments.PastTripsFragment;
 import com.example.tripreminder.view.fragments.PastTripsMapFragment;
 import com.example.tripreminder.view.fragments.ProfileFragment;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.Random;
@@ -43,8 +37,6 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     boolean isEditClicked = true;
     int previousFragmentNumber = 2;
     private Fragment selectedFragment;
-    public static String userId = "";
-    public static final String USER_ID_TAG = "userID";
     public Trip trip;
     private String[] notes;
 
@@ -53,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        userId = getIntent().getStringExtra(USER_ID_TAG);
         setupBottomBar();
     }
     //for internet connection

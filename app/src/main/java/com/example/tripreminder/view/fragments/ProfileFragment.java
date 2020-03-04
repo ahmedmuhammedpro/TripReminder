@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +19,11 @@ import android.widget.TextView;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.utils.Constants;
+import com.example.tripreminder.utils.SharedPreferencesHandler;
 import com.example.tripreminder.view.activities.AuthenticationActivity;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,15 +53,8 @@ public class ProfileFragment extends Fragment {
         nameTextView = view.findViewById(R.id.nameTextViewProfile);
         signOutButton = view.findViewById(R.id.signOutButton);
 
-        emailTextView.setText(email);
-        nameTextView.setText(username);
         profileImageView = view.findViewById(R.id.profileImageView);
 
-        if(imageUrl!=null &&!imageUrl.equals("") && !imageUrl.equals("empty")) {
-            Picasso.get()
-                    .load(imageUrl)
-                    .into(profileImageView);
-        }
 
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,13 +80,28 @@ public class ProfileFragment extends Fragment {
     }
 
     private void readFromSharedPreferences(){
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-        loggedIn = sharedPreferences.getBoolean(Constants.lOGGED_IN_KEY,false);
-        if(loggedIn) {
-            email = sharedPreferences.getString(Constants.EMAIL_KEY, "empty");
-            imageUrl = sharedPreferences.getString(Constants.IMAGE_URL, "empty");
-            username = sharedPreferences.getString(Constants.USERNAME_KEY,"empty");
+            SharedPreferencesHandler.getInstance().getUserInfoLiveData().observe(this, new Observer<HashMap<String, Object>>() {
+                @Override
+                public void onChanged(HashMap<String, Object> userInfoHashMap) {
+
+                    loggedIn = (boolean)userInfoHashMap.get(Constants.lOGGED_IN_KEY);
+                    if(loggedIn) {
+                        email = String.valueOf(userInfoHashMap.get(Constants.EMAIL_KEY));
+                        imageUrl = String.valueOf(userInfoHashMap.get(Constants.IMAGE_URL));
+                        username = String.valueOf(userInfoHashMap.get(Constants.USERNAME_KEY));
+
+                        emailTextView.setText(email);
+                        nameTextView.setText(username);
+
+                        if(imageUrl!=null &&!imageUrl.equals("") && !imageUrl.equals("empty")) {
+                            Picasso.get()
+                                    .load(imageUrl)
+                                    .into(profileImageView);
+                        }
+                    }
+                }
+            });
         }
-    }
+
 
 }

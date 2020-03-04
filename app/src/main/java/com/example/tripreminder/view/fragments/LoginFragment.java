@@ -4,24 +4,22 @@ package com.example.tripreminder.view.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.utils.Constants;
+import com.example.tripreminder.utils.SharedPreferencesHandler;
 import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.viewmodel.LoginViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -197,14 +195,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void writeInSharedPreferences(User loggedInUser,String imageUrl) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(Constants.IMAGE_URL,imageUrl);
-        editor.putString(Constants.EMAIL_KEY,loggedInUser.getEmail());
-        editor.putString(Constants.USERNAME_KEY,loggedInUser.getUsername());
-        editor.putString(USER_ID_TAG,loggedInUser.getUserId());
-        editor.putBoolean(Constants.lOGGED_IN_KEY,true);
-        editor.commit();
+        SharedPreferencesHandler.getInstance().writeInSharedPreferences(loggedInUser,imageUrl);
     }
 
     private  void resetPassword(String email){

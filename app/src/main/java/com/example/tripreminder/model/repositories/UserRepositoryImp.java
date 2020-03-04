@@ -1,17 +1,15 @@
 package com.example.tripreminder.model.repositories;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.Firestore.UserFirestoreHandler;
 
-import java.util.List;
-
 
 public class UserRepositoryImp {
 
 UserFirestoreHandler userFirestoreHandler = UserFirestoreHandler.getInstance();
+
 
 
     private static UserRepositoryImp userRepositoryImp =null;

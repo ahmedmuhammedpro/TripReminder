@@ -36,7 +36,6 @@
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"
             android:theme="@style/TripAlertDialog" />
-        <activity android:name=".view.activities.AddTripActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".view.activities.MainActivity" android:screenOrientation="portrait"></activity>
         <service
             android:name=".services.FloatingBubbleService"

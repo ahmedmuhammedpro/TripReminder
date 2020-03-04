@@ -1,7 +1,6 @@
 package com.example.tripreminder.view.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.utils.Constants;
-import com.example.tripreminder.view.adapters.MainAdapter;
 import com.example.tripreminder.viewmodel.BottomSheetViewModel;
 import com.example.tripreminder.viewmodel.workmanager.WorkManagerViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
