@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.Firestore.UserFirestoreHandler;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 
 public class UserRepositoryImp {
@@ -22,8 +23,8 @@ UserFirestoreHandler userFirestoreHandler = UserFirestoreHandler.getInstance();
     }
 
 
-    public  MutableLiveData<User> registerGoogleUSer(User user){
-        return userFirestoreHandler.registerGoogleUSer(user);
+    public  MutableLiveData<User> registerGoogleUSer(User user, GoogleSignInAccount account){
+        return userFirestoreHandler.registerGoogleUSer(user,account);
     }
     public MutableLiveData<User> registerUser(User user){
        return userFirestoreHandler.register(user);
@@ -38,6 +39,11 @@ UserFirestoreHandler userFirestoreHandler = UserFirestoreHandler.getInstance();
 
     public MutableLiveData<User> getUserData(String userId){
         return userFirestoreHandler.getUserData(userId);
+    }
+
+    public MutableLiveData<User> signout(){
+
+        return userFirestoreHandler.signout();
     }
 
 }

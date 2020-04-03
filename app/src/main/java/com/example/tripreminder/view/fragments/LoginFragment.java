@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 
 /**
@@ -119,8 +122,10 @@ public class LoginFragment extends Fragment {
     }
     private void googleSignIn(){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(String.valueOf(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+        //firebaseAuthWithGoogle(account);
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         getActivity().startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -129,13 +134,16 @@ public class LoginFragment extends Fragment {
     public void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+           String test = account.getIdToken();
+            String test2 = account.getId();
             // Signed in successfully, show authenticated UI.
             User user = new User();
             user.setEmail(account.getEmail());
             user.setUserId(account.getId());
             user.setUsername(account.getDisplayName());
-            loginViewModel.registerIfNewGoogleAccount(user);
 
+            AuthCredential credential = GoogleAuthProvider.getCredential(account.getId(), null);
+            loginViewModel.registerIfNewGoogleAccount(user,account);
             updateUI(account,user);
         } catch (ApiException e) {
             updateUI(null,null);
@@ -144,13 +152,20 @@ public class LoginFragment extends Fragment {
 
     private void updateUI(GoogleSignInAccount account,User user) {
 
+        Intent intent = new Intent(getActivity(), MainActivity.class);
         if(account!=null) {
-            writeInSharedPreferences(user,account.getPhotoUrl().toString());
+            if(account.getPhotoUrl()!=null){
+                writeInSharedPreferences(user,account.getPhotoUrl().toString());
+                intent.putExtra(Constants.IMAGE_URL,account.getPhotoUrl().toString());
+            }else{
+                writeInSharedPreferences(user,"");
+            }
+
+
             SharedPreferencesHandler.getInstance().readFromSharedPreferences(getActivity());
-            Intent intent = new Intent(getActivity(), MainActivity.class);
+
             intent.putExtra(Constants.EMAIL_KEY, user.getEmail());
             intent.putExtra(Constants.USERNAME_KEY, user.getUsername());
-            intent.putExtra(Constants.IMAGE_URL,account.getPhotoUrl().toString());
             intent.putExtra(USER_ID_TAG, user.getUserId());
             startActivity(intent);
         }

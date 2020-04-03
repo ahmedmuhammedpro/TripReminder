@@ -29,14 +29,13 @@ public class AuthenticationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RC_SIGN_IN && resultCode == RESULT_OK){
 
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             //handleSignInResult(task);
             if (getSupportFragmentManager().getFragments().get(0) instanceof LoginFragment){
                 ((LoginFragment)getSupportFragmentManager().getFragments().get(0)).handleSignInResult(task);
             }
-        }
+
     }
 
     @Override

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.model.repositories.UserRepositoryImp;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 public class LoginViewModel extends ViewModel {
 
@@ -15,8 +16,8 @@ public class LoginViewModel extends ViewModel {
         return userRepositoryImp.login(user);
     }
 
-    public void registerIfNewGoogleAccount(User user){
-        userRepositoryImp.registerGoogleUSer(user);
+    public void registerIfNewGoogleAccount(User user, GoogleSignInAccount account){
+        userRepositoryImp.registerGoogleUSer(user,account);
     }
 
     public MutableLiveData<User>  resetPassword(String email){return userRepositoryImp.resetPassword(email);}
