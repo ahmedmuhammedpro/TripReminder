@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -18,9 +19,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tripreminder.R;
+import com.example.tripreminder.model.Entities.User;
 import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.utils.SharedPreferencesHandler;
 import com.example.tripreminder.view.activities.AuthenticationActivity;
+import com.example.tripreminder.viewmodel.ProfileViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -30,7 +33,7 @@ import java.util.HashMap;
  */
 public class ProfileFragment extends Fragment {
 
-
+    ProfileViewModel profileViewModel;
     ImageView profileImageView;
     TextView emailTextView,nameTextView;
     Button signOutButton;
@@ -48,6 +51,8 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         readFromSharedPreferences();
+
+        profileViewModel =  ViewModelProviders.of(this).get(ProfileViewModel.class);
 
         emailTextView = view.findViewById(R.id.emailTextViewProfile);
         nameTextView = view.findViewById(R.id.nameTextViewProfile);
@@ -77,6 +82,21 @@ public class ProfileFragment extends Fragment {
         editor.commit();
         Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
         startActivity(intent);
+        /*
+        SharedPreferencesHandler.getInstance().getUserInfoLiveData().observe(this, new Observer<HashMap<String, Object>>() {
+            @Override
+            public void onChanged(HashMap<String, Object> stringObjectHashMap) {
+                profileViewModel.signout().observe(ProfileFragment.this, new Observer<User>() {
+                    @Override
+                    public void onChanged(User user) {
+
+
+                    }
+                });
+            }
+        });
+*/
+
     }
 
     private void readFromSharedPreferences(){
