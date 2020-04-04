@@ -59,7 +59,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         MainViewHolder mainViewHolder = new MainViewHolder(view);
         mainViewHolder.tripNotesBtn.setOnClickListener(v -> {
             Trip currentTrip = tripList.get(mainViewHolder.getAdapterPosition());
-            Log.i("adapter","trip type"+currentTrip.getTripType());
+            Log.i("adapter","trip type"+currentTrip.getTripDate());
             TripBottomSheetDialog bottomSheetDialog = new TripBottomSheetDialog();
             Bundle bundle = new Bundle();
             bundle.putSerializable(Constants.TRIP_OB_KEY, currentTrip);
@@ -98,7 +98,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                 holder.tripNotesBtn.setBackgroundResource(R.drawable.ic_arrow_upward_black_24dp);
                 allNotes = tripList.get(position).getNotes();
 
-                Log.i("adapter2","trip type"+tripList.get(position).getTripType());
+                Log.i("adapter2","trip type"+tripList.get(position).getTripDate());
                 if (holder.notesGroup.getChildCount() == 0) {
                     if (allNotes != null && allNotes.size() != 0) {
                         for (String txt : allNotes) {
@@ -110,7 +110,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                 }
             } else {
                 TransitionManager.beginDelayedTransition(holder.cardTrip, new AutoTransition());
-
                 holder.notesLayout.setVisibility(View.GONE);
                 holder.tripNotesBtn.setBackgroundResource(R.drawable.ic_arrow_downward_black_24dp);
             }
@@ -183,9 +182,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         String[] strings = dateString.split("-");
         int day = Integer.parseInt(strings[0]);
         int month = Integer.parseInt(strings[1]);
+
         int year = Integer.parseInt(strings[2]);
         Calendar c = Calendar.getInstance();
-        c.set(year, month, day);
+        c.set(year, month-1, day);
         return DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
 
     }
