@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
     <RelativeLayout
         android:id="@+id/floating_bubble_root"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         tools:ignore="UselessParent">
     <RelativeLayout
@@ -21,18 +21,19 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
             android:src="@drawable/trip_reminder_logo"
             tools:ignore="VectorDrawableCompat" />
 
         <!--Close button-->
         <ImageView
             android:id="@+id/close_button_bubble"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="40dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="20dp"
             android:src="@drawable/quantum_ic_clear_grey600_24"
             tools:ignore="ContentDescription"
-            android:layout_marginStart="40dp" />
+            android:layout_marginStart="20dp" />
     </RelativeLayout>
     <!--View while view is expanded-->
         <LinearLayout
@@ -42,28 +43,33 @@
             android:background="@color/white"
             android:orientation="vertical"
             android:padding="8dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:visibility="gone"
+               >
                 <ImageView
                     android:id="@+id/close_button_expand"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/ic_close_black_24dp" />
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/open_button"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="30dp"
+                    android:text="Back to App"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
-                    android:src="@drawable/ic_exit_to_app_black_24dp" />
+                    android:background="@color/white"
+                    android:drawableStart="@drawable/ic_exit_to_app_black_24dp"
+                     />
             </RelativeLayout>
 
         </LinearLayout>

@@ -2,15 +2,20 @@ package com.example.tripreminder.view.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -19,7 +24,9 @@ import com.example.tripreminder.OfflineFragment;
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.Trip;
 import com.example.tripreminder.model.map_directions.TaskLoadedCallback;
+import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.utils.LocationCommunicator;
+import com.example.tripreminder.utils.RequestPermissions;
 import com.example.tripreminder.view.fragments.AddTripFragment1;
 import com.example.tripreminder.view.fragments.MainFragment;
 import com.example.tripreminder.view.fragments.PastTripsFragment;
@@ -38,13 +45,19 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     int previousFragmentNumber = 2;
     private Fragment selectedFragment;
     public Trip trip;
+    private static boolean permLocStatus=false,permOverlayStatus=false;
     private String[] notes;
+    private RequestPermissions permissionsHandler ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+        permissionsHandler = RequestPermissions.getInstance(this);
+        if(permissionsHandler.requestLocPermissionIfNecessary()&&permissionsHandler.requestOverlayPermissionIfNecessary()) {
+            permLocStatus = true;
+            permOverlayStatus = true ;
+        }
         setupBottomBar();
     }
     //for internet connection
@@ -56,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     }
     private void setupBottomBar() {
         MeowBottomNavigation bottomNavigation = findViewById(R.id.bottomNavigation);
-
         SaveAndTripInterface mInterface = new SaveAndTripInterface() {
             @Override
             public void isClicked() {
@@ -81,7 +93,10 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
         bottomNavigation.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
-                // your codes
+                Bundle bundle = new Bundle();
+                if(permissionsHandler.checkOverlayPermissions())
+                { permOverlayStatus = true; }
+                bundle.putBooleanArray(Constants.PERMISSIONS_STATUS, new boolean[]{permLocStatus, permOverlayStatus});
                 switch (item.getId()) {
                     case 1:
                         selectedFragment = new PastTripsFragment();
@@ -97,10 +112,10 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                             selectedFragment = new OfflineFragment();
 
                         }else {
-                            selectedFragment = new AddTripFragment1();
-                            ((AddTripFragment1) selectedFragment).setmInterface(mInterface);
+                              selectedFragment = new AddTripFragment1();
+                              selectedFragment.setArguments(bundle);
+                               ((AddTripFragment1) selectedFragment).setmInterface(mInterface);
                         }
-
                         break;
                     case 4:
                         selectedFragment = new ProfileFragment();
@@ -119,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
 
                 previousFragmentNumber = item.getId();
             }
+
         });
         bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
             @Override
@@ -186,12 +202,8 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
     public void onTaskDone(Object... values) {
 
         Random rnd = new Random();
-
-
         if (getSupportFragmentManager().getFragments().get(1) instanceof PastTripsMapFragment) {
-
             ((PastTripsMapFragment) (getSupportFragmentManager().getFragments().get(1))).googleMap.addPolyline((PolylineOptions) values[0]).setColor(Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
-
         }
     }
 
@@ -222,17 +234,17 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        }else {
+
+            isBackPressedTwice = true;
+            Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isBackPressedTwice = false;
+                }
+            }, 3000);
         }
-
-        isBackPressedTwice = true;
-        Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                isBackPressedTwice = false;
-            }
-        }, 30000);
     }
 
     public interface SaveAndTripInterface {
@@ -243,4 +255,22 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
         void isClick(Trip t);
     }
 
+    /** Permission Checking **/
+    public void onRequestPermissionsResult(
+            int requestCode,
+            @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == RequestPermissions.REQUEST_CODE_PERMISSIONS  ) {
+          permLocStatus = permissionsHandler.requestLocPermissionIfNecessary(); // no-op if permissions are granted already.
+        }
+    }
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 }

@@ -59,6 +59,7 @@ public class PastTripsDataFragment extends Fragment {
         noTripsLayout = v.findViewById(R.id.no_trips_layout_pastTrips);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setVisibility(INVISIBLE);
+        noTripsLayout.setVisibility(INVISIBLE);
         pastTripsViewModel = ViewModelProviders.of(this).get(PastTripsViewModel.class);
 
         MutableLiveData<HashMap<String, Object>> userInfoLiveData = SharedPreferencesHandler.getInstance().getUserInfoLiveData();

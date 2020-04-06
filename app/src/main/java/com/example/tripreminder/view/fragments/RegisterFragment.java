@@ -3,6 +3,7 @@ package com.example.tripreminder.view.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.model.Entities.User;
+import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.viewmodel.RegisterViewModel;
 
 /**
@@ -24,7 +26,7 @@ public class RegisterFragment extends Fragment {
 
     EditText emailEditText,passwordEditText,nameEditText,confirmPasswordEditText;
     View view;
-    Button registerButton;
+    Button registerButton,loginButton;
 
     RegisterViewModel registerViewModel;
 
@@ -43,13 +45,20 @@ public class RegisterFragment extends Fragment {
     }
     private void viewSetup(){
         registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel.class);
-
+        loginButton = view.findViewById(R.id.loginButton);
         emailEditText = view.findViewById(R.id.emailEditTextRegister);
         passwordEditText = view.findViewById(R.id.passwordEditTextRegister);
         nameEditText = view.findViewById(R.id.nameEditTextRegister);
         confirmPasswordEditText = view.findViewById(R.id.confirmPasswordEditTextRegister);
         registerButton = view.findViewById(R.id.registerButton);
-
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getFragmentManager().getBackStackEntryCount() != 0) {
+                    getFragmentManager().popBackStack();
+                }
+            }
+        });
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +108,9 @@ public class RegisterFragment extends Fragment {
                 }
                 else{
                     Toast.makeText(getActivity(), "registered successfully", Toast.LENGTH_SHORT).show();
+                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                        getFragmentManager().popBackStack();
+                    }
                 }
             }
         });

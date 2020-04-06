@@ -76,17 +76,16 @@ public class TripAlertActivity extends AppCompatActivity implements LocationComm
                     mainViewModel.updateTripStatus(trip.getTripId(), Trip.DONE);
                     tripNotification.cancelNotification();
 
-                    //check permission overlay first
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this.getApplicationContext())) {
-                        //If the draw over permission is not available open the settings screen
-                        //to grant the permission.
-                        Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                Uri.parse("package:" + this.getPackageName()));
-                        startActivityForResult(permissionIntent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
-                    } else {
+//                    //check permission overlay first
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this.getApplicationContext())) {
+//                        //If the draw over permission is not available open the settings screen
+//                        //to grant the permission.
+//                        Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                                Uri.parse("package:" + this.getPackageName()));
+//                        startActivityForResult(permissionIntent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
+//                    } else {
                         if (LocationPermissions.getInstance(this).checkPermissions()) {
                             if (LocationPermissions.getInstance(this).isLocationEnabled()) {
-
                                 LocationLocator.getInstance(this).getLastLocation();
                             }
                             else {
@@ -95,11 +94,10 @@ public class TripAlertActivity extends AppCompatActivity implements LocationComm
                                 startActivity(intent);
                             }
                         }
-                        else {
-                            LocationPermissions.getInstance(this).requestPermissions();
-                        }
-
-                    }
+//                        else {
+//                            LocationPermissions.getInstance(this).requestPermissions();
+//                        }
+                  //  }
                     alertDialog.dismiss();
                     finish();
                 });
@@ -114,7 +112,6 @@ public class TripAlertActivity extends AppCompatActivity implements LocationComm
 
         alertDialog.setCancelable(false);
         alertDialog.show();
-
         // Play audio
         audioPlayer.playAudio();
 
@@ -140,7 +137,7 @@ public class TripAlertActivity extends AppCompatActivity implements LocationComm
 
   //setup bubble service
     private void initializeFloatingBubble() {
-        Log.i("bubble","start service ");
+       // Log.i("bubble","start service ");
         Intent intentBubble = new Intent(getApplicationContext(), FloatingBubbleService.class);
         intentBubble.putExtra(Constants.TRIP_NOTES_KEY,notes);
         this.startService(intentBubble);
@@ -148,28 +145,28 @@ public class TripAlertActivity extends AppCompatActivity implements LocationComm
 
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CODE_DRAW_OVER_OTHER_APP_PERMISSION) {
-
-            //Check if the permission is granted or not.
-            if ( grantResults.length >0 &&grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
-                finishActivity(CODE_DRAW_OVER_OTHER_APP_PERMISSION);
-                initializeFloatingBubble();
-
-            } else { //Permission is not available
-                Toast.makeText(this.getApplicationContext(), "Draw over other app permission not available. Closing the application", Toast.LENGTH_SHORT).show();
-                // getActivity().finish();
-            }
-        }
-        if((Integer.parseInt(Manifest.permission.ACCESS_COARSE_LOCATION )== PackageManager.PERMISSION_GRANTED )){
-            if (LocationPermissions.getInstance(this).isLocationEnabled()) {
-
-                LocationLocator.getInstance(this).getLastLocation();
-            }
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == CODE_DRAW_OVER_OTHER_APP_PERMISSION) {
+//
+//            //Check if the permission is granted or not.
+//            if ( grantResults.length >0 &&grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
+//                finishActivity(CODE_DRAW_OVER_OTHER_APP_PERMISSION);
+//                initializeFloatingBubble();
+//
+//            } else { //Permission is not available
+//                Toast.makeText(this.getApplicationContext(), R.string.set_permissions_in_settings, Toast.LENGTH_SHORT).show();
+//                // getActivity().finish();
+//            }
+//        }
+//        if((Integer.parseInt(Manifest.permission.ACCESS_COARSE_LOCATION )== PackageManager.PERMISSION_GRANTED )){
+//            if (LocationPermissions.getInstance(this).isLocationEnabled()) {
+//
+//                LocationLocator.getInstance(this).getLastLocation();
+//            }
+//        }
+//    }
 
     @Override
     public void onLocationReceivedAction(double longitude, double latitude, String locationInfo) {

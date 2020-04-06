@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -64,14 +65,12 @@ public class LoginFragment extends Fragment {
     }
 
     private void setup(){
-
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
         signUpButton = view.findViewById(R.id.signUpButton);
         loginButton = view.findViewById(R.id.loginButton);
         emailEditText = view.findViewById(R.id.emailEditText);
         passwordEditText = view.findViewById(R.id.passwordEditText);
         googleSignInButton = view.findViewById(R.id.googleSignInButton);
-
         forgotPasswordButton = view.findViewById(R.id.forgetPasswordBtn);
         setClickListners();
 
@@ -83,7 +82,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.fragment_enter_right_to_left,R.anim.fragment_exit_to_left)
-                        .replace(R.id.authenticationFrameLayout, new RegisterFragment()).commit();
+                        .replace(R.id.authenticationFrameLayout, new RegisterFragment()).addToBackStack(null).commit();
             }
         });
 

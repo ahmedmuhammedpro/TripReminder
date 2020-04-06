@@ -4,6 +4,6 @@
          android:padding="10dp">
         <!-- you can use any color you want I used here gray color-->
         <solid android:color="@color/colorPrimaryDark"/>
-        <corners android:radius="20dp"/>
+        <corners android:radius="0dp"/>
 
 </shape>

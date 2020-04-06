@@ -102,7 +102,7 @@ public class PastTripsMapFragment extends Fragment implements OnMapReadyCallback
                 }
 
 
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(30.063550, 31.027708), 10));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(30.063550, 31.027708), 9));
 
 
             }

@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/pastTripsTabLayout"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -26,13 +25,17 @@
             android:text="@string/MapTapText" />
 
     </com.google.android.material.tabs.TabLayout>
-
+   <androidx.core.widget.NestedScrollView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@+id/pastTripsTabLayout">
     <FrameLayout
         android:id="@+id/pastTripsFrameLayout"
-        android:layout_width="409dp"
-        android:layout_height="681dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pastTripsTabLayout">
-
     </FrameLayout>
+   </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

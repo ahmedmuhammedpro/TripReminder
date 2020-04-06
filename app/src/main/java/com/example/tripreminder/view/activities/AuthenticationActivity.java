@@ -4,8 +4,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.inputmethod.InputMethodManager;
 
 import com.example.tripreminder.R;
 import com.example.tripreminder.view.fragments.LoginFragment;
@@ -47,10 +50,17 @@ public class AuthenticationActivity extends AppCompatActivity {
         }
         else */
        if (getSupportFragmentManager().getFragments().get(0) instanceof RegisterFragment){
-
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.fragment_enter_left_to_right,R.anim.fragment_exit_to_right)
                     .replace(R.id.authenticationFrameLayout, new LoginFragment()).commit();
         }
+    }
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

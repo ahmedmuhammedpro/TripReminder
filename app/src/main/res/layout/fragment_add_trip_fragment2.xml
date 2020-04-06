@@ -12,7 +12,9 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:theme="@style/AppThemeAddTrip"
-        tools:context=".view.fragments.AddTripFragment2">
+        tools:context=".view.fragments.AddTripFragment2"
+        android:clickable="true"
+        android:focusableInTouchMode="true" >
 
         <Button
             android:id="@+id/prevBtn"
@@ -36,12 +38,13 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/noteTxtLayout"
             android:layout_width="240dp"
-            android:layout_height="70dp"
+            android:layout_height="@dimen/textFieldHeight"
             app:boxBackgroundColor="@color/white"
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
+            android:layout_marginTop="20dp"
             app:endIconMode="clear_text"
             app:endIconTintMode="src_in"
             app:layout_constraintStart_toStartOf="@+id/textView3"
@@ -57,13 +60,15 @@
 
         <Button
             android:id="@+id/addNoteBtn"
-            android:layout_width="40dp"
+            android:layout_width="70dp"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:background="@drawable/ic_note_add_black_24dp"
+            android:text="Add Note"
+            android:background="@color/white"
             app:layout_constraintStart_toEndOf="@+id/noteTxtLayout"
-            app:layout_constraintTop_toTopOf="@+id/noteTxtLayout" />
+            app:layout_constraintTop_toTopOf="@+id/noteTxtLayout"
+            android:drawableLeft="@drawable/ic_note_add_black_24dp" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroupNotes"

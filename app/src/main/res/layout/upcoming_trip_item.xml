@@ -5,17 +5,16 @@
     android:id="@+id/cardTrip"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/padding_16dp"
-    android:layout_marginEnd="@dimen/padding_16dp"
-    android:layout_marginBottom="@dimen/padding_8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="@dimen/padding_8dp"
     app:cardCornerRadius="@dimen/padding_16dp"
-    app:cardElevation="@dimen/padding_8dp">
+    app:cardElevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp">
-
 
         <TextView
             android:id="@+id/trip_name"
@@ -88,7 +87,7 @@
             android:id="@+id/start_trip_button"
             style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/actionButtonHeight"
             android:layout_marginTop="4dp"
             android:text="START"
             android:textAllCaps="false"
@@ -171,7 +170,12 @@
                 android:text="@string/tripNotes"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+            app:layout_constraintStart_toStartOf="@+id/tripnotesTextItem"
+            app:layout_constraintTop_toBottomOf="@+id/tripnotesTextItem" >
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/notesGroupItem"
                 android:layout_width="match_parent"
@@ -180,9 +184,12 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:background="@drawable/custom_chipgroup"
+                android:isScrollContainer="true"
+                android:scrollbars="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tripnotesTextItem"
                 app:layout_constraintTop_toBottomOf="@+id/tripnotesTextItem" />
+            </ScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

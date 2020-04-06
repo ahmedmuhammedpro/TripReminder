@@ -32,6 +32,7 @@ import com.example.tripreminder.services.FloatingBubbleService;
 import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.utils.LocationLocator;
 import com.example.tripreminder.utils.LocationPermissions;
+import com.example.tripreminder.utils.RequestPermissions;
 import com.example.tripreminder.utils.SharedPreferencesHandler;
 import com.example.tripreminder.view.activities.MainActivity;
 import com.example.tripreminder.view.adapters.MainAdapter;
@@ -64,6 +65,7 @@ public class MainFragment extends Fragment {
     private List<Trip> tripList;
     private boolean isDeleteActionClicked;
     private boolean isEditActionClicked;
+    private RequestPermissions permissionsHandler ;
     private String[] notes;
 
     private MainActivity.EditInterface mInterface;
@@ -74,39 +76,25 @@ public class MainFragment extends Fragment {
         trip.setTripStatus(Trip.DONE);
         viewModel.updateTrip(trip);
         workManagerViewModel.deleteRequest(trip.getTripId());
-
-        //check permission overlay first
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getActivity().getApplicationContext())) {
-            //If the draw over permission is not available open the settings screen
-            //to grant the permission.
-            Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getActivity().getPackageName()));
-            startActivityForResult(permissionIntent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
-        } else {
-
-            if (LocationPermissions.getInstance(getActivity()).checkPermissions()) {
-                if (LocationPermissions.getInstance(getActivity()).isLocationEnabled()) {
-
-                    LocationLocator.getInstance(getActivity()).getLastLocation();
-                }
-                else {
-                    Toast.makeText(getActivity(), "Please Turn on location", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
-                }
+        if (LocationPermissions.getInstance(getActivity()).checkPermissions()) {
+            if (LocationPermissions.getInstance(getActivity()).isLocationEnabled()) {
+                LocationLocator.getInstance(getActivity()).getLastLocation();
+            } else {
+                Toast.makeText(getActivity(), "Please Turn on location", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
             }
-            else {
-                LocationPermissions.getInstance(getActivity()).requestPermissions();
-            }
+        }
+//            else {
+//                LocationPermissions.getInstance(getActivity()).requestPermissions();
+//            }
 
-
-            ((MainActivity)getActivity()).trip = trip;
-            //start bubble service
-            if(trip.getNotes()!=null) {
-                notes = new String[trip.getNotes().size()];
-                trip.getNotes().toArray(notes);
-                initializeFloatingBubble(notes);
-            }
+        ((MainActivity) getActivity()).trip = trip;
+        //start bubble service
+        if (trip.getNotes() != null) {
+            notes = new String[trip.getNotes().size()];
+            trip.getNotes().toArray(notes);
+            initializeFloatingBubble(notes);
         }
 
     };
@@ -129,9 +117,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         MutableLiveData<HashMap<String, Object>> userInfoLiveData = SharedPreferencesHandler.getInstance().getUserInfoLiveData();
-
         viewModel.getAllTrips(String.valueOf(userInfoLiveData.getValue().get(Constants.USER_ID_TAG))).observe(this, new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
@@ -140,7 +126,7 @@ public class MainFragment extends Fragment {
                     tripList = trips;
                     for (int i = 0; i < tripList.size(); i++) {
                         Trip currentTrip = tripList.get(i);
-                        Log.i("main2","trip type"+currentTrip.getTripType());
+                        Log.i("main2", "trip type" + currentTrip.getTripType());
                         viewModel.getTripNotes(currentTrip.getTripId()).observe(MainFragment.this, new Observer<Vector<String>>() {
                             @Override
                             public void onChanged(Vector<String> strings) {
@@ -172,12 +158,21 @@ public class MainFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setVisibility(INVISIBLE);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        noTripsLayout.setVisibility(INVISIBLE);
         workManagerViewModel = new WorkManagerViewModel(getActivity());
+        permissionsHandler = RequestPermissions.getInstance(getActivity());
+        permissionsHandler.requestLocPermissionIfNecessary();
         return v;
     }
 
-    //set swiper items
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        permissionsHandler.requestOverlayPermissionIfNecessary();
 
+    }
+
+    //set swiper items
     private void enableSwipeToDeleteAndUndo() {
         SwipeToDeleteCallBack swipeToDeleteCallback = new SwipeToDeleteCallBack(getContext()) {
             @Override
@@ -232,7 +227,7 @@ public class MainFragment extends Fragment {
                 final int position = viewHolder.getAdapterPosition();
 
                 final Trip item = adapter.getData().get(position);
-             Log.i("main","type:"+item.getTripType());
+                Log.i("main", "type:" + item.getTripType());
                 Snackbar snackbar = Snackbar
                         .make(getView(), "Are you sure you want to Edit it? ", Snackbar.LENGTH_LONG);
                 snackbar.setAction("YES", new View.OnClickListener() {
@@ -272,7 +267,7 @@ public class MainFragment extends Fragment {
     }
 
     public void initializeFloatingBubble(String[] notes) {
-        Log.i("bubble","start service ");
+       // Log.i("bubble", "start service ");
         Intent intentBubble = new Intent(getActivity(), FloatingBubbleService.class);
         intentBubble.putExtra(Constants.TRIP_NOTES_KEY, notes);
         getActivity().startService(intentBubble);
@@ -282,34 +277,19 @@ public class MainFragment extends Fragment {
         void onItemClick(View view, int position);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CODE_DRAW_OVER_OTHER_APP_PERMISSION) {
-
-            //Check if the permission is granted or not.
-            if ( grantResults.length >0 &&grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
-                initializeFloatingBubble(notes);
-                getActivity().finishActivity(CODE_DRAW_OVER_OTHER_APP_PERMISSION);
-
-            } else { //Permission is not available
-                Toast.makeText(getActivity().getApplicationContext(), "Draw over other app permission not available. Closing the application", Toast.LENGTH_SHORT).show();
-                // getActivity().finish();
-            }
-        }
-    }
-
     private String getCurrentDate() {
         GregorianCalendar g = new GregorianCalendar();
 
-        return  g.get(GregorianCalendar.DAY_OF_MONTH) + "-" +
+        return g.get(GregorianCalendar.DAY_OF_MONTH) + "-" +
                 g.get(GregorianCalendar.MONTH) + "-" +
                 g.get(GregorianCalendar.YEAR) + "-" +
                 g.get(GregorianCalendar.HOUR_OF_DAY) + "-" +
                 g.get(GregorianCalendar.MINUTE);
     }
 
-    private void readFromSharedPreferences(){
+    private void readFromSharedPreferences() {
         SharedPreferencesHandler.getInstance().readFromSharedPreferences(getActivity());
     }
+
 }
+

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -93,19 +94,19 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         holder.tripNameTV.setText(tripList.get(position).getTripName());
         holder.tripNotesBtn.setOnClickListener(v -> {
             if (holder.notesLayout.getVisibility() == View.GONE) {
-                TransitionManager.beginDelayedTransition(holder.cardTrip, new AutoTransition());
-                holder.notesLayout.setVisibility(View.VISIBLE);
-                holder.tripNotesBtn.setBackgroundResource(R.drawable.ic_arrow_upward_black_24dp);
                 allNotes = tripList.get(position).getNotes();
-
-                Log.i("adapter2","trip type"+tripList.get(position).getTripDate());
                 if (holder.notesGroup.getChildCount() == 0) {
                     if (allNotes != null && allNotes.size() != 0) {
-                        for (String txt : allNotes) {
-                            Chip chip = addNoteChip(txt);
-                            holder.notesGroup.addView(chip);
-                            isAdded = true;
-                        }
+                        TransitionManager.beginDelayedTransition(holder.cardTrip, new AutoTransition());
+                        holder.notesLayout.setVisibility(View.VISIBLE);
+                        holder.tripNotesBtn.setBackgroundResource(R.drawable.ic_arrow_upward_black_24dp);
+                                for (String txt : allNotes) {
+                                    Chip chip = addNoteChip(txt);
+                                    holder.notesGroup.addView(chip);
+                                    isAdded = true;
+                                }
+                    }else{
+                        Toast.makeText(context, "There are no notes to show, you can swipe to right to add new note.", Toast.LENGTH_LONG).show();
                     }
                 }
             } else {

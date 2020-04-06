@@ -1,5 +1,8 @@
 package com.example.tripreminder.utils;
 
+import android.app.Activity;
+import android.view.inputmethod.InputMethodManager;
+
 public class Constants {
 
     // Trip keys
@@ -24,6 +27,7 @@ public class Constants {
     public static final String USERNAME_KEY = "username";
     public static final String USER_ID_TAG="userID";
     public static final String IMAGE_URL="imageUrl";
+    public static final String PERMISSIONS_STATUS="permissionStatus";
     public static final String TRIP_OB_KEY = "trip_ob";
 
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#575EC5</color>
-    <color name="colorPrimaryDark">#575EC5</color>
+    <color name="colorPrimary">#6078FF</color>
+    <color name="colorPrimaryDark">#6078FF</color>
     <color name="colorAccent">#2F424242</color>
     <color name="barBackground">#FFFFFF</color>
     <color name="defaultIcon">#2F050505</color>
     <color name="ripple">#2F050505</color>
-    <color name="selectedIcon">#575EC5</color>
+    <color name="selectedIcon">#6078FF</color>
 </resources>

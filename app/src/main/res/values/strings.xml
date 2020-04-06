@@ -41,4 +41,6 @@
     <string name="EmailTextViewValue">Email</string>
     <string name="SignOutButton">Sign out</string>
     <string name="signup">Signup</string>
+    <string name="set_permissions_in_settings">Go to Settings -> Apps and Notifications ->
+        Trip Reminder -> App Permissions and grant access to Get Current Location and Show on other apps.</string>
 </resources>

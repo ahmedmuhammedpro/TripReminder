@@ -24,6 +24,8 @@ import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.utils.SharedPreferencesHandler;
 import com.example.tripreminder.view.activities.AuthenticationActivity;
 import com.example.tripreminder.viewmodel.ProfileViewModel;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -34,7 +36,7 @@ import java.util.HashMap;
 public class ProfileFragment extends Fragment {
 
     ProfileViewModel profileViewModel;
-    ImageView profileImageView;
+    ShapeableImageView profileImageView;
     TextView emailTextView,nameTextView;
     Button signOutButton;
     String email="",username="",imageUrl="";
