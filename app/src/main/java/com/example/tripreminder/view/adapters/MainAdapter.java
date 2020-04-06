@@ -95,6 +95,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         holder.tripNotesBtn.setOnClickListener(v -> {
             if (holder.notesLayout.getVisibility() == View.GONE) {
                 allNotes = tripList.get(position).getNotes();
+                holder.notesGroup.removeAllViews();
                 if (holder.notesGroup.getChildCount() == 0) {
                     if (allNotes != null && allNotes.size() != 0) {
                         TransitionManager.beginDelayedTransition(holder.cardTrip, new AutoTransition());
@@ -113,6 +114,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                 TransitionManager.beginDelayedTransition(holder.cardTrip, new AutoTransition());
                 holder.notesLayout.setVisibility(View.GONE);
                 holder.tripNotesBtn.setBackgroundResource(R.drawable.ic_arrow_downward_black_24dp);
+
             }
         });
         holder.tripStartLocationTV.setText(tripList.get(position).getStartLocation().getLocationName());

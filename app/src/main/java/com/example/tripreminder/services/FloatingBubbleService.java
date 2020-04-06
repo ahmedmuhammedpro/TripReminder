@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.example.tripreminder.R;
 import com.example.tripreminder.utils.Constants;
 import com.example.tripreminder.view.activities.MainActivity;
+import com.google.android.material.button.MaterialButton;
 
 
 public class FloatingBubbleService extends Service {
@@ -40,7 +42,7 @@ public class FloatingBubbleService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         notes = intent.getStringArrayExtra(Constants.TRIP_NOTES_KEY);
-        Log.i("notes", "not: "+ notes);
+       // Log.i("notes", "not: "+ notes);
         handleStart();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -110,7 +112,7 @@ public class FloatingBubbleService extends Service {
             }
         });
 
-        ImageView openButton = (ImageView) floatingBubbleView.findViewById(R.id.open_button);
+      Button openButton = (Button) floatingBubbleView.findViewById(R.id.open_button);
         openButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +120,7 @@ public class FloatingBubbleService extends Service {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 stopSelf();
+                onDestroy();
             }
         });
         layout.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +160,7 @@ public class FloatingBubbleService extends Service {
                         params.x = initialX + (int) (event.getRawX() - initialTouchX);
                         params.y = initialY + (int) (event.getRawY() - initialTouchY);
                         //Update the layout with new X & Y coordinate
+                      if(floatingBubbleView != null)
                         windowManager.updateViewLayout(floatingBubbleView, params);
                         return true;
                 }

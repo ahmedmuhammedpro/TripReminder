@@ -38,19 +38,17 @@
     <!--View while view is expanded-->
         <LinearLayout
             android:id="@+id/expanded_container"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical"
             android:padding="8dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone"
-               >
+                android:orientation="vertical">
                 <ImageView
                     android:id="@+id/close_button_expand"
                     android:layout_width="40dp"
@@ -58,8 +56,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/ic_close_black_24dp" />
-
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/open_button"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -68,8 +65,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:background="@color/white"
-                    android:drawableStart="@drawable/ic_exit_to_app_black_24dp"
-                     />
+                    android:drawableLeft="@drawable/ic_exit_to_app_black_24dp" />
             </RelativeLayout>
 
         </LinearLayout>
